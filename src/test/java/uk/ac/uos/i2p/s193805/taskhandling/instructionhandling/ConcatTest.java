@@ -20,8 +20,8 @@ class ConcatTest {
     @Test
     void runInstruction() {
 
-        Instruction<String> concatter = new Concat();
-        List valueList = Arrays.asList("A", 2, 10);
+        Instruction<String> concatter = new Concat<>();
+        List<String> valueList = Arrays.asList("A", "2", "10");
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
         assertEquals( "A210", result.getAnswer() , "Answer should be 20");
     }
@@ -29,17 +29,17 @@ class ConcatTest {
     @Test
     void runInstruction2() {
 
-        Instruction<String> concatter = new Concat();
-        List valueList = Arrays.asList("A", 2, 10, 10.50);
+        Instruction<String> concatter = new Concat<>();
+        List<String> valueList = Arrays.asList("A", "2", "10", "10.50");
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
-        assertEquals("A21010.5", result.getAnswer(), "Answer should be 20");
+        assertEquals("A21010.50", result.getAnswer(), "Answer should be 20");
     }
 
     @Test
     void runInstructionEmptyList() {
 
-        Instruction<String> concatter = new Concat();
-        List valueList = Arrays.asList();
+        Instruction<String> concatter = new Concat<>();
+        List<String>valueList = Arrays.asList();
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
         assertEquals("", result.getAnswer(), "Answer should be empty");
     }
@@ -47,8 +47,8 @@ class ConcatTest {
     @Test
     void runInstructionNullList() {
 
-        Instruction<String> concatter = new Concat();
-        List valueList = null;
+        Instruction<String> concatter = new Concat<>();
+        List<String>valueList = null;
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
         assertEquals("", result.getAnswer(), "Answer should be empty");
     }

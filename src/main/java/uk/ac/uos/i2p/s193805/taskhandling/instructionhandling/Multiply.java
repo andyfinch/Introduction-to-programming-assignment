@@ -11,25 +11,26 @@ import java.util.List;
  * Time: 09:43
  */
 
-public class Multiply implements Instruction<Double> {
+public class Multiply<T extends Number> implements Instruction<T> {
 
     @Override
-    public Result<Double> runInstruction(List<Double> values) {
+    public Result<T> runInstruction(List<T> values) {
         Result<Double> result = new Result<>();
         Double runningSum = 1.00;
 
-        if ( values != null )
+        if (values != null)
         {
-            for (Double number : values)
+            for (T number : values)
             {
-                runningSum *= number;
+                runningSum *= Double.parseDouble(number.toString());
             }
         }
 
 
         result.setAnswer(runningSum);
 
-        return result;
+        return (Result<T>) result;
     }
+
 
 }

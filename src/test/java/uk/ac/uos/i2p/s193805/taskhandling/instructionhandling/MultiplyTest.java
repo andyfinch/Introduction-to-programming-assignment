@@ -20,18 +20,27 @@ class MultiplyTest {
     @Test
     void runInstruction() {
 
-        Instruction<Double> multiplier = new Multiply();
+        Instruction<Double> multiplier = new Multiply<>();
         List<Double> valueList = Arrays.asList(2.0 , 10.00);
-        Result<Double> result = multiplier.runInstruction(valueList);
-        assertEquals( 20.00, result.getAnswer().doubleValue() , "Answer should be 20");
+        double answer = multiplier.runInstruction(valueList).getAnswer();
+        assertEquals( 20.00, answer , "Answer should be 20");
     }
 
     @Test
     void runInstruction2() {
 
-        Instruction<Double> multiplier = new Multiply();
+        Instruction<Double> multiplier = new Multiply<>();
         List<Double> valueList = Arrays.asList(2.5, 10.5);
-        Result<Double> result = multiplier.runInstruction(valueList);
-        assertEquals(26.25, result.getAnswer().doubleValue(), "Answer should be 26.25");
+        double answer = multiplier.runInstruction(valueList).getAnswer();
+        assertEquals(26.25, answer, "Answer should be 26.25");
+    }
+
+    @Test
+    void runInstruction3() {
+
+        Instruction<Double> multiplier = new Multiply<>();
+        List<Double> valueList = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+        double answer = multiplier.runInstruction(valueList).getAnswer();
+        assertEquals(720.0, answer, "Answer should be 720.00");
     }
 }

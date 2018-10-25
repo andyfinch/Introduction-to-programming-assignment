@@ -18,11 +18,47 @@ import static org.junit.jupiter.api.Assertions.*;
 class AddTest {
 
     @Test
-    void runInstruction() {
+    void  runInstruction() {
 
-        Instruction<Double> adder = new Add();
+        Instruction<Double> adder = new Add<>();
         List<Double> valueList = Arrays.asList(50.00,50.00);
-        Result<Double> result = adder.runInstruction(valueList);
-        assertEquals( 100.00, result.getAnswer().doubleValue() , "Answer should be 100");
+        double answer = adder.runInstruction(valueList).getAnswer();
+        assertEquals( 100.00, answer , "Answer should be 100");
     }
+
+    @Test
+    void runInstruction2() {
+
+        Instruction<Double> adder = new Add<>();
+        List<Double> valueList = Arrays.asList(0.00, 50.00);
+        double answer = adder.runInstruction(valueList).getAnswer();
+        assertEquals(50.00, answer, "Answer should be 50");
+    }
+
+    @Test
+    void runInstruction3() {
+
+        Instruction<Double> adder = new Add<>();
+        List<Double> valueList = Arrays.asList(0.00, 0.00);
+        double answer = adder.runInstruction(valueList).getAnswer();
+        assertEquals(0.00, answer, "Answer should be 0");
+    }
+
+    @Test
+    void runInstruction4() {
+
+        Instruction<Double> adder = new Add<>();
+        List<Double> valueList = Arrays.asList(0.00);
+        double answer = adder.runInstruction(valueList).getAnswer();
+        assertEquals(0.00, answer, "Answer should be 0");
+    }
+
+   /* @Test
+    void runInstruction2() {
+
+        Instruction<String> adder = new Concat();
+        List<Double> valueList = Arrays.asList(50.00, 50.00);
+        Result<Double> result = adder.runInstruction(valueList);
+        assertEquals(100.00, result.getAnswer().doubleValue(), "Answer should be 100");
+    }*/
 }
