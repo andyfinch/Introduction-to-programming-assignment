@@ -2,6 +2,8 @@ package uk.ac.uos.i2p.s193805.taskhandling.instructionhandling;
 
 import uk.ac.uos.i2p.s193805.taskhandling.Result;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
@@ -9,27 +11,25 @@ import uk.ac.uos.i2p.s193805.taskhandling.Result;
  * Time: 09:43
  */
 
-public class Multiply implements Instruction {
+public class Multiply implements Instruction<Double> {
 
-    public Result runInstruction(String... params) {
+    @Override
+    public Result<Double> runInstruction(List<Double> values) {
+        Result<Double> result = new Result<>();
+        Double runningSum = 1.00;
 
-        Result result = new Result();
-        Double runningSum = 0.00;
-
-        for (String number : params)
+        if ( values != null )
         {
-            try
+            for (Double number : values)
             {
-                runningSum += Double.parseDouble(number);
-            } catch (NumberFormatException e)
-            {
-                throw new IllegalArgumentException("Only Integers can be added together. Invalid value=" + number);
+                runningSum *= number;
             }
         }
 
-        result.setAnswer(runningSum.toString());
+
+        result.setAnswer(runningSum);
 
         return result;
-
     }
+
 }

@@ -2,6 +2,8 @@ package uk.ac.uos.i2p.s193805.taskhandling.instructionhandling;
 
 import uk.ac.uos.i2p.s193805.taskhandling.Result;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
@@ -9,7 +11,7 @@ import uk.ac.uos.i2p.s193805.taskhandling.Result;
  * Time: 09:40
  */
 
-public interface Instruction {
+public interface Instruction<T> {
 
-    Result runInstruction(String...params);
+    Result<T> runInstruction(List<T> values);
 }

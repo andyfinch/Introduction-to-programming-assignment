@@ -7,9 +7,9 @@ package uk.ac.uos.i2p.s193805.taskhandling;
  * Time: 09:40
  */
 
-public class Result {
+public class Result<T> {
 
-    private String answer;
+    private T answer;
     private String response;
 
     public boolean isCorrect()
@@ -40,11 +40,11 @@ public class Result {
 
     }
 
-    public String getAnswer() {
+    public T getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(T answer) {
         this.answer = answer;
     }
 

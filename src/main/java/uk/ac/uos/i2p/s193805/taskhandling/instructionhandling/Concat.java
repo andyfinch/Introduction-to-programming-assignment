@@ -2,6 +2,8 @@ package uk.ac.uos.i2p.s193805.taskhandling.instructionhandling;
 
 import uk.ac.uos.i2p.s193805.taskhandling.Result;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
@@ -9,22 +11,26 @@ import uk.ac.uos.i2p.s193805.taskhandling.Result;
  * Time: 09:43
  */
 
-public class Concat implements Instruction {
+public class Concat implements Instruction<String> {
 
-    public Result runInstruction(String... params) {
-
-        Result result = new Result();
+    @Override
+    public Result<String> runInstruction(List<String> values) {
+        Result<String> result = new Result<>();
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (String number : params)
+        if ( values != null )//handle null list
         {
-            stringBuilder.append(number);
+            for (Object number : values)
+            {
+                stringBuilder.append(number);
+
+            }
 
         }
 
         result.setAnswer(stringBuilder.toString());
 
         return result;
-
     }
+
 }
