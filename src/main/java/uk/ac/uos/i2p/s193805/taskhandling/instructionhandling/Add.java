@@ -11,11 +11,35 @@ import java.util.List;
  * Time: 09:43
  */
 
-public class Add<T extends Number> implements Instruction<T> {
-
-
+public class Add<T extends Integer> implements Instruction<T> {
 
     @Override
+    @SuppressWarnings("unchecked")
+    public Result<T> runInstruction(List<Object> values) throws IllegalArgumentException {
+        Result<Integer> result = new Result<>();
+        Integer runningSum = 0;
+
+        if (values != null)
+        {
+            for (Object number : values)
+            {
+                try
+                {
+                    runningSum += Integer.parseInt(number.toString());
+                } catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException("Parameters must be Integer values only");
+                }
+            }
+        }
+
+
+        result.setAnswer(runningSum);
+
+        return (Result<T>) result;
+    }
+
+    /*@Override
     public Result<T> runInstruction(List<T> values) {
         Result<T> result = new Result<>();
         Double runningSum = 0.00;
@@ -27,17 +51,17 @@ public class Add<T extends Number> implements Instruction<T> {
                 runningSum += Double.parseDouble(value.toString());
             }
 
-            /*for (Double number : values)
+            *//*for (Double number : values)
             {
                 runningSum += number;
-            }*/
+            }*//*
         }
 
 
         result.setAnswer((T) runningSum);
 
         return result;
-    }
+    }*/
 
     /*@Override
     public Result<Double> runInstruction(List<Double> values) {

@@ -14,15 +14,23 @@ import java.util.List;
 public class Multiply<T extends Number> implements Instruction<T> {
 
     @Override
-    public Result<T> runInstruction(List<T> values) {
+    @SuppressWarnings("unchecked")
+    public Result<T> runInstruction(List<Object> values) throws IllegalArgumentException {
+
         Result<Double> result = new Result<>();
         Double runningSum = 1.00;
 
         if (values != null)
         {
-            for (T number : values)
+            for (Object number : values)
             {
-                runningSum *= Double.parseDouble(number.toString());
+                try
+                {
+                    runningSum *= Integer.parseInt(number.toString());
+                } catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException("Parameters must be Integer values only");
+                }
             }
         }
 

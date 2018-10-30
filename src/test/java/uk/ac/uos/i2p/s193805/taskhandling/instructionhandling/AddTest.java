@@ -18,47 +18,82 @@ import static org.junit.jupiter.api.Assertions.*;
 class AddTest {
 
     @Test
-    void  runInstruction() {
+    void  testAdder() {
 
-        Instruction<Double> adder = new Add<>();
-        List<Double> valueList = Arrays.asList(50.00,50.00);
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(50,50);
         double answer = adder.runInstruction(valueList).getAnswer();
         assertEquals( 100.00, answer , "Answer should be 100");
     }
 
     @Test
-    void runInstruction2() {
+    void testAdder_With_Zero_As_Param() {
 
-        Instruction<Double> adder = new Add<>();
-        List<Double> valueList = Arrays.asList(0.00, 50.00);
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(0, 50);
         double answer = adder.runInstruction(valueList).getAnswer();
-        assertEquals(50.00, answer, "Answer should be 50");
+        assertEquals(50, answer, "Answer should be 50");
     }
 
     @Test
-    void runInstruction3() {
+    void testAdder_With_All_Zeroes() {
 
-        Instruction<Double> adder = new Add<>();
-        List<Double> valueList = Arrays.asList(0.00, 0.00);
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(0, 0);
         double answer = adder.runInstruction(valueList).getAnswer();
-        assertEquals(0.00, answer, "Answer should be 0");
+        assertEquals(0, answer, "Answer should be 0");
     }
 
     @Test
-    void runInstruction4() {
+    void testAdder_with_Only_Zero_Value() {
 
-        Instruction<Double> adder = new Add<>();
-        List<Double> valueList = Arrays.asList(0.00);
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(0);
         double answer = adder.runInstruction(valueList).getAnswer();
-        assertEquals(0.00, answer, "Answer should be 0");
+        assertEquals(0, answer, "Answer should be 0");
     }
 
-   /* @Test
-    void runInstruction2() {
+    @Test
+    void testAdder_with_Only_One_Value() {
 
-        Instruction<String> adder = new Concat();
-        List<Double> valueList = Arrays.asList(50.00, 50.00);
-        Result<Double> result = adder.runInstruction(valueList);
-        assertEquals(100.00, result.getAnswer().doubleValue(), "Answer should be 100");
-    }*/
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(5);
+        double answer = adder.runInstruction(valueList).getAnswer();
+        assertEquals(5, answer, "Answer should be 5");
+    }
+
+    @Test
+    void testAdder_Text_Strings() {
+
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList("A", "B");
+
+        try
+        {
+            adder.runInstruction(valueList).getAnswer();
+            fail("Exception should have been thrown");
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Parameters must be Integer values only", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testAdder_Integer_And_Text_Strings() {
+
+        Instruction<Integer> adder = new Add<>();
+        List<Object> valueList = Arrays.asList(1, "B");
+
+        try
+        {
+            adder.runInstruction(valueList).getAnswer();
+            fail("Exception should have been thrown");
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Parameters must be Integer values only", e.getMessage());
+        }
+
+    }
+
 }

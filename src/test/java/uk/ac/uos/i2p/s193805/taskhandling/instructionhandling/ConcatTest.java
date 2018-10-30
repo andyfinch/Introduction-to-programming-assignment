@@ -18,28 +18,46 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ConcatTest {
 
     @Test
-    void runInstruction() {
+    void testConcate_With_Integers() {
 
         Instruction<String> concatter = new Concat<>();
-        List<String> valueList = Arrays.asList("A", "2", "10");
+        List<Object> valueList = Arrays.asList(1, 2, 10);
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
-        assertEquals( "A210", result.getAnswer() , "Answer should be 20");
+        assertEquals( "1210", result.getAnswer() , "Answer should be 1210");
     }
 
     @Test
-    void runInstruction2() {
+    void runInstruction_With_Text_Strings() {
 
         Instruction<String> concatter = new Concat<>();
-        List<String> valueList = Arrays.asList("A", "2", "10", "10.50");
+        List<Object> valueList = Arrays.asList("A", "B", "C");
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
-        assertEquals("A21010.50", result.getAnswer(), "Answer should be 20");
+        assertEquals("ABC", result.getAnswer(), "Answer should be ABC");
+    }
+
+    @Test
+    void runInstruction_With_Integer_And_Text_Strings() {
+
+        Instruction<String> concatter = new Concat<>();
+        List<Object> valueList = Arrays.asList("A", "B", 1, 2);
+        Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
+        assertEquals("AB12", result.getAnswer(), "Answer should be AB12");
+    }
+
+    @Test
+    void runInstruction_With_Integer_Boolean_And_Text_Strings() {
+
+        Instruction<String> concatter = new Concat<>();
+        List<Object> valueList = Arrays.asList("A", "B", 1, 2, true);
+        Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
+        assertEquals("AB12true", result.getAnswer(), "Answer should be AB12true");
     }
 
     @Test
     void runInstructionEmptyList() {
 
         Instruction<String> concatter = new Concat<>();
-        List<String>valueList = Arrays.asList();
+        List<Object>valueList = Arrays.asList();
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
         assertEquals("", result.getAnswer(), "Answer should be empty");
     }
@@ -48,7 +66,7 @@ class ConcatTest {
     void runInstructionNullList() {
 
         Instruction<String> concatter = new Concat<>();
-        List<String>valueList = null;
+        List<Object>valueList = null;
         Result<String> result = concatter.runInstruction(valueList);//warning ok as this can take any object to concat
         assertEquals("", result.getAnswer(), "Answer should be empty");
     }

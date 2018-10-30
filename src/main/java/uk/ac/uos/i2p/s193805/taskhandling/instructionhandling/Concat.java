@@ -12,9 +12,12 @@ import java.util.List;
  */
 
 public class Concat<T extends String> implements Instruction<T> {
+
     @Override
-    public Result<T> runInstruction(List<T> values) {
-        Result<T> result = new Result<>();
+    @SuppressWarnings("unchecked")
+    public Result<T> runInstruction(List<Object> values) {
+
+        Result<String> result = new Result<>();
         StringBuilder stringBuilder = new StringBuilder();
 
         if (values != null)//handle null list
@@ -26,10 +29,10 @@ public class Concat<T extends String> implements Instruction<T> {
             }
 
         }
+        
+        result.setAnswer(stringBuilder.toString());
 
-        result.setAnswer((T) stringBuilder.toString());
-
-        return result;
+        return (Result<T>) result;
     }
 
     /*@Override

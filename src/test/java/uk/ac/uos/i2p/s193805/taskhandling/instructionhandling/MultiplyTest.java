@@ -1,12 +1,11 @@
 package uk.ac.uos.i2p.s193805.taskhandling.instructionhandling;
 
 import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.taskhandling.Result;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,29 +17,78 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MultiplyTest {
 
     @Test
-    void runInstruction() {
+    void testMultiplyer_2_Integers() {
 
         Instruction<Double> multiplier = new Multiply<>();
-        List<Double> valueList = Arrays.asList(2.0 , 10.00);
+        List<Object> valueList = Arrays.asList(2 , 10);
         double answer = multiplier.runInstruction(valueList).getAnswer();
-        assertEquals( 20.00, answer , "Answer should be 20");
+        assertEquals( 20, answer , "Answer should be 20");
     }
 
     @Test
-    void runInstruction2() {
+    void testMultiplyer_3_Integers() {
 
         Instruction<Double> multiplier = new Multiply<>();
-        List<Double> valueList = Arrays.asList(2.5, 10.5);
+        List<Object> valueList = Arrays.asList(2, 2, 2);
         double answer = multiplier.runInstruction(valueList).getAnswer();
-        assertEquals(26.25, answer, "Answer should be 26.25");
+        assertEquals(8, answer, "Answer should be 8");
     }
 
     @Test
-    void runInstruction3() {
+    void testMultiplyer_6_Integers() {
 
         Instruction<Double> multiplier = new Multiply<>();
-        List<Double> valueList = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+        List<Object> valueList = Arrays.asList(1, 2, 3, 4, 5, 6);
         double answer = multiplier.runInstruction(valueList).getAnswer();
-        assertEquals(720.0, answer, "Answer should be 720.00");
+        assertEquals(720, answer, "Answer should be 720.00");
     }
+
+    @Test
+    void testMultiplyer_With_A_Zero_Integer() {
+
+        Instruction<Double> multiplier = new Multiply<>();
+        List<Object> valueList = Arrays.asList(0, 2, 3, 4, 5, 6);
+        double answer = multiplier.runInstruction(valueList).getAnswer();
+        assertEquals(0, answer, "Answer should be 0");
+    }
+
+    @Test
+    void testMultiplyer_With_Text_Strings() {
+
+        Instruction<Double> multiplier = new Multiply<>();
+        List<Object> valueList = Arrays.asList("A", "B");
+        try
+        {
+            multiplier.runInstruction(valueList).getAnswer();
+            fail("Exception should have been thrown");
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Parameters must be Integer values only", e.getMessage());
+        }
+    }
+
+    @Test
+    void testMultiplyer_With_Integer_And_Text_Strings() {
+
+        Instruction<Double> multiplier = new Multiply<>();
+        List<Object> valueList = Arrays.asList(1, 2, "A", "B");
+        try
+        {
+            multiplier.runInstruction(valueList).getAnswer();
+            fail("Exception should have been thrown");
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Parameters must be Integer values only", e.getMessage());
+        }
+    }
+
+    /*try
+        {
+            adder.runInstruction(valueList).getAnswer();
+            fail("Exception should have been thrown");
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Parameters must be Integer values only", e.getMessage());
+        }
+*/
 }
