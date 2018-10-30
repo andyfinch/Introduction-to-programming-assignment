@@ -7,9 +7,9 @@ package uk.ac.uos.i2p.s193805.taskhandling;
  * Time: 09:40
  */
 
-public class Result<T> {
+public class Result {
 
-    private T answer;
+    private String answer;
     private String response;
 
     public boolean isCorrect()
@@ -24,11 +24,11 @@ public class Result<T> {
 
     public boolean isNumeric()
     {
-        if ( response != null)
+        if (answer != null)
         {
             try
             {
-                Double.parseDouble(response);
+                Integer.parseInt(answer);
             } catch (NumberFormatException e)
             {
                 return false;
@@ -40,11 +40,24 @@ public class Result<T> {
 
     }
 
-    public T getAnswer() {
+    public int getAnswerIntValue()
+    {
+        if ( !isNumeric() )
+        {
+            throw new NumberFormatException("Answer is not numeric " + answer);
+
+        }
+        else
+        {
+            return Integer.parseInt(answer);
+        }
+    }
+
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(T answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
 

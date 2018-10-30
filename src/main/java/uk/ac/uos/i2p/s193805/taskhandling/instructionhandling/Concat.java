@@ -11,13 +11,13 @@ import java.util.List;
  * Time: 09:43
  */
 
-public class Concat<T extends String> implements Instruction<T> {
+public class Concat implements Instruction {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Result<T> runInstruction(List<Object> values) {
+    public Result runInstruction(List<Object> values) {
 
-        Result<String> result = new Result<>();
+        Result result = new Result();
         StringBuilder stringBuilder = new StringBuilder();
 
         if (values != null)//handle null list
@@ -32,27 +32,8 @@ public class Concat<T extends String> implements Instruction<T> {
         
         result.setAnswer(stringBuilder.toString());
 
-        return (Result<T>) result;
+        return result;
     }
 
-    /*@Override
-    public Result<String> runInstruction(List<String> values) {
-        Result<String> result = new Result<>();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        if ( values != null )//handle null list
-        {
-            for (Object number : values)
-            {
-                stringBuilder.append(number);
-
-            }
-
-        }
-
-        result.setAnswer(stringBuilder.toString());
-
-        return result;
-    }*/
 
 }

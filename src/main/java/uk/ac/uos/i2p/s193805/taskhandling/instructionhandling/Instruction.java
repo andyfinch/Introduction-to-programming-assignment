@@ -11,8 +11,8 @@ import java.util.List;
  * Time: 09:40
  */
 
-public interface Instruction<T> {
+public interface Instruction {
 
-    Result<T> runInstruction(List<Object> values) throws IllegalArgumentException;
+    Result runInstruction(List<Object> values) throws IllegalArgumentException;
 
 }

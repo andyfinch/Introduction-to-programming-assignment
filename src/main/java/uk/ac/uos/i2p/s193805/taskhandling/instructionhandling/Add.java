@@ -11,12 +11,12 @@ import java.util.List;
  * Time: 09:43
  */
 
-public class Add<T extends Integer> implements Instruction<T> {
+public class Add implements Instruction {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Result<T> runInstruction(List<Object> values) throws IllegalArgumentException {
-        Result<Integer> result = new Result<>();
+    public Result runInstruction(List<Object> values) throws IllegalArgumentException {
+        Result result = new Result();
         Integer runningSum = 0;
 
         if (values != null)
@@ -34,53 +34,11 @@ public class Add<T extends Integer> implements Instruction<T> {
         }
 
 
-        result.setAnswer(runningSum);
+        result.setAnswer(runningSum.toString());
 
-        return (Result<T>) result;
+        return result;
     }
 
-    /*@Override
-    public Result<T> runInstruction(List<T> values) {
-        Result<T> result = new Result<>();
-        Double runningSum = 0.00;
-
-        if (values != null)
-        {
-            for (T value : values)
-            {
-                runningSum += Double.parseDouble(value.toString());
-            }
-
-            *//*for (Double number : values)
-            {
-                runningSum += number;
-            }*//*
-        }
-
-
-        result.setAnswer((T) runningSum);
-
-        return result;
-    }*/
-
-    /*@Override
-    public Result<Double> runInstruction(List<Double> values) {
-        Result<Double> result = new Result<>();
-        Double runningSum = 0.00;
-
-        if ( values != null )
-        {
-            for (Double number : values)
-            {
-                runningSum += number;
-            }
-        }
-
-
-        result.setAnswer(runningSum);
-
-        return result;
-    }*/
 
 
 }

@@ -20,57 +20,57 @@ class AddTest {
     @Test
     void  testAdder() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(50,50);
-        double answer = adder.runInstruction(valueList).getAnswer();
+        int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals( 100.00, answer , "Answer should be 100");
     }
 
     @Test
     void testAdder_With_Zero_As_Param() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(0, 50);
-        double answer = adder.runInstruction(valueList).getAnswer();
+        int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(50, answer, "Answer should be 50");
     }
 
     @Test
     void testAdder_With_All_Zeroes() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(0, 0);
-        double answer = adder.runInstruction(valueList).getAnswer();
+        int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(0, answer, "Answer should be 0");
     }
 
     @Test
     void testAdder_with_Only_Zero_Value() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(0);
-        double answer = adder.runInstruction(valueList).getAnswer();
+        int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(0, answer, "Answer should be 0");
     }
 
     @Test
     void testAdder_with_Only_One_Value() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(5);
-        double answer = adder.runInstruction(valueList).getAnswer();
+        int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(5, answer, "Answer should be 5");
     }
 
     @Test
     void testAdder_Text_Strings() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList("A", "B");
 
         try
         {
-            adder.runInstruction(valueList).getAnswer();
+            adder.runInstruction(valueList);
             fail("Exception should have been thrown");
         } catch (IllegalArgumentException e)
         {
@@ -82,12 +82,12 @@ class AddTest {
     @Test
     void testAdder_Integer_And_Text_Strings() {
 
-        Instruction<Integer> adder = new Add<>();
+        Instruction adder = new Add();
         List<Object> valueList = Arrays.asList(1, "B");
 
         try
         {
-            adder.runInstruction(valueList).getAnswer();
+            adder.runInstruction(valueList);
             fail("Exception should have been thrown");
         } catch (IllegalArgumentException e)
         {

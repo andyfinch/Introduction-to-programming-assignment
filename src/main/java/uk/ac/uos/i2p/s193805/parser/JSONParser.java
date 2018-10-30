@@ -86,6 +86,25 @@ public class JSONParser {
         
     }
 
+    public List<String> getJSONStringArray(String keyName) {
+
+        checkKeyExists(keyName);
+
+        //reading arrays from json
+        JsonArray jsonArray = parsedJSONObject.getJsonArray(keyName);
+        List<String> jsonValues = new ArrayList<>();
+
+        for (JsonValue jsonValue : jsonArray)
+        {
+
+            jsonValues.add(((JsonString) jsonValue).getString());
+
+        }
+
+        return jsonValues;
+
+    }
+
     public JsonObject getNestedJSONObject(String keyName) {
 
         checkKeyExists(keyName);

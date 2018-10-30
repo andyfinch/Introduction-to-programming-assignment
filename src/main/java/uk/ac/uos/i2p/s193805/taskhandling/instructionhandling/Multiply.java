@@ -11,14 +11,14 @@ import java.util.List;
  * Time: 09:43
  */
 
-public class Multiply<T extends Number> implements Instruction<T> {
+public class Multiply implements Instruction {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Result<T> runInstruction(List<Object> values) throws IllegalArgumentException {
+    public Result runInstruction(List<Object> values) throws IllegalArgumentException {
 
-        Result<Double> result = new Result<>();
-        Double runningSum = 1.00;
+        Result result = new Result();
+        Integer runningSum = 1;
 
         if (values != null)
         {
@@ -35,9 +35,9 @@ public class Multiply<T extends Number> implements Instruction<T> {
         }
 
 
-        result.setAnswer(runningSum);
+        result.setAnswer(runningSum.toString());
 
-        return (Result<T>) result;
+        return result;
     }
 
 

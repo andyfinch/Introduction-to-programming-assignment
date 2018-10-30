@@ -10,11 +10,11 @@ import uk.ac.uos.i2p.s193805.taskhandling.instructionhandling.Multiply;
  * Time: 09:12
  */
 
-public class MultiplyTask<T extends Integer> extends Task<T> {
+public class MultiplyTask extends Task {
 
     @Override
     public void runInstruction() {
-        Instruction<T> adder = new Multiply<>();
+        Instruction adder = new Multiply();
         result = adder.runInstruction(paramList);
 
     }

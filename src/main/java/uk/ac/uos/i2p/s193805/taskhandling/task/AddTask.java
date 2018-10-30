@@ -10,11 +10,11 @@ import uk.ac.uos.i2p.s193805.taskhandling.instructionhandling.Instruction;
  * Time: 09:12
  */
 
-public class AddTask<T extends Integer> extends Task<T> {
+public class AddTask extends Task {
 
     @Override
     public void runInstruction() {
-        Instruction<T> adder = new Add<>();
+        Instruction adder = new Add();
         result = adder.runInstruction(paramList);
 
     }

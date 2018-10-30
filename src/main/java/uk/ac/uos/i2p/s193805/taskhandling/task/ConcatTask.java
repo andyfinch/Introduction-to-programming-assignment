@@ -10,11 +10,11 @@ import uk.ac.uos.i2p.s193805.taskhandling.instructionhandling.Instruction;
  * Time: 09:12
  */
 
-public class ConcatTask<T extends String> extends Task<T> {
+public class ConcatTask extends Task {
 
     @Override
     public void runInstruction() {
-        Instruction<T> adder = new Concat<>();
+        Instruction adder = new Concat();
         result = adder.runInstruction(paramList);
 
     }

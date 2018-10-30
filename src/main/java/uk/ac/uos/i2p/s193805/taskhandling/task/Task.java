@@ -12,13 +12,12 @@ import java.util.List;
  * Time: 15:35
  */
 
-public abstract class Task<T> {
+public abstract class Task {
 
-    private String taskURL;
     private String instruction;
     protected List<Object> paramList = new ArrayList<>();
     private String responseURL;
-    protected Result<T> result;
+    protected Result result;
 
     public abstract void runInstruction();
 
@@ -28,14 +27,6 @@ public abstract class Task<T> {
 
     public void setParamList(List<Object> paramList) {
         this.paramList = paramList;
-    }
-
-    public String getTaskURL() {
-        return taskURL;
-    }
-
-    public void setTaskURL(String taskURL) {
-        this.taskURL = taskURL;
     }
 
     public String getInstruction() {
@@ -54,11 +45,11 @@ public abstract class Task<T> {
         this.responseURL = responseURL;
     }
 
-    public Result<T> getResult() {
+    public Result getResult() {
         return result;
     }
 
-    public void setResult(Result<T> result) {
+    public void setResult(Result result) {
         this.result = result;
     }
 }
