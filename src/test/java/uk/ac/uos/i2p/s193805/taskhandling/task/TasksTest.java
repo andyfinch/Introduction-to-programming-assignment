@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.http.HTTPRequest;
 import uk.ac.uos.i2p.s193805.parser.JSONParser;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
 
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TasksTest {
 
     @Test
-    void testTasksCreation() {
+    void testTasksCreation() throws Exception {
 
         Tasks tasks = TasksBuilder.buildTasksObject("{\"id\": \"s113867\",\"tasks\": [\"/task/452359-4435382-6595137\",\"/task/99012-65325148-3574826\"]}\n");
         assertEquals("s113867", tasks.getId());

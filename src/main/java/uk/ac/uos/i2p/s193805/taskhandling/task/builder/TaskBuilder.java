@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task.builder;
 
 import uk.ac.uos.i2p.s193805.parser.JSONParser;
+import uk.ac.uos.i2p.s193805.parser.JavaJSONObject;
 import uk.ac.uos.i2p.s193805.taskhandling.task.AddTask;
 import uk.ac.uos.i2p.s193805.taskhandling.task.ConcatTask;
 import uk.ac.uos.i2p.s193805.taskhandling.task.MultiplyTask;
@@ -17,29 +18,29 @@ public class TaskBuilder {
 
     public static Task buildTaskObject(String json) throws IllegalArgumentException {
         Task task = null;
-        JSONParser jsonParser = new JSONParser(json);
+        JavaJSONObject javaJSONObject = JSONParser.parseJSONtoJava(json);
 
-        if ( jsonParser.getJSONStringValue("instruction").equalsIgnoreCase("add"))
+        if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("add"))
         {
            task = new AddTask();
         }
-        else if (jsonParser.getJSONStringValue("instruction").equalsIgnoreCase("multiply"))
+        else if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("multiply"))
         {
            task = new MultiplyTask();
         }
-        else if (jsonParser.getJSONStringValue("instruction").equalsIgnoreCase("concat"))
+        else if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("concat"))
         {
             task = new ConcatTask();
         }
         else
         {
-            throw new IllegalArgumentException("Invalid Instruction " + jsonParser.getJSONStringValue("instruction"));
+            throw new IllegalArgumentException("Invalid Instruction " + javaJSONObject.getJSONStringValue("instruction"));
         }
 
 
-        task.setInstruction(jsonParser.getJSONStringValue("instruction"));
-        task.setParamList(jsonParser.getJSONArray("parameters"));
-        task.setResponseURL(jsonParser.getJSONStringValue("response URL"));
+        task.setInstruction(javaJSONObject.getJSONStringValue("instruction"));
+        task.setParamList(javaJSONObject.getJSONArray("parameters"));
+        task.setResponseURL(javaJSONObject.getJSONStringValue("response URL"));
 
         return task;
     }
