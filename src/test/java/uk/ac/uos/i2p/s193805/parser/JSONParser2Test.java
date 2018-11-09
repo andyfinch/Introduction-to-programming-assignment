@@ -2,8 +2,6 @@ package uk.ac.uos.i2p.s193805.parser;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
@@ -16,7 +14,7 @@ class JSONParser2Test {
     @Test
     void name() throws Exception {
 
-        JSONParser2 jsonParser2  = new JSONParser2("{\n" +
+        JSONObject jsonObject = JSONToJavaParser.parseJSONtoJava("{\n" +
                 "  \"instruction\": \"add\",\n" +
                 "  \"parameters\": [\n" +
                 "    \"23\",\n" +
@@ -31,7 +29,7 @@ class JSONParser2Test {
                 "  },\n" +
                 "  \"response URL\": \"/answer/d3ae45\"\n" +
                 "}");
-        jsonParser2.parseJSON();
+        
         System.out.println("");
     }
 
