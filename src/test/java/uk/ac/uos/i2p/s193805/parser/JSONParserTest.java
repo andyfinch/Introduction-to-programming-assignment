@@ -133,4 +133,24 @@ class JSONParserTest {
 
     }
 
+    @Test
+    void testParser_Validate() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\" : \"add\",\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ],\n" +
+                "  \"firstNested\": {\n" +
+                "    \"secondNested\": {\n" +
+                "      \"thirdNested\": {\n" +
+                "        \"test\": \"hello\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}\n");
+
+    }
+
 }

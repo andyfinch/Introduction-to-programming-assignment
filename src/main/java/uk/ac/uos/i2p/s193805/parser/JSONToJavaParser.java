@@ -22,8 +22,7 @@ public class JSONToJavaParser {
         this.JSONString = JSONString;
     }*/
 
-    public static JSONObject parseJSONtoJava(String jsonToParse)
-    {
+    public static JSONObject parseJSONtoJava(String jsonToParse) {
         String santisedJSON = jsonToParse.replace("\"", "").replace("\n", "").trim();
 
         char[] jsonToChar = santisedJSON.toCharArray();
@@ -47,7 +46,7 @@ public class JSONToJavaParser {
             char c = jsonToChar[i];
             System.out.print(c);
 
-            if ( i == 0)
+            if (i == 0)
             {
                 if (c != '{')
                 {
@@ -60,14 +59,14 @@ public class JSONToJavaParser {
             }
 
 
-            if ( processingingKey)
+            if (processingingKey)
             {
-                if ( c != ':' && c != ',')
+                if (c != ':' && c != ',')
                 {
                     jsonKey.append(c);
                 }
 
-                if ( c == ':')
+                if (c == ':')
                 {
 
                     processingingKey = false;
@@ -80,9 +79,9 @@ public class JSONToJavaParser {
                 }*/
             }
 
-            if ( processingingValue && !processingingArray && !processingingNested )
+            if (processingingValue && !processingingArray && !processingingNested)
             {
-                if ( c == '{')
+                if (c == '{')
                 {
                     jsonValue.append(c);
                     openBraces++;
@@ -96,9 +95,9 @@ public class JSONToJavaParser {
                     continue;
                 }
 
-                if ( c != ',' && c != '}')
+                if (c != ',' && c != '}')
                 {
-                   jsonValue.append(c);
+                    jsonValue.append(c);
                 }
                 else
                 {
@@ -109,7 +108,7 @@ public class JSONToJavaParser {
                     processingingKey = true;
                 }
             }
-            
+
             if (processingingArray)
             {
                 if (c != ',' && c != ']')
@@ -123,7 +122,7 @@ public class JSONToJavaParser {
                     jsonValue = new StringBuilder();
 
                 }
-                if ( c == ']')
+                if (c == ']')
                 {
                     jsonArrayList.add(jsonValue.toString().trim());
                     jsonObject.getJsonKeyArrayMap().put(jsonKey.toString().trim(), jsonArrayList);
@@ -136,19 +135,18 @@ public class JSONToJavaParser {
             }
 
 
-
-            if ( processingingNested)
+            if (processingingNested)
             {
-                if ( c == '{')
+                if (c == '{')
                 {
                     openBraces++;
                 }
-                if ( c == '}')
+                if (c == '}')
                 {
                     closedBraces++;
                 }
 
-                if ( openBraces != closedBraces)
+                if (openBraces != closedBraces)
                 {
                     jsonValue.append(c);
                 }
@@ -167,8 +165,6 @@ public class JSONToJavaParser {
 
             }
 
-            
-
 
         }
 
@@ -176,6 +172,183 @@ public class JSONToJavaParser {
 
     }
 
+    public static boolean validateJSONString(String jsonToValidate) {
+        String santisedJSONforValidation = jsonToValidate.replace(" ", "").replace("\n", "").trim();
 
+        char[] jsonCharArray = santisedJSONforValidation.toCharArray();
+
+        boolean openBraceFound = false;
+        boolean closedBraceFound = false;
+
+        boolean firstQuoteFound = false;
+        boolean matchedQuoteFound = false;
+
+        boolean processingKey = true;
+        boolean processingValue = false;
+
+        boolean processingArray = false;
+        boolean firstArrayBracketFound = false;
+        boolean matchedArrayBracketFound = false;
+
+        for (int i = 0; i < jsonCharArray.length; i++)
+        {
+            char c = jsonCharArray[i];
+
+            if (i == 0 && c != '{')
+            {
+                return false;
+            }
+            if (i == jsonCharArray.length - 1 && c != '}')
+            {
+                return false;
+            }
+
+            if (processingKey)
+            {
+                if (!firstQuoteFound && c == '"')
+                {
+                    firstQuoteFound = true;
+                    continue;
+                }
+
+                if (firstQuoteFound && !matchedQuoteFound)
+                {
+                    if (c == '"')
+                    {
+                        matchedQuoteFound = true;
+                        continue;
+                    }
+
+
+                }
+
+                if (firstQuoteFound && matchedQuoteFound)
+                {
+                    if (c != ':')
+                    {
+                        System.out.println("Missing COLON");
+                        return false;
+                    }
+                    else
+                    {
+                        processingKey = false;
+                        processingValue = true;
+                        firstQuoteFound = false;
+                        matchedQuoteFound = false;
+                        continue;
+                    }
+                }
+            }
+
+            if (processingValue)
+            {
+                if (!processingArray && c == '[')
+                {
+                    processingArray = true;
+                    firstArrayBracketFound = true;
+                    continue;
+                }
+
+                if (processingArray)
+                {
+
+                    if (c == ']')
+                    {
+                        if (jsonCharArray[i + 1] != ',')
+                        {
+                            System.out.println("MISSING comma after ]");
+                            return false;
+                        }
+                        else if (jsonCharArray[i + 1] == ',')
+                        {
+                            i++;
+                            processingArray = false;
+                            processingValue = false;
+                            processingKey = true;
+                            firstQuoteFound = false;
+                            matchedQuoteFound = false;
+                            firstArrayBracketFound = false;
+                            matchedArrayBracketFound = false;
+                            continue;
+                        }
+
+                    }
+
+                    if (!firstQuoteFound && c == '"')
+                    {
+                        firstQuoteFound = true;
+                        continue;
+                    }
+
+                    if (firstQuoteFound && !matchedQuoteFound && c == ',')
+                    {
+                        System.out.println("MISSING Quote");
+                        return false;
+                    }
+
+                    if (firstQuoteFound && c == '"')
+                    {
+                        matchedQuoteFound = true;
+                        continue;
+                    }
+
+                    if (firstQuoteFound && matchedQuoteFound && c != ',')
+                    {
+                        System.out.println("MISSING Comma 1");
+                        return false;
+                    }
+
+
+
+
+                }
+                else {
+                    if (!firstQuoteFound && c == '"')
+                    {
+                        firstQuoteFound = true;
+                        continue;
+                    }
+
+                    if (firstQuoteFound && !matchedQuoteFound && c == ',')
+                    {
+                        System.out.println("MISSING Quote");
+                        return false;
+                    }
+
+                    if (firstQuoteFound && c == '"')
+                    {
+                        matchedQuoteFound = true;
+                        continue;
+                    }
+
+                    if (firstQuoteFound && matchedQuoteFound && c != ',')
+                    {
+                        System.out.println("MISSING Comma 2");
+                        return false;
+                    }
+                    else if (firstQuoteFound && matchedQuoteFound && c == ',')
+                    {
+                        processingValue = false;
+                        processingKey = true;
+                        firstQuoteFound = false;
+                        matchedQuoteFound = false;
+                        continue;
+
+                    }
+                }
+
+
+
+
+            }
+
+
+        }
+
+
+        System.out.println(santisedJSONforValidation);
+
+        return false;
+    }
 
 }
