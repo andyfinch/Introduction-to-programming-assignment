@@ -91,49 +91,279 @@ class JSONParserTest {
 
     }
 
-    @Test
-    void testParser_With_Invalid_JSON_Missing_Comma() {
 
+    @Test
+    void testParser_Validate_Simple_Key_Value() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\": \"add\"\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_INT_Value() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\": 10\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_2_Simple_Key_Values() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"another\": \"one\"\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Values_And_Array() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ]\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Values_X2_And_Array() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ],\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Values_X2_And_Array_And_Nested() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"instruction\" : \"add\",\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ],\n" +
+                "  \"firstNested\": {\n" +
+                "    \"secondNested\": {\n" +
+                "      \"thirdNested\": {\n" +
+                "        \"test\": \"hello\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}\n" +
+                "\n" +
+                "\n");
+
+    }
+
+    @Test
+    void testParser_Validate_2_Simple_Key_Values_Missing_2nd_Colon() {
         try
         {
-            JSONToJavaParser.parseJSONtoJava("{\"instruction\": \"add\"\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
-            fail("Shouldn't get here");
-        } catch (JsonParsingException e)
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\": \"add\",\n" +
+                    "  \"another\" \"one\"\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
         {
-            assertEquals("JSON is invalid Invalid token=STRING at (line no=1, column no=33, offset=32). Expected tokens are: [COMMA]", e.getMessage());
+            assertEquals("Missing Colon", e.getMessage());
         }
 
     }
 
     @Test
-    void testParser_With_Invalid_JSON_Extra_Brace() {
-
+    void testParser_Validate_Simple_Key_Value_Missing_Start_Brace() {
         try
         {
-            JSONToJavaParser.parseJSONtoJava("{{\"instruction\": \"add\"\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
-            fail("Shouldn't get here");
-        } catch (JsonParsingException e)
+            JSONToJavaParser.validateJSONString("\n" +
+                    "  \"instruction\": \"add\"\n" +
+                    "}");
+            fail();
+        } catch (RuntimeException e)
         {
-            assertEquals("JSON is invalid Invalid token=CURLYOPEN at (line no=1, column no=2, offset=1). Expected tokens are: [STRING]", e.getMessage());
+            assertEquals("Missing open brace", e.getMessage());
         }
 
     }
 
     @Test
-    void testParser_With_Invalid_JSON_Missing_Colon() {
-
+    void testParser_Validate_Simple_Key_Value_Missing_Closing_Brace() {
         try
         {
-            JSONObject jsonObject = JSONToJavaParser.parseJSONtoJava("{\"instruction\" \"add\"\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
-            fail("Shouldn't get here");
-        } catch (JsonException e)
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\": \"add\"\n" +
+                    "");
+            fail("Should not get here");
+        } catch (RuntimeException e)
         {
-            assertEquals("JSON is invalid Invalid token=STRING at (line no=1, column no=20, offset=19). Expected tokens are: [COLON]", e.getMessage());
+            assertEquals("Missing closing brace", e.getMessage());
         }
 
     }
 
     @Test
+    void testParser_Validate_Simple_Key_Value_Missing_Colon() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\" \"add\"\n" +
+                    "");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("Missing Colon", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Value_Missing_Value() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\": \n" +
+                    "}\n");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("Missing Value", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Value_String_Value_Not_Quoted() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\": add\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("String value not quoted", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Key_Value_String_Value_End_Quote_Missing() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"instruction\": \"add\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("String value end quote missing", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ]\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array_X_2() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"parameters\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "    ],\n" +
+                "  \"parametersAgain\": [\n" +
+                "    \"23\",\n" +
+                "    45\n" +
+                "  ]\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array_INT() {
+        JSONToJavaParser.validateJSONString("{\n" +
+                "  \"parameters\": [\n" +
+                "    23,\n" +
+                "    45\n" +
+                "  ]\n" +
+                "}");
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array_Missing_Start_Quote() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"parameters\": [\n" +
+                    "    23\",\n" +
+                    "    45\n" +
+                    "  ]\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("String value end quote missing", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array_Missing_End_Quote() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"parameters\": [\n" +
+                    "    \"23,\n" +
+                    "    45\n" +
+                    "  ]\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("String value end quote missing", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testParser_Validate_Simple_Array_Missing_Square_Bracket() {
+        try
+        {
+            JSONToJavaParser.validateJSONString("{\n" +
+                    "  \"parameters\": \n" +
+                    "    23,\n" +
+                    "    45\n" +
+                    "    ]\n" +
+                    "}");
+            fail("Should not get here");
+        } catch (RuntimeException e)
+        {
+            assertEquals("Array missing [", e.getMessage());
+        }
+
+    }
+
+
+
+    /*@Test
     void testParser_Validate() {
         JSONToJavaParser.validateJSONString("{\n" +
                 "  \"instruction\" : \"add\",\n" +
@@ -151,6 +381,6 @@ class JSONParserTest {
                 "  \"response URL\": \"/answer/d3ae45\"\n" +
                 "}\n");
 
-    }
+    }*/
 
 }

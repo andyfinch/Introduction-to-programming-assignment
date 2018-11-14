@@ -187,159 +187,228 @@ public class JSONToJavaParser {
         boolean processingValue = false;
 
         boolean processingArray = false;
+        boolean processingNested = false;
         boolean firstArrayBracketFound = false;
         boolean matchedArrayBracketFound = false;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        boolean validJSON = true;
 
         for (int i = 0; i < jsonCharArray.length; i++)
         {
             char c = jsonCharArray[i];
+            stringBuilder.append(c);
 
             if (i == 0 && c != '{')
             {
-                return false;
+                throw new RuntimeException("Missing open brace");
             }
             if (i == jsonCharArray.length - 1 && c != '}')
             {
-                return false;
+                throw new RuntimeException("Missing closing brace");
             }
 
-            if (processingKey)
+            if (processingKey && !processingArray)
             {
+
+                if (c == ']')
+                {
+                    throw new RuntimeException("Array missing [");
+                }
+                
                 if (!firstQuoteFound && c == '"')
                 {
                     firstQuoteFound = true;
                     continue;
                 }
 
-                if (firstQuoteFound && !matchedQuoteFound)
+                if (firstQuoteFound /*&& !matchedQuoteFound*/)
                 {
                     if (c == '"')
                     {
-                        matchedQuoteFound = true;
-                        continue;
-                    }
-
-
-                }
-
-                if (firstQuoteFound && matchedQuoteFound)
-                {
-                    if (c != ':')
-                    {
-                        System.out.println("Missing COLON");
-                        return false;
-                    }
-                    else
-                    {
-                        processingKey = false;
-                        processingValue = true;
                         firstQuoteFound = false;
-                        matchedQuoteFound = false;
+
+                        if ( jsonCharArray[i+1] != ':')
+                        {
+                            throw new RuntimeException("Missing Colon");
+                        }
+                        else if ( jsonCharArray[i+2] == '[' )
+                        {
+                            processingKey = false;
+                            processingValue = false;
+                            processingArray = true;
+                            i+=1;
+                        }
+                        else if (jsonCharArray[i+2] == '{')
+                        {
+                            processingKey = false;
+                            processingValue = false;
+                            processingArray = false;
+                            processingNested = true;
+                            i +=1;
+                        }
+                        else if (jsonCharArray[i + 2] == ',' || jsonCharArray[i + 2] == '}')
+                        {
+                            throw new RuntimeException("Missing Value");
+                        }
+                        else
+                        {
+                            processingKey = false;
+                            processingValue = true;
+                            i += 1;
+                        }
+
                         continue;
                     }
+
                 }
+
             }
 
-            if (processingValue)
+            if ( processingValue)
             {
-                if (!processingArray && c == '[')
+
+                if ( firstQuoteFound && c == '"')
                 {
-                    processingArray = true;
-                    firstArrayBracketFound = true;
+                    matchedQuoteFound = true;
+                    continue;
+                    //2nd quote found
+                }
+
+                if ( !firstQuoteFound && c == '"')
+                {
+
+                    firstQuoteFound = true;
                     continue;
                 }
 
-                if (processingArray)
+                if ( !firstQuoteFound && c != '"' ) //should be number then
                 {
-
-                    if (c == ']')
+                    try
                     {
-                        if (jsonCharArray[i + 1] != ',')
+                        if ( processingArray && c == ',')
                         {
-                            System.out.println("MISSING comma after ]");
-                            return false;
+                            continue;
                         }
-                        else if (jsonCharArray[i + 1] == ',')
+
+                        Integer.parseInt(String.valueOf(c));
+
+                        if ( jsonCharArray[i+1] == ',' || jsonCharArray[i + 1] == '}')
                         {
-                            i++;
-                            processingArray = false;
                             processingValue = false;
                             processingKey = true;
                             firstQuoteFound = false;
                             matchedQuoteFound = false;
-                            firstArrayBracketFound = false;
-                            matchedArrayBracketFound = false;
+
+                        }
+
+                    } catch (NumberFormatException e)
+                    {
+                        throw new RuntimeException("String value not quoted");
+                    }
+
+                }
+
+                if (firstQuoteFound && !matchedQuoteFound && (c == '}' || c == ','))
+                {
+                    throw new RuntimeException("String value end quote missing");
+
+                }
+
+
+                if ( c == ',')
+                {
+                    processingValue = false;
+                    processingKey = true;
+                    firstQuoteFound = false;
+                    matchedQuoteFound = false;
+                }
+
+
+                /*if ( firstQuoteFound && c == '"')
+                {
+                    if ( jsonCharArray[i+1] != ',')
+                    {
+                        throw new RuntimeException("X");
+                    }
+                }*/
+            }
+
+            if ( processingArray  )
+            {
+                if ( c== '[')
+                {
+                    continue;
+                }
+
+                if ( c== ']')
+                {
+                    processingValue = false;
+                    processingKey = true;
+                    firstQuoteFound = false;
+                    matchedQuoteFound = false;
+                    processingArray = false;
+                    continue;
+                }
+
+                if (firstQuoteFound && c == '"')
+                {
+                    matchedQuoteFound = true;
+                    continue;
+                    //2nd quote found
+                }
+
+                if (!firstQuoteFound && c == '"')
+                {
+
+                    firstQuoteFound = true;
+                    continue;
+                }
+
+                if (!firstQuoteFound && c != '"') //should be number then
+                {
+                    try
+                    {
+                        if (c == ',')
+                        {
+                            firstQuoteFound = false;
+                            matchedQuoteFound = false;
                             continue;
                         }
 
-                    }
+                        Integer.parseInt(String.valueOf(c));
 
-                    if (!firstQuoteFound && c == '"')
+                        if (jsonCharArray[i + 1] == ',' || jsonCharArray[i + 1] == '}')
+                        {
+                            processingValue = false;
+                            processingKey = true;
+                            firstQuoteFound = false;
+                            matchedQuoteFound = false;
+
+                        }
+
+                    } catch (NumberFormatException e)
                     {
-                        firstQuoteFound = true;
-                        continue;
+                        throw new RuntimeException("String value not quoted");
                     }
-
-                    if (firstQuoteFound && !matchedQuoteFound && c == ',')
-                    {
-                        System.out.println("MISSING Quote");
-                        return false;
-                    }
-
-                    if (firstQuoteFound && c == '"')
-                    {
-                        matchedQuoteFound = true;
-                        continue;
-                    }
-
-                    if (firstQuoteFound && matchedQuoteFound && c != ',')
-                    {
-                        System.out.println("MISSING Comma 1");
-                        return false;
-                    }
-
-
-
 
                 }
-                else {
-                    if (!firstQuoteFound && c == '"')
-                    {
-                        firstQuoteFound = true;
-                        continue;
-                    }
 
-                    if (firstQuoteFound && !matchedQuoteFound && c == ',')
-                    {
-                        System.out.println("MISSING Quote");
-                        return false;
-                    }
+                if (firstQuoteFound && !matchedQuoteFound && (c == '}' || c == ','))
+                {
+                    throw new RuntimeException("String value end quote missing");
 
-                    if (firstQuoteFound && c == '"')
-                    {
-                        matchedQuoteFound = true;
-                        continue;
-                    }
-
-                    if (firstQuoteFound && matchedQuoteFound && c != ',')
-                    {
-                        System.out.println("MISSING Comma 2");
-                        return false;
-                    }
-                    else if (firstQuoteFound && matchedQuoteFound && c == ',')
-                    {
-                        processingValue = false;
-                        processingKey = true;
-                        firstQuoteFound = false;
-                        matchedQuoteFound = false;
-                        continue;
-
-                    }
                 }
 
 
-
-
+                if (c == ',')
+                {
+                    processingValue = false;
+                    processingKey = true;
+                    firstQuoteFound = false;
+                    matchedQuoteFound = false;
+                }
             }
 
 
