@@ -14,6 +14,7 @@ public class JSONSymbol {
         CLOSE_BRACE,
         QUOTE,
         COLON,
+        COMMA,
         OPEN_ARRAY,
         CLOSE_ARRAY,
         KEY,
