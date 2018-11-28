@@ -2,6 +2,10 @@ package uk.ac.uos.i2p.s193805.parser;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.StringReader;
+
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
@@ -14,23 +18,58 @@ class JSONParser2Test {
     @Test
     void name() throws Exception {
 
-        JSONObject jsonObject = JSONToJavaParser.parseJSONtoJava("{\n" +
-                "  \"instruction\": \"add\",\n" +
-                "  \"parameters\": [\n" +
-                "    \"23\",\n" +
-                "    45\n" +
-                "  ],\n" +
-                "  \"firstNested\": {\n" +
-                "    \"secondNested\": {\n" +
-                "      \"thirdNested\": {\n" +
-                "        \"test\": \"hello\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  },\n" +
+        String json = "{\n" +
+                "  \"instruction\" : \"add\",\n" +
                 "  \"response URL\": \"/answer/d3ae45\"\n" +
-                "}");
+                "}";
+
+        JSONToJavaParser2 jsonToJavaParser = new JSONToJavaParser2(new StringReader(json));
+        jsonToJavaParser.parse();
         
-        System.out.println("");
+    }
+
+    @Test
+    void testOpenBrace() throws Exception {
+
+        String json = "{";
+
+        JSONToJavaParser2 jsonToJavaParser = new JSONToJavaParser2(new StringReader(json));
+        JSONSymbol jsonSymbol = jsonToJavaParser.next();
+        assertEquals(JSONSymbol.Type.OPEN_BRACE, jsonSymbol.type);
+
+    }
+
+    @Test
+    void testClosedBrace() throws Exception {
+
+        String json = "}";
+
+        JSONToJavaParser2 jsonToJavaParser = new JSONToJavaParser2(new StringReader(json));
+        JSONSymbol jsonSymbol = jsonToJavaParser.next();
+        assertEquals(JSONSymbol.Type.CLOSE_BRACE, jsonSymbol.type);
+
+    }
+
+    @Test
+    void testColon() throws Exception {
+
+        String json = ":";
+
+        JSONToJavaParser2 jsonToJavaParser = new JSONToJavaParser2(new StringReader(json));
+        JSONSymbol jsonSymbol = jsonToJavaParser.next();
+        assertEquals(JSONSymbol.Type.COLON, jsonSymbol.type);
+
+    }
+
+    @Test
+    void testStringValue() throws Exception {
+
+        String json = "Hello";
+
+        JSONToJavaParser2 jsonToJavaParser = new JSONToJavaParser2(new StringReader(json));
+        JSONSymbol jsonSymbol = jsonToJavaParser.next();
+        assertEquals(JSONSymbol.Type.STRING_VALUE, jsonSymbol.type);
+
     }
 
    

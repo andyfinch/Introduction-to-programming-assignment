@@ -1,7 +1,13 @@
 package uk.ac.uos.i2p.s193805.parser;
 
 import javax.json.JsonException;
+import java.io.IOException;
+import java.io.PushbackReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.*;
+
+import static uk.ac.uos.i2p.s193805.parser.JSONToJavaParser.CurrentState.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,12 +20,247 @@ public class JSONToJavaParser {
 
     private String JSONString;
 
+    public enum CurrentState {
+        START_PROCESSING,
+        PROCESSING_KEY,
+        PROCESSING_VALUE,
+        PROCESSING_ARRAY,
+        PROCESSING_NESTED
+    }
+
+    String jsonKey;
+    String jsonValue;
+    List<String> jsonArrayList = new ArrayList<>();
+    PushbackReader pushbackReader;
+    JSONObject jsonObject = new JSONObject();
+    CurrentState currentState = START_PROCESSING;
+
+
+
     /*private Map<String, String> jsonKeyValueMap = new HashMap<>();
     private Map<String, List<String>> jsonKeyArrayMap = new HashMap<>();
     private Map<String, JSONParser2> jsonKeyNestedObjectMap = new HashMap<>();
 
     public JSONParser2(String JSONString) {
         this.JSONString = JSONString;
+    }*/
+
+    private PushbackReader setupReader(String jsonToParse)
+    {
+
+        return new PushbackReader(new StringReader(jsonToParse));
+
+    }
+
+
+
+    public JSONObject parseJSONtoJava(String jsonToParse, boolean test) {
+
+        pushbackReader = setupReader(jsonToParse);
+
+        //CurrentState currentState = START_PROCESSING;
+
+        try
+        {
+            int c;
+            while ((c = pushbackReader.read()) != -1)
+            {
+                char charRead = (char) c;
+                //Character.isWhitespace(c);
+
+                if (currentState == START_PROCESSING)
+                {
+                    //must first check for opening {
+                    if (Character.isWhitespace(charRead))
+                    {
+                        continue;
+                    }
+                    else if (charRead == '{')
+                    {
+                        currentState = PROCESSING_KEY;
+                    }
+                    else
+                    {
+                        throw new RuntimeException("JSON Must start with {");
+                    }
+                }
+
+                if (currentState == PROCESSING_KEY)
+                {
+                    jsonKey();
+
+                    if (!ignoreWhiteSpace(charRead))
+                    {
+                        if (charRead != ':')
+                        {
+                            throw new RuntimeException(": must follow a key");
+                        }
+                        else
+                        {
+                            currentState = PROCESSING_VALUE;
+                            continue;
+                        }
+                    }
+
+                    //continue;
+                }
+
+
+                if ( Character.isWhitespace(charRead))
+                {
+                    continue;
+                }
+
+                //next char after key must be
+                if ( charRead != '"' && charRead != '[' && charRead != '{')
+                {
+                     throw new RuntimeException(" \" or [ or { must follow : ");
+                }
+                else if ( charRead == '"')
+                {
+                    currentState = PROCESSING_VALUE;
+
+                }
+
+                if (currentState == PROCESSING_VALUE)
+                {
+                    jsonValue();
+                    continue;
+                }
+
+
+                System.out.print(charRead);
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+        return null;
+
+    }
+
+    private boolean ignoreWhiteSpace(CurrentState currentState)
+    {
+         return currentState == PROCESSING_KEY;
+    }
+
+
+    private void jsonKey() throws IOException {
+
+        int c;
+        while ((c = pushbackReader.read()) != -1)
+        {
+            char charRead = (char) c;
+
+            if ( !ignoreWhiteSpace(charRead) )
+            {
+                if ( charRead == '"')
+                {
+                    jsonKey = getStringLiteral();
+                    jsonObject.getJsonKeyValueMap().put(jsonKey, null);
+                    return;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    private String getStringLiteral() throws IOException
+    {
+        pushbackReader.unread('"');
+        int quoteCount = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int c;
+        while ((c = pushbackReader.read()) != -1 && quoteCount < 2)
+        {
+            char charRead = (char) c;
+
+
+            if ( charRead == '"')
+            {
+                quoteCount++;
+            }
+            else
+            {
+                stringBuilder.append(charRead);
+            }
+
+            System.out.print(charRead);
+
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private boolean ignoreWhiteSpace(char c) throws IOException
+    {
+        return Character.isWhitespace(c);
+    }
+
+    private void jsonValue() throws IOException
+    {
+        int c;
+        while ((c = pushbackReader.read()) != -1)
+        {
+            char charRead = (char) c;
+
+            if (!ignoreWhiteSpace(charRead))
+            {
+                if (charRead == '"')
+                {
+                    jsonValue = getStringLiteral();
+                    jsonObject.getJsonKeyValueMap().put(jsonKey, jsonValue);
+                    continue;
+
+                }
+                //now check for acceptable next char
+                if (!ignoreWhiteSpace(charRead))
+                {
+                    if (charRead != ',' && charRead != '}')
+                    {
+                        throw new RuntimeException(", or } must follow a value");
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
+
+            System.out.print(charRead);
+
+        }
+    }
+
+    private String jsonArray(Reader reader)
+    {
+        return null;
+    }
+
+    /*private char readFromReader(Reader reader)
+    {
+        int c = 0;
+        try
+        {
+            if ( reader.read() != -1)
+            {
+                return (char) c;
+            }
+        } catch (IOException e)
+        {
+            throw new RuntimeException("An IOException occured");
+        }
+
+        return null;
+
     }*/
 
     public static JSONObject parseJSONtoJava(String jsonToParse) {
