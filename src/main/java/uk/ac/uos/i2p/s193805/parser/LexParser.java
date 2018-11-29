@@ -16,10 +16,6 @@ public class LexParser {
         this.reader = new PushbackReader(reader);
     }
 
-    public void parse() throws IOException
-    {
-        jsonSymbolList.add(next());
-    }
 
     public JSONSymbol next() throws IOException
     {
@@ -33,46 +29,63 @@ public class LexParser {
         }
         else if (c == '{')
         {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.OPEN_BRACE);
-        }
-        else if (c == '}')
-        {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.CLOSE_BRACE);
-        }
-        else if (c == '[')
-        {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.OPEN_ARRAY);
-        }
-        else if (c == ']')
-        {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.CLOSE_ARRAY);
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.OPEN_BRACE, "{");
         }
         else if (c == '"')
         {
-            while (Character.isWhitespace(c)) {
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.QUOTE, "\"");
+
+        }
+        else if (Character.isLetter(c))
+        {
+            StringBuilder string = new StringBuilder();
+            while (Character.isLetter(c))
+            {
+                string.append((char)c);
                 c = reader.read();
             }
             reader.unread(c);
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.QUOTE);
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.STRING, string.toString());
         }
         else if (c == ':')
         {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.COLON);
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.COLON, ":");
         }
-        else if (c == '\n')
+        else if (Character.isDigit(c))
         {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.NEW_LINE);
-        }
-        else if (c == ',')
-        {
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.COMMA);
-        }
-        else if (Character.isWhitespace(c)) {
-            while (Character.isWhitespace(c)) {
+            StringBuilder string = new StringBuilder();
+            while (Character.isDigit(c))
+            {
+                string.append((char) c);
                 c = reader.read();
             }
             reader.unread(c);
-            jsonSymbol = new JSONSymbol(JSONSymbol.Type.SPACE);
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.NUMBER, string.toString());
+        }
+        else if (c == ',')
+        {
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.COMMA, ",");
+        }
+        else if (c == '[')
+        {
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.OPEN_ARRAY, "[");
+        }
+        else if (c == ']')
+        {
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.CLOSE_ARRAY, "]");
+        }
+        else if (c == '}')
+        {
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.CLOSE_BRACE, "}");
+        }
+        else if (Character.isWhitespace(c)) {
+            StringBuilder string = new StringBuilder();
+            while (Character.isWhitespace(c)) {
+                string.append((char)c);
+                c = reader.read();
+            }
+            reader.unread(c);
+            jsonSymbol = new JSONSymbol(JSONSymbol.Type.SPACE, string.toString());
         }
         else
         {

@@ -17,6 +17,8 @@ public class JSONSymbol {
         COMMA,
         OPEN_ARRAY,
         CLOSE_ARRAY,
+        STRING,
+        NUMBER,
         KEY,
         STRING_VALUE,
         BOOLEAN_VALUE,
