@@ -60,7 +60,7 @@ public class JSONObject {
              returnInt = Integer.parseInt(jsonKeyValueMap.get(keyName));
         } catch (NumberFormatException e)
         {
-            throw new NumberFormatException("Value is not a Integer Type " + jsonKeyValueMap.get(keyName));
+            throw new NumberFormatException("JsonValue is not a Integer Type " + jsonKeyValueMap.get(keyName));
         }
 
         return returnInt;

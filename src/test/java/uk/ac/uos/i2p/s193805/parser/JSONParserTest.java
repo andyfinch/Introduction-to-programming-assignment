@@ -235,7 +235,7 @@ class JSONParserTest {
             fail("Should not get here");
         } catch (RuntimeException e)
         {
-            assertEquals("Missing Value", e.getMessage());
+            assertEquals("Missing JsonValue", e.getMessage());
         }
 
     }

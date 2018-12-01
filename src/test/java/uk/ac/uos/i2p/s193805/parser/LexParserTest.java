@@ -112,24 +112,40 @@ class LexParserTest {
     @Test
     void testCombination() throws IOException {
         LexParser lexParser = new LexParser(new StringReader("{\"abc\":123"));
-        JSONSymbol symbol = lexParser.next();
-        assertEquals(OPEN_BRACE, symbol.type);
+        assertNextSymbol(lexParser, JSONSymbol.Type.OPEN_BRACE);
+        assertNextSymbol(lexParser, JSONSymbol.Type.QUOTE);
+        assertNextSymbol(lexParser, JSONSymbol.Type.STRING, "abc");
+        assertNextSymbol(lexParser, JSONSymbol.Type.QUOTE);
+        assertNextSymbol(lexParser, JSONSymbol.Type.COLON);
+        assertNextSymbol(lexParser, JSONSymbol.Type.NUMBER, "123");
 
-        symbol = lexParser.next();
-        assertEquals(QUOTE, symbol.type);
 
-        symbol = lexParser.next();
-        assertEquals(STRING, symbol.type);
 
-        symbol = lexParser.next();
-        assertEquals(QUOTE, symbol.type);
-
-        symbol = lexParser.next();
-        assertEquals(COLON, symbol.type);
-
-        symbol = lexParser.next();
-        assertEquals(NUMBER, symbol.type);
     }
+
+    @Test
+    public void testMixedOther() throws IOException {
+        LexParser lex = new LexParser(new StringReader("#@%!"));
+        assertNextSymbol(lex, JSONSymbol.Type.OTHER, "#");
+        assertNextSymbol(lex, JSONSymbol.Type.OTHER, "@");
+        assertNextSymbol(lex, JSONSymbol.Type.OTHER, "%");
+        assertNextSymbol(lex, JSONSymbol.Type.OTHER, "!");
+        assertNextSymbol(lex, JSONSymbol.Type.END);
+    }
+
+
+    void assertNextSymbol(LexParser lex, JSONSymbol.Type type, String value) throws
+            IOException {
+        JSONSymbol symbol = lex.next();
+        assertEquals(type, symbol.type);
+        assertEquals(value, symbol.value);
+    }
+
+    void assertNextSymbol(LexParser lex, JSONSymbol.Type type) throws IOException {
+        JSONSymbol symbol = lex.next();
+        assertEquals(type, symbol.type);
+    }
+
 
 
 }

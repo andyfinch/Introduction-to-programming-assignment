@@ -29,5 +29,7 @@ public class PushbackLexParser {
         symbols.push(symbol);
     }
 
-
+    public Stack<JSONSymbol> getSymbols() {
+        return symbols;
+    }
 }

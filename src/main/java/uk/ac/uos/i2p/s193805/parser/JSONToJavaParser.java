@@ -491,7 +491,7 @@ public class JSONToJavaParser {
                         }
                         else if (jsonCharArray[i + 2] == ',' || jsonCharArray[i + 2] == '}')
                         {
-                            throw new RuntimeException("Missing Value");
+                            throw new RuntimeException("Missing JsonValue");
                         }
                         else
                         {
