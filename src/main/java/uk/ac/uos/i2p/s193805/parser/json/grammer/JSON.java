@@ -2,6 +2,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.LexParser;
+import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class JSON {
         this.jsonObject = jsonObject;
     }
 
-    private JSON json(LexParser lexParser) throws IOException
+    private JSON json(PushbackLexParser lexParser) throws IOException
     {
         JsonObject jsonObject = jsonObject(lexParser);
 
@@ -32,7 +33,7 @@ public class JSON {
         return new JsonValue();
     }*/
 
-    private JsonObject jsonObject(LexParser lexParser) throws IOException
+    private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
     {
         JsonMember jsonMember = jsonMember(lexParser);
         if ( jsonMember == null )
@@ -44,7 +45,7 @@ public class JSON {
 
     }
 
-    private JsonMember jsonMember(LexParser lexParser) throws IOException {
+    private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
         String key = key(lexParser);
         if (null == key)
         {
@@ -73,7 +74,7 @@ public class JSON {
         return ret.toString();
     }*/
 
-    private String key(LexParser lex) throws IOException {
+    private String key(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.next();
         if (JSONSymbol.Type.END == symbol.type) return null;
 
@@ -89,10 +90,22 @@ public class JSON {
         if (symbol.type != JSONSymbol.Type.QUOTE) {
             throw new IOException("Expected \", got " + symbol.type);
         }
+
+        symbol = lex.next();
+        if ( symbol.type == SPACE)
+        {
+            symbol = lex.next();
+        }
+
+        if (symbol.type != COLON)
+        {
+            throw new RuntimeException("Key must be followed by :");
+        }
+
         return key;
     }
 
-    private JsonValue value(LexParser lex) throws IOException {
+    private JsonValue value(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.next();
         if (JSONSymbol.Type.END == symbol.type)
         {

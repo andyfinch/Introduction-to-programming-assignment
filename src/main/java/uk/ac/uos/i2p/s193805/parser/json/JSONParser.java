@@ -27,7 +27,7 @@ public class JSONParser {
         JsonObject jsonObject = jsonObject(lexParser);
         if (null == jsonObject)
         {
-            throw new RuntimeException("Not valid JSON - No {")
+            throw new RuntimeException("Not valid JSON - No {");
         }
         return new JSON(jsonObject);
     }
