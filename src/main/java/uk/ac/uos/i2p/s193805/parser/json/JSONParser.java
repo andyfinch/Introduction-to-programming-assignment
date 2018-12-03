@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805.parser.json;
 
 import uk.ac.uos.i2p.s193805.parser.LexParser;
+import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JSON;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 
@@ -19,16 +20,20 @@ public class JSONParser {
     public JSON parse (Reader in) throws IOException
     {
         LexParser lexParser = new LexParser(in);
-        return jsonDocument(lexParser);
+        PushbackLexParser pushBackLexParser = new PushbackLexParser(lexParser);
+        return jsonDocument(pushBackLexParser);
     }
 
-    private JSON jsonDocument(LexParser lexParser) throws IOException
+    private JSON jsonDocument(PushbackLexParser lexParser) throws IOException
     {
-        JsonObject jsonObject = jsonObject(lexParser);
+        JSON json = new JSON(lexParser);
+        JsonObject jsonObject = json.jsonObject;
+
         if (null == jsonObject)
         {
             throw new RuntimeException("Not valid JSON - No {");
         }
+
         return new JSON(jsonObject);
     }
 

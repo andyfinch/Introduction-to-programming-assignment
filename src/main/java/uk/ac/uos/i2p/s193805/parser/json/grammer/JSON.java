@@ -16,32 +16,38 @@ public class JSON {
         this.jsonObject = jsonObject;
     }
 
-    private JSON json(PushbackLexParser lexParser) throws IOException
+    public JSON(PushbackLexParser pushbackLexParser) throws IOException {
+        this.jsonObject = jsonObject(pushbackLexParser);
+    }
+
+    /*private JSON json(PushbackLexParser lexParser) throws IOException
     {
         JsonObject jsonObject = jsonObject(lexParser);
 
         return new JSON(jsonObject);
 
-    }
-
-   /* //Element can container object,array,boolean,string,number,null...
-    private JsonValue jsonValue(LexParser lexParser) throws IOException
-    {
-        JsonObject jsonObject = jsonObject(lexParser);
-        if ( null == jsonObject) return null;
-
-        return new JsonValue();
     }*/
 
     private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
     {
-        JsonMember jsonMember = jsonMember(lexParser);
+        JSONSymbol symbol = lexParser.next();
+
+        if ( symbol.type != OPEN_BRACE)
+        {
+            throw new RuntimeException("JSON Object must start with {");
+        }
+
+        JsonObject jsonObject = new JsonObject(lexParser);
+
+        return jsonObject;
+
+       /* JsonMember jsonMember = jsonMember(lexParser);
         if ( jsonMember == null )
         {
             throw new RuntimeException("TODO");
         }
 
-        return new JsonObject(jsonMember);
+        return new JsonObject(jsonMember);*/
 
     }
 
@@ -59,20 +65,6 @@ public class JSON {
 
         return new JsonMember(key, value);
     }
-
-    /*private String key(LexParser lexParser) throws IOException {
-        StringBuilder ret = new StringBuilder();
-        sym: for (JSONSymbol symbol = lexParser.next(); symbol.type != JSONSymbol.Type.END; symbol = lexParser.next()) {
-            switch(symbol.type) {
-                case STRING:
-                    ret.append(symbol.value);
-                    break;
-                default:
-                    break sym; // to stop loop
-            }
-        }
-        return ret.toString();
-    }*/
 
     private String key(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.next();
@@ -112,21 +104,15 @@ public class JSON {
             throw new IOException("Expected VALUE, got " + symbol.type);
         }
 
-        if (symbol.type != JSONSymbol.Type.QUOTE) return null;
+        JsonValue jsonValue = new JsonValue(lex);
 
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.STRING) {
-            throw new IOException("Expected STRING, got " + symbol.type);
-        }
-        String key = symbol.value;
-
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.QUOTE) {
-            throw new IOException("Expected \", got " + symbol.type);
-        }
-        return key;
+        return jsonValue;
     }
 
+    public String getJSONString(String keyName)
+    {
+        return (String) jsonObject.jsonValueMap.get(keyName).jsonValue;
+    }
 
 
 

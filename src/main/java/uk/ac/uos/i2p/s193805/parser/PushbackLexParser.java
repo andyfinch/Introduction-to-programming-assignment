@@ -25,6 +25,29 @@ public class PushbackLexParser {
         return lexParser.next();
     }
 
+    public JSONSymbol nextSkipSpaces() throws IOException {
+        JSONSymbol symbol;
+        if (!symbols.isEmpty())
+        {
+            symbol = symbols.pop();
+            if (symbol.type == JSONSymbol.Type.SPACE)
+            {
+                return symbols.pop();
+            }
+
+            return symbol;
+        }
+        else
+        {
+            symbol = lexParser.next();
+            if (symbol.type == JSONSymbol.Type.SPACE)
+            {
+                symbol = lexParser.next();
+            }
+        }
+        return symbol;
+    }
+
     public void unread(JSONSymbol symbol) {
         symbols.push(symbol);
     }

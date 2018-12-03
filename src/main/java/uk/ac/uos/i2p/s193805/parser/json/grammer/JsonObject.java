@@ -5,6 +5,8 @@ import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.COLON;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.SPACE;
@@ -12,13 +14,26 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.SPACE;
 public class JsonObject {
 
     //has members
-    public final JsonMember jsonMember;
+    //public final JsonMember jsonMember;
+    public final Map<String, JsonValue> jsonValueMap = new HashMap<>();
 
-    public JsonObject(JsonMember jsonMember) {
+    /*public JsonObject(JsonMember jsonMember) {
         this.jsonMember = jsonMember;
+    }*/
+
+    public JsonObject(PushbackLexParser pushbackLexParser) throws IOException {
+
+        JsonMember jsonMember;
+        while ( (jsonMember = jsonMember(pushbackLexParser)) != null)
+        {
+            //JsonMember jsonMember = jsonMember(pushbackLexParser);
+            jsonValueMap.put(jsonMember.key, jsonMember.jsonValue);
+        }
+
+        //this.jsonMember = jsonMember(pushbackLexParser);
     }
 
-    private JsonObject jsonObject(LexParser lexParser) throws IOException
+    /*private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
     {
         JsonMember jsonMember = jsonMember(lexParser);
         if (null == jsonMember)
@@ -27,9 +42,18 @@ public class JsonObject {
         }
 
         return new JsonObject(jsonMember);
-    }
+    }*/
 
     private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
+
+        JSONSymbol symbol = lexParser.nextSkipSpaces();
+
+        if ( symbol.type == JSONSymbol.Type.END || symbol.type == JSONSymbol.Type.CLOSE_BRACE)
+        {
+            return null;
+        }
+        lexParser.unread(symbol);
+
         String key = key(lexParser);
         if (null == key)
         {
@@ -45,7 +69,7 @@ public class JsonObject {
     }
 
     private String key(PushbackLexParser lex) throws IOException {
-        JSONSymbol symbol = lex.next();
+        JSONSymbol symbol = lex.nextSkipSpaces();
         if (JSONSymbol.Type.END == symbol.type) return null;
 
         if (symbol.type != JSONSymbol.Type.QUOTE) return null;
@@ -75,26 +99,16 @@ public class JsonObject {
         return key;
     }
 
-    private JsonValue value(LexParser lex) throws IOException {
-        JSONSymbol symbol = lex.next();
-        if (JSONSymbol.Type.END == symbol.type)
-        {
-            throw new IOException("Expected VALUE, got " + symbol.type);
-        }
+    private JsonValue value(PushbackLexParser lex) throws IOException {
 
-        if (symbol.type != JSONSymbol.Type.QUOTE) return null;
+        JsonValue jsonValue = new JsonValue(lex);
 
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.STRING) {
-            throw new IOException("Expected STRING, got " + symbol.type);
-        }
-        String key = symbol.value;
+        if ( jsonValue.jsonValue == null) return null;
 
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.QUOTE) {
-            throw new IOException("Expected \", got " + symbol.type);
-        }
-        return key;
+        return jsonValue;
+
     }
+
+
 
 }
