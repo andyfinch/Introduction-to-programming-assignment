@@ -35,10 +35,10 @@ public class LexParser {
             return new JSONSymbol(JSONSymbol.Type.QUOTE, "\"");
 
         }
-        else if (Character.isLetter(c))
+        else if (Character.isLetter(c) || c == '/')
         {
             StringBuilder string = new StringBuilder();
-            while (Character.isLetter(c))
+            while (Character.isLetter(c) || c == ' ' || c == '/')
             {
                 string.append((char)c);
                 c = reader.read();

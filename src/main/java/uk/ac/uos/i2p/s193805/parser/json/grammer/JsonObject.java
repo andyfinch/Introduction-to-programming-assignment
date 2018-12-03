@@ -17,9 +17,6 @@ public class JsonObject {
     //public final JsonMember jsonMember;
     public final Map<String, JsonValue> jsonValueMap = new HashMap<>();
 
-    /*public JsonObject(JsonMember jsonMember) {
-        this.jsonMember = jsonMember;
-    }*/
 
     public JsonObject(PushbackLexParser pushbackLexParser) throws IOException {
 
@@ -28,21 +25,12 @@ public class JsonObject {
         {
             //JsonMember jsonMember = jsonMember(pushbackLexParser);
             jsonValueMap.put(jsonMember.key, jsonMember.jsonValue);
+
         }
 
-        //this.jsonMember = jsonMember(pushbackLexParser);
+
     }
 
-    /*private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
-    {
-        JsonMember jsonMember = jsonMember(lexParser);
-        if (null == jsonMember)
-        {
-            throw new RuntimeException("No members");
-        }
-
-        return new JsonObject(jsonMember);
-    }*/
 
     private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
 
@@ -60,9 +48,16 @@ public class JsonObject {
             throw new RuntimeException("Json member must have string key");
         }
         JsonValue value = value(lexParser);
+
         if (null == value)
         {
             throw new RuntimeException("Json member must have value");
+        }
+
+        symbol = lexParser.nextSkipSpaces();
+        if ( symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.COMMA)
+        {
+            throw new RuntimeException("Members must be seperated by commas");
         }
 
         return new JsonMember(key, value);
@@ -70,19 +65,21 @@ public class JsonObject {
 
     private String key(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.nextSkipSpaces();
+        StringBuilder key = new StringBuilder();
+
         if (JSONSymbol.Type.END == symbol.type) return null;
 
         if (symbol.type != JSONSymbol.Type.QUOTE) return null;
 
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.STRING) {
-            throw new IOException("Expected STRING, got " + symbol.type);
-        }
-        String key = symbol.value;
+        //lex.nextSkipSpaces();
 
-        symbol = lex.next();
-        if (symbol.type != JSONSymbol.Type.QUOTE) {
-            throw new IOException("Expected \", got " + symbol.type);
+        while ( (symbol = lex.nextSkipSpaces()).type != JSONSymbol.Type.QUOTE)
+        {
+            if ( symbol.type == JSONSymbol.Type.END)
+            {
+                throw new RuntimeException("Quoted String must end with \"");
+            }
+            key.append(symbol.value);
         }
 
         symbol = lex.next();
@@ -96,7 +93,7 @@ public class JsonObject {
             throw new RuntimeException("Key must be followed by :");
         }
 
-        return key;
+        return key.toString();
     }
 
     private JsonValue value(PushbackLexParser lex) throws IOException {
@@ -106,6 +103,19 @@ public class JsonObject {
         if ( jsonValue.jsonValue == null) return null;
 
         return jsonValue;
+
+    }
+
+    public Object getJsonValue(String key)
+    {
+        JsonValue jsonValue = jsonValueMap.get(key);
+
+        if (jsonValue == null)
+        {
+            throw new RuntimeException("Key " + key + " does not exist");
+        }
+
+        return jsonValue.jsonValue;
 
     }
 

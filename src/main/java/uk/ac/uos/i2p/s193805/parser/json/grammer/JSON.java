@@ -111,7 +111,56 @@ public class JSON {
 
     public String getJSONString(String keyName)
     {
-        return (String) jsonObject.jsonValueMap.get(keyName).jsonValue;
+        Object jsonString = jsonObject.getJsonValue(keyName);
+
+        if ( !(jsonString instanceof String))
+        {
+            throw new RuntimeException("Requested String is not a JSON String. It is a" + jsonString.getClass());
+        }
+
+        return String.valueOf(jsonString);
+    }
+
+    public Integer getJSONNumber(String keyName) {
+
+        Object jsonInt = jsonObject.getJsonValue(keyName);
+
+        if (!(jsonInt instanceof Number))
+        {
+            throw new RuntimeException("Requested Number is not a JSON Number. It is a " + jsonInt.getClass());
+        }
+
+        try {
+            return Integer.valueOf(String.valueOf(jsonInt));
+        }
+        catch (NumberFormatException nfe)
+        {
+            throw new RuntimeException("Cannot convert number to Integer" + jsonInt);
+        }
+
+    }
+
+    public Boolean getJsonBoolean(String keyName) {
+
+        Object jsonBoolean = jsonObject.getJsonValue(keyName);
+
+        if (!(jsonBoolean instanceof Boolean))
+        {
+            throw new RuntimeException("Requested Boolean is not a JSON Boolean. It is a " + jsonBoolean.getClass());
+        }
+
+        String booleanString = String.valueOf(jsonBoolean);
+        if ( booleanString.equals("true") || booleanString.equals("false"))
+        {
+            return Boolean.valueOf(booleanString);
+        }
+        else
+        {
+            throw new RuntimeException("Requested Boolean is not a JSON Boolean. It is a " + jsonBoolean.getClass());
+
+        }
+
+
     }
 
 

@@ -6,8 +6,7 @@ import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
 
-import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.COLON;
-import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.SPACE;
+import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JsonValue {
 
@@ -20,27 +19,35 @@ public class JsonValue {
 
     private Object value(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.nextSkipSpaces();
+
+
         if (JSONSymbol.Type.END == symbol.type) return null;
 
         if (symbol.type == JSONSymbol.Type.QUOTE)
         {
-            symbol = lex.next();
-
-            if (symbol.type == JSONSymbol.Type.STRING)
+            StringBuilder value = new StringBuilder();
+            while ((symbol = lex.nextSkipSpaces()).type != JSONSymbol.Type.QUOTE)
             {
-                String value = symbol.value;
-                symbol = lex.next();
-                if (symbol.type != JSONSymbol.Type.QUOTE)
+                if (symbol.type == JSONSymbol.Type.END)
                 {
-                    throw new RuntimeException("JSON String value end with \"");
+                    throw new RuntimeException("Quoted Value must end with \"");
                 }
-                return value;
-            }
-            else if (symbol.type == JSONSymbol.Type.QUOTE )
-            {
-                return "";
+                value.append(symbol.value);
             }
 
+            return value.toString();
+
+        }
+        else if ( symbol.type == NUMBER)
+        {
+            return Integer.valueOf(symbol.value);
+        }
+        else if (symbol.type == STRING)
+        {
+            if ( symbol.value.equals("true") || symbol.value.equals("false") )
+            {
+                return Boolean.valueOf(symbol.value);
+            }
 
         }
 

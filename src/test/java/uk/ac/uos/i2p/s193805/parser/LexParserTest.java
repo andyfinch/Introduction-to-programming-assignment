@@ -110,6 +110,25 @@ class LexParserTest {
     }
 
     @Test
+    void testSpaceInString() throws IOException {
+        LexParser lexParser = new LexParser(new StringReader("Response URL"));
+        assertNextSymbol(lexParser, STRING);
+        assertNextSymbol(lexParser, END);
+        
+    }
+
+    @Test
+    void testSlashInString() throws IOException {
+        LexParser lexParser = new LexParser(new StringReader("/answer/d3ae45"));
+        assertNextSymbol(lexParser, STRING);
+        assertNextSymbol(lexParser, NUMBER);
+        assertNextSymbol(lexParser, STRING);
+        assertNextSymbol(lexParser, NUMBER);
+        assertNextSymbol(lexParser, END);
+
+    }
+
+    @Test
     void testCombination() throws IOException {
         LexParser lexParser = new LexParser(new StringReader("{\"abc\":123"));
         assertNextSymbol(lexParser, JSONSymbol.Type.OPEN_BRACE);
