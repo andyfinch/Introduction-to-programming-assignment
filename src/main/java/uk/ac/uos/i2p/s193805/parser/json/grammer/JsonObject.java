@@ -49,10 +49,10 @@ public class JsonObject {
         }
         JsonValue value = value(lexParser);
 
-        if (null == value)
+        /*if (null == value)
         {
             throw new RuntimeException("Json member must have value");
-        }
+        }*/
 
         symbol = lexParser.nextSkipSpaces();
         if ( symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.COMMA)
@@ -108,12 +108,12 @@ public class JsonObject {
 
     public Object getJsonValue(String key)
     {
-        JsonValue jsonValue = jsonValueMap.get(key);
-
-        if (jsonValue == null)
+        if (!jsonValueMap.containsKey(key) )
         {
             throw new RuntimeException("Key " + key + " does not exist");
         }
+
+        JsonValue jsonValue = jsonValueMap.get(key);
 
         return jsonValue.jsonValue;
 

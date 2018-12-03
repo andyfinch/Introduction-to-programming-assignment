@@ -5,8 +5,8 @@ import uk.ac.uos.i2p.s193805.parser.json.grammer.JSON;
 
 import java.io.IOException;
 import java.io.StringReader;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JSONParserTest {
 
@@ -89,6 +89,17 @@ public class JSONParserTest {
                 "  \"instruction\": true\n" +
                 "}\n"));
         assertEquals(true, data.getJsonBoolean("instruction"));
+
+    }
+
+    @Test
+    void testSimpleKeyNull() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JSON data = jsonParser.parse(new StringReader("{\n" +
+                "  \"instruction\": null\n" +
+                "}\n"));
+        assertNull(data.jsonObject.getJsonValue("instruction"));
 
     }
 }

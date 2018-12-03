@@ -48,6 +48,14 @@ public class JsonValue {
             {
                 return Boolean.valueOf(symbol.value);
             }
+            else if (symbol.value.equals("null"))
+            {
+                return null;
+            }
+            else
+            {
+                throw new RuntimeException("Unquoted String value not allowed");
+            }
 
         }
 
