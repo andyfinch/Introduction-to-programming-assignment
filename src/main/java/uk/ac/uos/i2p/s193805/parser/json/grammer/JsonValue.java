@@ -1,7 +1,6 @@
 package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
-import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
@@ -10,11 +9,11 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JsonValue {
 
-    public final Object jsonValue;
+    public final Object object;
 
     public JsonValue(PushbackLexParser pushbackLexParser) throws IOException {
 
-        this.jsonValue = value(pushbackLexParser);
+        this.object = value(pushbackLexParser);
     }
 
     private Object value(PushbackLexParser lex) throws IOException {
@@ -58,8 +57,76 @@ public class JsonValue {
             }
 
         }
+        else if (symbol.type == OPEN_BRACE)
+        {
+            return new JsonObject(lex);
+        }
+        else if (symbol.type == OPEN_ARRAY)
+        {
+            return new JsonArray(lex);
+        }
 
         return null;
+    }
+
+    public JsonObject getJsonObject() {
+
+        if (!(object instanceof JsonObject))
+        {
+            throw new RuntimeException("Requested Json Object is not a JSON Object. It is a " + this.getClass());
+        }
+
+        return (JsonObject) object;
+
+    }
+
+    public String getJSONString() {
+
+        if (!(object instanceof String))
+        {
+            throw new RuntimeException("Requested String is not a JSON String. It is a" + this.getClass());
+        }
+
+        return (String) object;
+    }
+
+    public Integer getJSONNumber() {
+
+        try
+        {
+            return Integer.valueOf(String.valueOf(object));
+        } catch (NumberFormatException nfe)
+        {
+            throw new RuntimeException("Cannot convert number to Integer " + object);
+        }
+
+    }
+
+    public Boolean getJsonBoolean() {
+
+        String booleanString = String.valueOf(object);
+        if (booleanString.equals("true") || booleanString.equals("false"))
+        {
+            return Boolean.valueOf(booleanString);
+        }
+        else
+        {
+            throw new RuntimeException("Cannot convert value to Boolean " + object);
+
+        }
+
+
+    }
+
+    public JsonArray getJsonArray() {
+
+        if (!(object instanceof JsonArray))
+        {
+            throw new RuntimeException("Requested Json Array is not a JSON Array. It is a " + this.getClass());
+        }
+
+        return (JsonArray) object;
+
     }
 
 

@@ -104,12 +104,10 @@ public class JSON {
             throw new IOException("Expected VALUE, got " + symbol.type);
         }
 
-        JsonValue jsonValue = new JsonValue(lex);
-
-        return jsonValue;
+        return new JsonValue(lex);
     }
 
-    public String getJSONString(String keyName)
+    /*public String getJSONString(String keyName)
     {
         Object jsonString = jsonObject.getJsonValue(keyName);
 
@@ -162,6 +160,19 @@ public class JSON {
 
 
     }
+
+    public JsonObject getJsonObject(String keyName)
+    {
+        Object JSONObject = jsonObject.getJsonValue(keyName);
+
+        if ( !(JSONObject instanceof JsonObject))
+        {
+            throw new RuntimeException("Requested Json Object is not a JSON Object. It is a " + JSONObject.getClass());
+        }
+
+        return (JsonObject) JSONObject;
+
+    }*/
 
 
 

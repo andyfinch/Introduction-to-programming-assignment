@@ -17,14 +17,14 @@ import java.io.Reader;
 
 public class JSONParser {
 
-    public JSON parse (Reader in) throws IOException
+    public JsonObject parse (Reader in) throws IOException
     {
         LexParser lexParser = new LexParser(in);
         PushbackLexParser pushBackLexParser = new PushbackLexParser(lexParser);
         return jsonDocument(pushBackLexParser);
     }
 
-    private JSON jsonDocument(PushbackLexParser lexParser) throws IOException
+    private JsonObject jsonDocument(PushbackLexParser lexParser) throws IOException
     {
         JSON json = new JSON(lexParser);
         JsonObject jsonObject = json.jsonObject;
@@ -34,7 +34,7 @@ public class JSONParser {
             throw new RuntimeException("Not valid JSON - No {");
         }
 
-        return new JSON(jsonObject);
+        return jsonObject;
     }
 
 
