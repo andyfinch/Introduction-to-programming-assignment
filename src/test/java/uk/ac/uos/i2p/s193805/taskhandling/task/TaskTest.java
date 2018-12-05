@@ -3,6 +3,8 @@ package uk.ac.uos.i2p.s193805.taskhandling.task;
 import org.junit.jupiter.api.Test;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -15,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskTest {
 
     @Test
-    public void testTaskBuilderAdd() {
+    public void testTaskBuilderAdd() throws IOException {
 
         Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
         assertTrue( task instanceof AddTask );
@@ -24,7 +26,7 @@ class TaskTest {
     }
 
     @Test
-    public void testTaskBuilderMultiply() {
+    public void testTaskBuilderMultiply() throws IOException {
 
         Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"multiply\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
         assertTrue(task instanceof MultiplyTask);
@@ -33,7 +35,7 @@ class TaskTest {
     }
 
     @Test
-    public void testTaskBuilderConcat() {
+    public void testTaskBuilderConcat() throws IOException{
 
         Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"concat\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
         assertTrue(task instanceof ConcatTask);
@@ -42,7 +44,7 @@ class TaskTest {
     }
 
     @Test
-    public void testTaskBuilderInvalidInstruction() {
+    public void testTaskBuilderInvalidInstruction() throws IOException{
 
         try
         {

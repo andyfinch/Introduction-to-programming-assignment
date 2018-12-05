@@ -48,21 +48,20 @@ public class JsonArray {
     }
 
     private JsonValue value(PushbackLexParser lex) throws IOException {
-        /*JSONSymbol symbol = lex.next();
-
-        if ( symbol.type != JSONSymbol.Type.COMMA)
-        {
-            lex.unread(symbol);
-            return new JsonValue(lex);
-
-        }
-
-
-
-        return null;*/
 
         return new JsonValue(lex);
 
 
+    }
+
+    public List<Object> getObjectList()
+    {
+        List<Object> objects = new ArrayList<>();
+        for (JsonValue jsonValue : jsonValues)
+        {
+            objects.add(jsonValue.object);
+        }
+
+        return objects;
     }
 }

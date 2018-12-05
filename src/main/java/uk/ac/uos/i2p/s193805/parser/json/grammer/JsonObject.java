@@ -4,6 +4,7 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,15 +50,10 @@ public class JsonObject {
         }
         JsonValue value = value(lexParser);
 
-        /*if (null == value)
-        {
-            throw new RuntimeException("Json member must have value");
-        }*/
-
         symbol = lexParser.nextSkipSpaces();
         if ( (symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.END) && symbol.type != JSONSymbol.Type.COMMA)
         {
-            throw new RuntimeException("Members must be seperated by commas");
+            throw new RuntimeException("Members must be seperated by commas, found symbol " + symbol.type.name() + " symbol value " + symbol.value );
         }
         if ( symbol.type == CLOSE_BRACE)
         {
@@ -184,6 +180,28 @@ public class JsonObject {
         JsonValue jsonValue = getJsonValue(keyName);
 
         return jsonValue.getJsonArray().jsonValues;
+
+    }
+
+    public List<String> getJsonArrayStringList(String keyName) {
+        JsonValue jsonValue = getJsonValue(keyName);
+
+        List<String> valuesAsStrings = new ArrayList<>();
+
+        for (JsonValue value : jsonValue.getJsonArray().jsonValues)
+        {
+            valuesAsStrings.add(value.getJSONString());
+        }
+
+
+        return valuesAsStrings;
+
+    }
+
+    public List<Object> getJsonArrayObjectList(String keyName) {
+        JsonValue jsonValue = getJsonValue(keyName);
+
+        return new ArrayList<>(jsonValue.getJsonArray().jsonValues);
 
     }
 

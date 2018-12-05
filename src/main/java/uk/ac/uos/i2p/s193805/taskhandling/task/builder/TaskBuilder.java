@@ -1,11 +1,15 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task.builder;
 
-import uk.ac.uos.i2p.s193805.parser.JSONParser;
-import uk.ac.uos.i2p.s193805.parser.JavaJSONObject;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
+
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import uk.ac.uos.i2p.s193805.taskhandling.task.AddTask;
 import uk.ac.uos.i2p.s193805.taskhandling.task.ConcatTask;
 import uk.ac.uos.i2p.s193805.taskhandling.task.MultiplyTask;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,31 +20,35 @@ import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
 
 public class TaskBuilder {
 
-    public static Task buildTaskObject(String json) throws IllegalArgumentException {
+    public static Task buildTaskObject(String json) throws IllegalArgumentException, IOException {
         Task task = null;
-        JavaJSONObject javaJSONObject = JSONParser.parseJSONtoJava(json);
+        JsonObject jsonObject = new JSONParser().parse(new StringReader(json));
 
-        if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("add"))
+        String instruction = jsonObject.getJSONString("instruction");
+
+
+        if ("add".equalsIgnoreCase(instruction))
         {
            task = new AddTask();
         }
-        else if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("multiply"))
+        else if ("multiply".equalsIgnoreCase(instruction))
         {
            task = new MultiplyTask();
         }
-        else if (javaJSONObject.getJSONStringValue("instruction").equalsIgnoreCase("concat"))
+        else if ("concat".equalsIgnoreCase(instruction))
         {
             task = new ConcatTask();
         }
         else
         {
-            throw new IllegalArgumentException("Invalid Instruction " + javaJSONObject.getJSONStringValue("instruction"));
+            throw new IllegalArgumentException("Invalid Instruction " + jsonObject.getJSONString("instruction"));
         }
 
 
-        task.setInstruction(javaJSONObject.getJSONStringValue("instruction"));
-        task.setParamList(javaJSONObject.getJSONArray("parameters"));
-        task.setResponseURL(javaJSONObject.getJSONStringValue("response URL"));
+
+        task.setInstruction(instruction);
+        task.setParamList(jsonObject.getJsonArray("parameters").getObjectList());
+        task.setResponseURL(jsonObject.getJSONString("response URL"));
 
         return task;
     }

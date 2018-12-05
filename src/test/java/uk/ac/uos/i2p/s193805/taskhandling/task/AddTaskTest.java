@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +32,7 @@ class AddTaskTest {
     }
 
     @Test
-    public void testTaskBuilder() {
+    public void testTaskBuilder() throws IOException {
 
         Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
 

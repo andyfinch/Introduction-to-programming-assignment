@@ -14,6 +14,7 @@ import java.util.List;
 
 public abstract class Task {
 
+    private String requestURL;
     private String instruction;
     protected List<Object> paramList = new ArrayList<>();
     private String responseURL;
@@ -51,5 +52,13 @@ public abstract class Task {
 
     public void setResult(Result result) {
         this.result = result;
+    }
+
+    public String getRequestURL() {
+        return requestURL;
+    }
+
+    public void setRequestURL(String requestURL) {
+        this.requestURL = requestURL;
     }
 }

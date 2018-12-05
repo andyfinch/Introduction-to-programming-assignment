@@ -14,12 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HTTPRequestTest {
 
+    public final static String url = "http://i2j.openode.io/student?id=s193805";
+
     @Test
     void testHTTP() {
         HTTPRequest httpRequest = new HTTPRequest();
         try
         {
-            httpRequest.sendHTTPRequest("http://localhost:4500", null, "GET");
+            httpRequest.sendHTTPRequest(url, null, "GET");
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -33,7 +35,7 @@ class HTTPRequestTest {
         HTTPRequest httpRequest = new HTTPRequest();
         try
         {
-            httpRequest.sendHTTPRequest("http://localhost:4500", null, "GET");
+            httpRequest.sendHTTPRequest(url, null, "GET");
         } catch (Exception e)
         {
             e.printStackTrace();
