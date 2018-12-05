@@ -54,13 +54,13 @@ public class IntegrationTest {
                 {
                     task.runInstruction();
                     httpRequest.sendHTTPPostRequest(baseurl+task.getResponseURL(), "text/plain", task.getResult().getAnswer());
+                    assertTrue(task.getResult().isCorrect());
                     assertEquals(200, httpRequest.getResponse());
                 } catch (IllegalArgumentException e)
                 {
                     e.printStackTrace();
                 }
 
-                System.out.println(task.getResult().getAnswer());
             }
 
         } catch (Exception e)

@@ -1,8 +1,6 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.http.HTTPRequest;
-import uk.ac.uos.i2p.s193805.parser.JSONParser;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;

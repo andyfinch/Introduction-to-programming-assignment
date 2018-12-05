@@ -20,14 +20,6 @@ public class JSON {
         this.jsonObject = jsonObject(pushbackLexParser);
     }
 
-    /*private JSON json(PushbackLexParser lexParser) throws IOException
-    {
-        JsonObject jsonObject = jsonObject(lexParser);
-
-        return new JSON(jsonObject);
-
-    }*/
-
     private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
     {
         JSONSymbol symbol = lexParser.next();
@@ -40,14 +32,6 @@ public class JSON {
         JsonObject jsonObject = new JsonObject(lexParser);
 
         return jsonObject;
-
-       /* JsonMember jsonMember = jsonMember(lexParser);
-        if ( jsonMember == null )
-        {
-            throw new RuntimeException("TODO");
-        }
-
-        return new JsonObject(jsonMember);*/
 
     }
 
@@ -106,101 +90,6 @@ public class JSON {
 
         return new JsonValue(lex);
     }
-
-    /*public String getJSONString(String keyName)
-    {
-        Object jsonString = jsonObject.getJsonValue(keyName);
-
-        if ( !(jsonString instanceof String))
-        {
-            throw new RuntimeException("Requested String is not a JSON String. It is a" + jsonString.getClass());
-        }
-
-        return String.valueOf(jsonString);
-    }
-
-    public Integer getJSONNumber(String keyName) {
-
-        Object jsonInt = jsonObject.getJsonValue(keyName);
-
-        if (!(jsonInt instanceof Number))
-        {
-            throw new RuntimeException("Requested Number is not a JSON Number. It is a " + jsonInt.getClass());
-        }
-
-        try {
-            return Integer.valueOf(String.valueOf(jsonInt));
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new RuntimeException("Cannot convert number to Integer" + jsonInt);
-        }
-
-    }
-
-    public Boolean getJsonBoolean(String keyName) {
-
-        Object jsonBoolean = jsonObject.getJsonValue(keyName);
-
-        if (!(jsonBoolean instanceof Boolean))
-        {
-            throw new RuntimeException("Requested Boolean is not a JSON Boolean. It is a " + jsonBoolean.getClass());
-        }
-
-        String booleanString = String.valueOf(jsonBoolean);
-        if ( booleanString.equals("true") || booleanString.equals("false"))
-        {
-            return Boolean.valueOf(booleanString);
-        }
-        else
-        {
-            throw new RuntimeException("Requested Boolean is not a JSON Boolean. It is a " + jsonBoolean.getClass());
-
-        }
-
-
-    }
-
-    public JsonObject getJsonObject(String keyName)
-    {
-        Object JSONObject = jsonObject.getJsonValue(keyName);
-
-        if ( !(JSONObject instanceof JsonObject))
-        {
-            throw new RuntimeException("Requested Json Object is not a JSON Object. It is a " + JSONObject.getClass());
-        }
-
-        return (JsonObject) JSONObject;
-
-    }*/
-
-
-
-    /*private JsonArray jsonArray(LexParser lexParser) throws IOException
-    {
-        JSONSymbol jsonSymbol = lexParser.next();
-        if ( jsonSymbol.type != JSONSymbol.Type.OPEN_ARRAY)
-        {
-            return null;
-        }
-        return new JsonArray();
-
-    }
-
-    private JsonBoolean jsonBoolean(LexParser lexParser) throws IOException
-    {
-        JSONSymbol jsonSymbol = lexParser.next();
-        if (jsonSymbol.type == JSONSymbol.Type.STRING
-                && (jsonSymbol.value.equalsIgnoreCase("true")
-                || jsonSymbol.value.equalsIgnoreCase("false")))
-        {
-                return new JsonBoolean();
-        }
-
-        return null;
-
-    }*/
-
 
 
 }

@@ -14,12 +14,8 @@ public class Result {
 
     public boolean isCorrect()
     {
-        if ( "200 OK".equalsIgnoreCase(response))
-        {
-            return true;
-        }
+        return "200 OK".equalsIgnoreCase(response);
 
-        return false;
     }
 
     public boolean isNumeric()

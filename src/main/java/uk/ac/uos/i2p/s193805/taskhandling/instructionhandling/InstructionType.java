@@ -11,5 +11,5 @@ public enum InstructionType {
 
     ADD,
     MULTIPLY,
-    CONCAT;
+    CONCAT
 }

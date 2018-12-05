@@ -27,7 +27,7 @@ public class JSONSymbol {
         NEW_LINE,
         END,
         OTHER
-    };
+    }
 
     public final Type type;
     public final String value;
