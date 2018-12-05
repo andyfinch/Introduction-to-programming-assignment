@@ -10,11 +10,11 @@ package uk.ac.uos.i2p.s193805.taskhandling;
 public class Result {
 
     private String answer;
-    private String response;
+    private int response;
 
     public boolean isCorrect()
     {
-        return "200 OK".equalsIgnoreCase(response);
+        return 200 == response;
 
     }
 
@@ -57,11 +57,11 @@ public class Result {
         this.answer = answer;
     }
 
-    public String getResponse() {
+    public int getResponse() {
         return response;
     }
 
-    public void setResponse(String response) {
+    public void setResponse(int response) {
         this.response = response;
     }
 }

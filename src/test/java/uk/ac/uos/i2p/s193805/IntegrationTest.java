@@ -1,7 +1,8 @@
 package uk.ac.uos.i2p.s193805;
 
 import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.http.HTTPRequest;
+import uk.ac.uos.i2p.s193805.http.HttpRequester;
+import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Tasks;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
@@ -27,35 +28,36 @@ public class IntegrationTest {
     @Test
     void testSendCorrectResults() {
 
-        HTTPRequest httpRequest = new HTTPRequest();
-
         try
         {
-            httpRequest.sendHTTPRequest(baseurl+studentQuery, null, "GET");
-            Tasks tasks = TasksBuilder.buildTasksObject(httpRequest.getBody());
+            HttpResponseVO httpResponseVO = HttpRequester.sendGET(baseurl+studentQuery);
+            Tasks tasks = TasksBuilder.buildTasksObject(httpResponseVO.getBody());
 
             for (String taskURL : tasks.getTaskURLS())
             {
-                httpRequest.sendHTTPGetRequest(baseurl+taskURL);
+                httpResponseVO = HttpRequester.sendGET(baseurl+taskURL);
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(httpRequest.getBody());
+                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody());
+                    System.out.println(task.getInstruction());
+                    System.out.println(task.getParamList());
                 } catch (RuntimeException e )
                 {
-                    httpRequest.sendHTTPPostRequest(baseurl + taskURL, "text/plain", "Error" + e.getMessage());
-                    assertEquals(200, httpRequest.getResponse());
+                    e.printStackTrace();
+                    httpResponseVO = HttpRequester.sendPOST(baseurl + taskURL, "Error" + e.getMessage());
+                    assertEquals(200, httpResponseVO.getResponse());
                     continue;
                 }
 
-                System.out.println(task.getInstruction());
-                System.out.println(task.getParamList());
+
                 try
                 {
                     task.runInstruction();
-                    httpRequest.sendHTTPPostRequest(baseurl+task.getResponseURL(), "text/plain", task.getResult().getAnswer());
+                    httpResponseVO = HttpRequester.sendPOST(baseurl+task.getResponseURL(), task.getResult().getAnswer());
+                    task.getResult().setResponse(httpResponseVO.getResponse());
                     assertTrue(task.getResult().isCorrect());
-                    assertEquals(200, httpRequest.getResponse());
+                    assertEquals(200, httpResponseVO.getResponse());
                 } catch (IllegalArgumentException e)
                 {
                     e.printStackTrace();
@@ -74,41 +76,46 @@ public class IntegrationTest {
     @Test
     void testSendIncorrectResults() {
 
-        HTTPRequest httpRequest = new HTTPRequest();
 
         try
         {
-            httpRequest.sendHTTPRequest(baseurl + studentQuery, null, "GET");
-            Tasks tasks = TasksBuilder.buildTasksObject(httpRequest.getBody());
+            HttpResponseVO httpResponseVO = HttpRequester.sendGET(baseurl+studentQuery);
+            Tasks tasks = null;
+            try {
+                tasks = TasksBuilder.buildTasksObject(httpResponseVO.getBody());
+
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
 
             for (String taskURL : tasks.getTaskURLS())
             {
-                httpRequest.sendHTTPGetRequest(baseurl + taskURL);
+                httpResponseVO = HttpRequester.sendGET(baseurl+taskURL);
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(httpRequest.getBody());
-                } catch (RuntimeException e)
+                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody());
+                    System.out.println(task.getInstruction());
+                    System.out.println(task.getParamList());
+                } catch (RuntimeException e )
                 {
-                    httpRequest.sendHTTPPostRequest(baseurl + taskURL, "text/plain", "Error" + e.getMessage());
-                    assertEquals(200, httpRequest.getResponse());
+                    httpResponseVO = HttpRequester.sendPOST(baseurl + taskURL, "Error" + e.getMessage());
+                    assertEquals(200, httpResponseVO.getResponse());
                     continue;
                 }
-                System.out.println(taskURL);
-                System.out.println(task.getResponseURL());
-                System.out.println(task.getInstruction());
-                System.out.println(task.getParamList());
+
                 try
                 {
                     task.runInstruction();
-                    httpRequest.sendHTTPPostRequest(baseurl + task.getResponseURL(), "text/plain", task.getResult().getAnswer()+"Wrong");
-                    assertEquals(400, httpRequest.getResponse());
+                    httpResponseVO = HttpRequester.sendPOST(baseurl+task.getResponseURL(), task.getResult().getAnswer()+"WRONG");
+                    task.getResult().setResponse(httpResponseVO.getResponse());
+                    assertFalse(task.getResult().isCorrect());
+                    assertEquals(400, httpResponseVO.getResponse());
                 } catch (IllegalArgumentException e)
                 {
                     e.printStackTrace();
                 }
 
-                System.out.println(task.getResult().getAnswer());
             }
 
         } catch (Exception e)
