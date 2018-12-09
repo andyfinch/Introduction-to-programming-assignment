@@ -4,6 +4,7 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
@@ -37,9 +38,10 @@ public class JsonValue {
             return value.toString();
 
         }
-        else if ( symbol.type == NUMBER)
+        else if ( symbol.type == NUMBER || symbol.type == MINUS_SIGN)
         {
-            return Integer.valueOf(symbol.value);
+            lex.unread(symbol);
+            return new JsonNumber(lex);
         }
         else if (symbol.type == STRING)
         {
@@ -90,15 +92,15 @@ public class JsonValue {
         return (String) object;
     }
 
-    public Integer getJSONNumber() {
+    public JsonNumber getJSONNumber() {
 
-        try
+        if (!(object instanceof JsonNumber))
         {
-            return Integer.valueOf(String.valueOf(object));
-        } catch (NumberFormatException nfe)
-        {
-            throw new RuntimeException("Cannot convert number to Integer " + object);
+            throw new RuntimeException("Requested number is not a JSON Number. It is a" + this.getClass());
         }
+
+        return (JsonNumber) object;
+
 
     }
 

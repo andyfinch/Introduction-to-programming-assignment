@@ -32,7 +32,7 @@ public class PushbackLexParser {
             symbol = symbols.pop();
             if (symbol.type == JSONSymbol.Type.SPACE)
             {
-                return symbols.pop();
+                return next();
             }
 
             return symbol;

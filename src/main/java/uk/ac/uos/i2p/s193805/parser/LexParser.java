@@ -50,6 +50,18 @@ public class LexParser {
         {
             return new JSONSymbol(JSONSymbol.Type.COLON, ":");
         }
+        else if (c == '-')
+        {
+            return new JSONSymbol(JSONSymbol.Type.MINUS_SIGN, "-");
+        }
+        else if (c == '+')
+        {
+            return new JSONSymbol(JSONSymbol.Type.PLUS_SIGN, "+");
+        }
+        else if (c == '.')
+        {
+            return new JSONSymbol(JSONSymbol.Type.DECIMAL_POINT, ".");
+        }
         else if (Character.isDigit(c))
         {
             StringBuilder string = new StringBuilder();

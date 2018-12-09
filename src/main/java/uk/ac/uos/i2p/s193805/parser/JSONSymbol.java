@@ -19,12 +19,10 @@ public class JSONSymbol {
         CLOSE_ARRAY,
         STRING,
         NUMBER,
-        KEY,
-        STRING_VALUE,
-        BOOLEAN_VALUE,
-        INT_VALUE,
+        MINUS_SIGN,
+        PLUS_SIGN,
+        DECIMAL_POINT,
         SPACE,
-        NEW_LINE,
         END,
         OTHER
     }

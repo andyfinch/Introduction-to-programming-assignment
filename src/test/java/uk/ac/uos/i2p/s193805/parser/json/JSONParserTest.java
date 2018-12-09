@@ -45,6 +45,17 @@ public class JSONParserTest {
     }
 
     @Test
+    void testSimpleKeyNegativeNumber() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": -12\n" +
+                "}"));
+        assertEquals(-12, data.getJSONNumber("number").intValue());
+
+    }
+
+    @Test
     void testKeyValueNotNumber() throws IOException {
 
         JSONParser jsonParser = new JSONParser();

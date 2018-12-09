@@ -145,7 +145,7 @@ public class JsonObject {
 
     }
 
-    public Integer getJSONNumber(String keyName) {
+    public JsonNumber getJSONNumber(String keyName) {
 
         JsonValue jsonValue = getJsonValue(keyName);
 
