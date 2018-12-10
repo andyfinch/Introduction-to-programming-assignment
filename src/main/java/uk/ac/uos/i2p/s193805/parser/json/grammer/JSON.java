@@ -35,7 +35,7 @@ public class JSON {
 
     }
 
-    private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
+    /*private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
         String key = key(lexParser);
         if (null == key)
         {
@@ -48,9 +48,9 @@ public class JSON {
         }
 
         return new JsonMember(key, value);
-    }
+    }*/
 
-    private String key(PushbackLexParser lex) throws IOException {
+    /*private String key(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.next();
         if (JSONSymbol.Type.END == symbol.type) return null;
 
@@ -79,9 +79,9 @@ public class JSON {
         }
 
         return key;
-    }
+    }*/
 
-    private JsonValue value(PushbackLexParser lex) throws IOException {
+    /*private JsonValue value(PushbackLexParser lex) throws IOException {
         JSONSymbol symbol = lex.next();
         if (JSONSymbol.Type.END == symbol.type)
         {
@@ -89,7 +89,7 @@ public class JSON {
         }
 
         return new JsonValue(lex);
-    }
+    }*/
 
 
 }

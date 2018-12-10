@@ -24,7 +24,7 @@ public class TaskBuilder {
         Task task = null;
         JsonObject jsonObject = new JSONParser().parse(new StringReader(json));
 
-        String instruction = jsonObject.getJSONString("instruction");
+        String instruction = jsonObject.getString("instruction");
 
 
         if ("add".equalsIgnoreCase(instruction))
@@ -48,7 +48,7 @@ public class TaskBuilder {
 
         task.setInstruction(instruction);
         task.setParamList(jsonObject.getJsonArray("parameters").getObjectList());
-        task.setResponseURL(jsonObject.getJSONString("response URL"));
+        task.setResponseURL(jsonObject.getString("response URL"));
 
         return task;
     }

@@ -6,7 +6,7 @@ import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class JsonNumber {
+public class JsonNumber implements JsonValue {
 
     public final BigDecimal number;
 

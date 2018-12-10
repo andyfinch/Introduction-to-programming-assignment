@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
-public class JsonValue {
+public interface JsonValue {
 
-    public final Object object;
+    /*public final Object object;
 
     public JsonValue(PushbackLexParser pushbackLexParser) throws IOException {
 
@@ -129,7 +129,7 @@ public class JsonValue {
 
         return (JsonArray) object;
 
-    }
+    }*/
 
 
 }

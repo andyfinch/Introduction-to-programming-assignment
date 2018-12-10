@@ -20,7 +20,7 @@ public class TasksBuilder {
     {
         Tasks tasks = new Tasks();
         JsonObject jsonObject = new JSONParser().parse(new StringReader(json));
-        tasks.setId(jsonObject.getJSONString("id"));
+        tasks.setId(jsonObject.getString("id"));
         tasks.setTaskURLS(jsonObject.getJsonArrayStringList("tasks"));
 
         return tasks;

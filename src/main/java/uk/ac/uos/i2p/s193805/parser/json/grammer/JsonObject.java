@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
-public class JsonObject {
+public class JsonObject implements JsonValue {
 
     //has members
     //public final JsonMember jsonMember;
@@ -94,31 +94,14 @@ public class JsonObject {
 
     private JsonValue value(PushbackLexParser lex) throws IOException {
 
-        JsonValue jsonValue = new JsonValue(lex);
+        JsonValue jsonValue = JsonValueBuilder.buildJsonValue(lex);
 
-        if ( jsonValue.object == null) return null;
+        if ( jsonValue == null) return null;
 
         return jsonValue;
 
     }
 
-    /*public Object getJsonValue(String key)
-    {
-        if (!jsonValueMap.containsKey(key) )
-        {
-            throw new RuntimeException("Key " + key + " does not exist");
-        }
-
-        JsonValue jsonValue = jsonValueMap.get(key);
-
-        if ( jsonValue == null)
-        {
-            return null;
-        }
-
-        return jsonValue.object;
-
-    }*/
 
     public JsonValue getJsonValue(String key) {
         if (!jsonValueMap.containsKey(key))
@@ -137,71 +120,95 @@ public class JsonObject {
 
     }
 
-    public String getJSONString(String keyName) {
+    public JsonValue getJsonValue(String key, Class<? extends JsonValue> JsonType) {
 
-        JsonValue jsonValue = getJsonValue(keyName);
+        JsonValue jsonValue = getJsonValue(key);
 
-        return jsonValue.getJSONString();
+        if (!(JsonType.isInstance(jsonValue)))
+        {
+            throw new RuntimeException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
+        }
+
+        if (!jsonValueMap.containsKey(key))
+        {
+            throw new RuntimeException("Key " + key + " does not exist");
+        }
+
+        return jsonValue;
+
+    }
+
+    public JsonString getJSONString(String keyName) {
+
+        return (JsonString) getJsonValue(keyName, JsonString.class);
+
+    }
+
+    public String getString(String keyName) {
+
+        return getJSONString(keyName).stringValue;
 
     }
 
     public JsonNumber getJSONNumber(String keyName) {
 
-        JsonValue jsonValue = getJsonValue(keyName);
-
-        return jsonValue.getJSONNumber();
+        return (JsonNumber) getJsonValue(keyName, JsonNumber.class);
 
     }
 
-    public Boolean getJsonBoolean(String keyName) {
+    public int getInt(String keyName) {
 
-        JsonValue jsonValue = getJsonValue(keyName);
+        return getJSONNumber(keyName).intValue();
 
-        return jsonValue.getJsonBoolean();
+    }
+
+    public JsonBoolean getJsonBoolean(String keyName) {
+
+        return (JsonBoolean) getJsonValue(keyName, JsonBoolean.class);
+
+    }
+
+    public boolean getBoolean(String keyName) {
+
+        return getJsonBoolean(keyName).booleanValue;
 
     }
 
     public JsonObject getJsonObject(String keyName) {
 
-        JsonValue jsonValue = getJsonValue(keyName);
-
-        return jsonValue.getJsonObject();
+        return (JsonObject) getJsonValue(keyName, JsonObject.class);
 
     }
 
     public JsonArray getJsonArray(String keyName) {
-        JsonValue jsonValue = getJsonValue(keyName);
 
-        return jsonValue.getJsonArray();
+        return (JsonArray) getJsonValue(keyName, JsonArray.class);
 
     }
 
     public List<JsonValue> getJsonArrayList(String keyName) {
         JsonValue jsonValue = getJsonValue(keyName);
-
-        return jsonValue.getJsonArray().jsonValues;
-
+        return getJsonArray(keyName).jsonValues;
     }
 
     public List<String> getJsonArrayStringList(String keyName) {
-        JsonValue jsonValue = getJsonValue(keyName);
+        JsonArray jsonArray = getJsonArray(keyName);
 
         List<String> valuesAsStrings = new ArrayList<>();
 
-        for (JsonValue value : jsonValue.getJsonArray().jsonValues)
+        for (JsonValue value : jsonArray.jsonValues)
         {
-            valuesAsStrings.add(value.getJSONString());
+            valuesAsStrings.add(String.valueOf(value));
         }
-
 
         return valuesAsStrings;
 
     }
 
     public List<Object> getJsonArrayObjectList(String keyName) {
-        JsonValue jsonValue = getJsonValue(keyName);
+        JsonArray jsonArray = getJsonArray(keyName);
 
-        return new ArrayList<>(jsonValue.getJsonArray().jsonValues);
+        return new ArrayList<>(jsonArray.jsonValues);
 
     }
 

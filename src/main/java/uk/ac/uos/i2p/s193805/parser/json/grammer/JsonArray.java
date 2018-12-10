@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonArray {
+public class JsonArray implements JsonValue {
 
     public final List<JsonValue> jsonValues = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class JsonArray {
             if ( symbol.type != JSONSymbol.Type.COMMA)
             {
                 pushbackLexParser.unread(symbol);
-                jsonValue = value(pushbackLexParser);
+                jsonValue = JsonValueBuilder.buildJsonValue(pushbackLexParser);
                 jsonValues.add(jsonValue);
             }
             else
@@ -47,19 +47,12 @@ public class JsonArray {
 
     }
 
-    private JsonValue value(PushbackLexParser lex) throws IOException {
-
-        return new JsonValue(lex);
-
-
-    }
-
     public List<Object> getObjectList()
     {
         List<Object> objects = new ArrayList<>();
         for (JsonValue jsonValue : jsonValues)
         {
-            objects.add(jsonValue.object);
+            objects.add(jsonValue);
         }
 
         return objects;
