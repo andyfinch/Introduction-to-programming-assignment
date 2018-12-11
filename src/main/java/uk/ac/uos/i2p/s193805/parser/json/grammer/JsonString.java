@@ -14,4 +14,9 @@ public class JsonString implements JsonValue {
     public JsonString(String stringValue) {
         this.stringValue = stringValue;
     }
+
+    @Override
+    public String toString() {
+        return stringValue;
+    }
 }

@@ -47,7 +47,7 @@ public class TaskBuilder {
 
 
         task.setInstruction(instruction);
-        task.setParamList(jsonObject.getJsonArray("parameters").getObjectList());
+        task.setParamList(jsonObject.getJsonArray("parameters").getStringList());
         task.setResponseURL(jsonObject.getString("response URL"));
 
         return task;

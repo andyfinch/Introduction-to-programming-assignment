@@ -20,7 +20,7 @@ class MultiplyTest {
     void testMultiplyer_2_Integers() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList(2 , 10);
+        List<String> valueList = Arrays.asList("2" , "10");
         int answer = multiplier.runInstruction(valueList).getAnswerIntValue();
         assertEquals( 20, answer , "Answer should be 20");
     }
@@ -29,7 +29,7 @@ class MultiplyTest {
     void testMultiplyer_3_Integers() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList(2, 2, 2);
+        List<String> valueList = Arrays.asList("2", "2", "2");
         int answer = multiplier.runInstruction(valueList).getAnswerIntValue();
         assertEquals(8, answer, "Answer should be 8");
     }
@@ -38,7 +38,7 @@ class MultiplyTest {
     void testMultiplyer_6_Integers() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList(1, 2, 3, 4, 5, 6);
+        List<String> valueList = Arrays.asList("1", "2", "3", "4", "5", "6");
         int answer = multiplier.runInstruction(valueList).getAnswerIntValue();
         assertEquals(720, answer, "Answer should be 720.00");
     }
@@ -47,7 +47,7 @@ class MultiplyTest {
     void testMultiplyer_With_A_Zero_Integer() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList(0, 2, 3, 4, 5, 6);
+        List<String> valueList = Arrays.asList("0", "2", "3", "4", "5", "6");
         int answer = multiplier.runInstruction(valueList).getAnswerIntValue();
         assertEquals(0, answer, "Answer should be 0");
     }
@@ -56,7 +56,7 @@ class MultiplyTest {
     void testMultiplyer_With_Text_Strings() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList("A", "B");
+        List<String> valueList = Arrays.asList("A", "B");
         try
         {
             multiplier.runInstruction(valueList);
@@ -71,7 +71,7 @@ class MultiplyTest {
     void testMultiplyer_With_Integer_And_Text_Strings() {
 
         Instruction multiplier = new Multiply();
-        List<Object> valueList = Arrays.asList(1, 2, "A", "B");
+        List<String> valueList = Arrays.asList("1", "2", "A", "B");
         try
         {
             multiplier.runInstruction(valueList);

@@ -15,18 +15,18 @@ public class Multiply implements Instruction {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Result runInstruction(List<Object> values) throws IllegalArgumentException {
+    public Result runInstruction(List<String> values) throws IllegalArgumentException {
 
         Result result = new Result();
         Integer runningSum = 1;
 
         if (values != null)
         {
-            for (Object number : values)
+            for (String number : values)
             {
                 try
                 {
-                    runningSum *= Integer.parseInt(number.toString());
+                    runningSum *= Integer.parseInt(number);
                 } catch (NumberFormatException e)
                 {
                     throw new IllegalArgumentException("Parameters must be Integer values only");

@@ -21,7 +21,7 @@ class AddTest {
     void  testAdder() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(50,50);
+        List<String> valueList = Arrays.asList("50","50");
         int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals( 100.00, answer , "Answer should be 100");
     }
@@ -30,7 +30,7 @@ class AddTest {
     void testAdder_With_Zero_As_Param() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(0, 50);
+        List<String> valueList = Arrays.asList("0", "50");
         int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(50, answer, "Answer should be 50");
     }
@@ -39,7 +39,7 @@ class AddTest {
     void testAdder_With_All_Zeroes() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(0, 0);
+        List<String> valueList = Arrays.asList("0", "0");
         int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(0, answer, "Answer should be 0");
     }
@@ -48,7 +48,7 @@ class AddTest {
     void testAdder_with_Only_Zero_Value() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(0);
+        List<String> valueList = Arrays.asList("0");
         int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(0, answer, "Answer should be 0");
     }
@@ -57,7 +57,7 @@ class AddTest {
     void testAdder_with_Only_One_Value() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(5);
+        List<String> valueList = Arrays.asList("5");
         int answer = adder.runInstruction(valueList).getAnswerIntValue();
         assertEquals(5, answer, "Answer should be 5");
     }
@@ -66,7 +66,7 @@ class AddTest {
     void testAdder_Text_Strings() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList("A", "B");
+        List<String> valueList = Arrays.asList("A", "B");
 
         try
         {
@@ -83,7 +83,7 @@ class AddTest {
     void testAdder_Integer_And_Text_Strings() {
 
         Instruction adder = new Add();
-        List<Object> valueList = Arrays.asList(1, "B");
+        List<String> valueList = Arrays.asList("1", "B");
 
         try
         {

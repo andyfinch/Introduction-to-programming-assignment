@@ -16,17 +16,17 @@ public abstract class Task {
 
     private String requestURL;
     private String instruction;
-    protected List<Object> paramList = new ArrayList<>();
+    protected List<String> paramList = new ArrayList<>();
     private String responseURL;
     protected Result result;
 
     public abstract void runInstruction();
 
-    public List<Object> getParamList() {
+    public List<String> getParamList() {
         return paramList;
     }
 
-    public void setParamList(List<Object> paramList) {
+    public void setParamList(List<String> paramList) {
         this.paramList = paramList;
     }
 

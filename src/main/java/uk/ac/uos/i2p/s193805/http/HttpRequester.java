@@ -31,6 +31,7 @@ public class HttpRequester {
             String proxyHost = System.getProperty("proxyHost");
             String proxyPort = System.getProperty("proxyPort");
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, Integer.parseInt(proxyPort)));
+
             con = (HttpURLConnection) url.openConnection(proxy);
         }
         else
@@ -48,6 +49,7 @@ public class HttpRequester {
         HttpResponseVO httpResponseVO = new HttpResponseVO();
 
         HttpURLConnection con = setupConnection(urlAddress, "GET");
+        con.connect();
         httpResponseVO.setResponse(con.getResponseCode());
 
         BufferedReader in = new BufferedReader(
@@ -68,7 +70,10 @@ public class HttpRequester {
 
     public static HttpResponseVO sendPOST(String urlAddress, String body) throws Exception
     {
+
+
         HttpResponseVO httpResponseVO = new HttpResponseVO();
+
 
         HttpURLConnection con = setupConnection(urlAddress, "POST");
         con.setDoOutput(true);
@@ -93,11 +98,16 @@ public class HttpRequester {
                 content.append(inputLine);
             }
             in.close();
-            con.disconnect();
+
             httpResponseVO.setBody(content.toString());
         }
 
+        con.disconnect();
+        
         return httpResponseVO;
+
+
+
     }
 
 }

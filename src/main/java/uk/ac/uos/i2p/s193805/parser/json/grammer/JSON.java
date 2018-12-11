@@ -22,7 +22,7 @@ public class JSON {
 
     private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
     {
-        JSONSymbol symbol = lexParser.next();
+        JSONSymbol symbol = lexParser.nextSkipSpaces();
 
         if ( symbol.type != OPEN_BRACE)
         {

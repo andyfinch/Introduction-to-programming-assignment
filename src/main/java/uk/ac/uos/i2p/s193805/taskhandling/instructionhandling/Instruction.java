@@ -13,6 +13,6 @@ import java.util.List;
 
 public interface Instruction {
 
-    Result runInstruction(List<Object> values) throws IllegalArgumentException;
+    Result runInstruction(List<String> values) throws IllegalArgumentException;
 
 }

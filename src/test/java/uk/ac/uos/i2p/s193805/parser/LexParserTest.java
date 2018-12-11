@@ -89,6 +89,27 @@ class LexParserTest {
     }
 
     @Test
+    void testMinusSign() throws IOException {
+        LexParser lexParser = new LexParser(new StringReader("-"));
+        JSONSymbol symbol = lexParser.next();
+        assertEquals(MINUS_SIGN, symbol.type);
+    }
+
+    @Test
+    void testPlusSign() throws IOException {
+        LexParser lexParser = new LexParser(new StringReader("+"));
+        JSONSymbol symbol = lexParser.next();
+        assertEquals(PLUS_SIGN, symbol.type);
+    }
+
+    @Test
+    void testDecimalPoint() throws IOException {
+        LexParser lexParser = new LexParser(new StringReader("."));
+        JSONSymbol symbol = lexParser.next();
+        assertEquals(DECIMAL_POINT, symbol.type);
+    }
+
+    @Test
     void testSpace() throws IOException {
         LexParser lexParser = new LexParser(new StringReader(" "));
         JSONSymbol symbol = lexParser.next();

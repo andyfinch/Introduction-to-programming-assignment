@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805.http;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,16 +16,17 @@ class HTTPRequestTest {
 
     @Test
     void testHTTP() {
-        HttpRequester httpRequest = new HttpRequester();
+
         try
         {
-            HttpRequester.sendGET(url);
+            HttpResponseVO httpResponseVO = HttpRequester.sendGET(url);
+            assertEquals(200, httpResponseVO.getResponse());
         } catch (Exception e)
         {
             e.printStackTrace();
+            fail();
         }
 
-        System.out.println("test");
     }
 
 

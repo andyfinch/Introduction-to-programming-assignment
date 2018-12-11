@@ -48,46 +48,53 @@ public class JsonNumber implements JsonValue {
         symbol = pushbackLexParser.next();
 
 
-        if (symbol.type == JSONSymbol.Type.DECIMAL_POINT)
+        if (symbol.type == JSONSymbol.Type.DECIMAL_POINT || symbol.value.equalsIgnoreCase("E"))
         {
-            numberString.append(symbol.value); //-1. or 1.
-
-            symbol = pushbackLexParser.next();
-
-            if (symbol.type != JSONSymbol.Type.NUMBER)
+            if (symbol.type == JSONSymbol.Type.DECIMAL_POINT)
             {
-                throw new RuntimeException("Number must follow decimal point");
+                numberString.append(symbol.value); //-1. or 1.
+
+                symbol = pushbackLexParser.next();
+
+                if (symbol.type != JSONSymbol.Type.NUMBER)
+                {
+                    throw new RuntimeException("Number must follow decimal point");
+                }
+
+                numberString.append(symbol.value); //-1.1 or 1.1
+
+                symbol = pushbackLexParser.next();
+
             }
 
-            numberString.append(symbol.value); //-1.1 or 1.1
+            if ( symbol.value.equalsIgnoreCase("E"))
+            {
+                numberString.append(symbol.value);
 
+                symbol = pushbackLexParser.next();
 
+                if (symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.PLUS_SIGN)
+                {
+                    throw new RuntimeException("Exponent E must be followed by sign");
+                }
+
+                numberString.append(symbol.value);
+
+                symbol = pushbackLexParser.next();
+
+                if ( symbol.type != JSONSymbol.Type.NUMBER)
+                {
+                    throw new RuntimeException("Exponent sign must be followed by number");
+                }
+
+                numberString.append(symbol.value);
+            }
+        }
+        else
+        {
+            pushbackLexParser.unread(symbol);
         }
 
-        if ( symbol.value.equals("E"))
-        {
-            numberString.append(symbol.value);
-
-            symbol = pushbackLexParser.next();
-
-            if (symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.PLUS_SIGN)
-            {
-                throw new RuntimeException("Exponent E must be followed by sign");
-            }
-
-            numberString.append(symbol.value);
-
-            symbol = pushbackLexParser.next();
-
-            if ( symbol.type != JSONSymbol.Type.NUMBER)
-            {
-                throw new RuntimeException("Exponent sign must be followed by number");
-            }
-
-            numberString.append(symbol.value);
-        }
-
-        pushbackLexParser.unread(symbol);
 
         return new BigDecimal(numberString.toString());
 
@@ -99,4 +106,8 @@ public class JsonNumber implements JsonValue {
         return number.intValue();
     }
 
+    @Override
+    public String toString() {
+        return this.number.toString();
+    }
 }

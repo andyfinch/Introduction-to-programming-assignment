@@ -15,14 +15,14 @@ public class Concat implements Instruction {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Result runInstruction(List<Object> values) {
+    public Result runInstruction(List<String> values) {
 
         Result result = new Result();
         StringBuilder stringBuilder = new StringBuilder();
 
         if (values != null)//handle null list
         {
-            for (Object number : values)
+            for (String number : values)
             {
                 stringBuilder.append(number);
 

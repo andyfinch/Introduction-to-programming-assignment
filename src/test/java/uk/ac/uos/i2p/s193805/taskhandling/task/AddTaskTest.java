@@ -23,7 +23,7 @@ class AddTaskTest {
     {
         Task task = new AddTask();
         task.setInstruction("add");
-        task.setParamList(Arrays.asList(1,2,3));
+        task.setParamList(Arrays.asList("1","2","3"));
         task.runInstruction();
         assertEquals(6, task.result.getAnswerIntValue());
 
@@ -40,7 +40,7 @@ class AddTaskTest {
         task.runInstruction();
         assertEquals("add", task.getInstruction());
         assertEquals("23", task.getParamList().get(0));
-        assertEquals(45, task.getParamList().get(1));
+        assertEquals("45", task.getParamList().get(1));
         assertEquals(68, task.getResult().getAnswerIntValue());
 
 

@@ -14,4 +14,9 @@ public class JsonBoolean implements JsonValue {
     public JsonBoolean(Boolean booleanValue) {
         this.booleanValue = booleanValue;
     }
+
+    @Override
+    public String toString() {
+        return this.booleanValue.toString();
+    }
 }

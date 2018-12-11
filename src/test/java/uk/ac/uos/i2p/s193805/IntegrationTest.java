@@ -67,6 +67,7 @@ public class IntegrationTest {
 
         } catch (Exception e)
         {
+            fail();
             e.printStackTrace();
         }
 
@@ -120,6 +121,7 @@ public class IntegrationTest {
 
         } catch (Exception e)
         {
+            fail();
             e.printStackTrace();
         }
 

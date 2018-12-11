@@ -24,6 +24,11 @@ public class JsonArray implements JsonValue {
 
         while ((symbol = pushbackLexParser.nextSkipSpaces()).type != JSONSymbol.Type.CLOSE_ARRAY)
         {
+            if (symbol.type == JSONSymbol.Type.CLOSE_BRACE)
+            {
+                continue;
+            }
+
             //JsonMember jsonMember = jsonMember(pushbackLexParser);
             if ( symbol.type != JSONSymbol.Type.COMMA)
             {
@@ -47,14 +52,88 @@ public class JsonArray implements JsonValue {
 
     }
 
-    public List<Object> getObjectList()
-    {
-        List<Object> objects = new ArrayList<>();
-        for (JsonValue jsonValue : jsonValues)
+    public JsonValue getJsonValue(int index) {
+
+        JsonValue jsonValue = jsonValues.get(index);
+
+        if (jsonValue == null)
         {
-            objects.add(jsonValue);
+            return null;
         }
 
-        return objects;
+        return jsonValue;
+
+    }
+
+    private JsonValue getJsonValue(int index, Class<? extends JsonValue> JsonType) {
+
+        JsonValue jsonValue = getJsonValue(index);
+
+        if (!(JsonType.isInstance(jsonValue)))
+        {
+            throw new RuntimeException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
+        }
+
+        return jsonValue;
+
+    }
+
+    public JsonString getJSONString(int index) {
+
+        return (JsonString) getJsonValue(index, JsonString.class);
+
+    }
+
+    public String getString(int index) {
+
+        return getJSONString(index).stringValue;
+
+    }
+
+    public JsonNumber getJSONNumber(int index) {
+
+        return (JsonNumber) getJsonValue(index, JsonNumber.class);
+
+    }
+
+    public int getInt(int index) {
+
+        return getJSONNumber(index).intValue();
+
+    }
+
+    public JsonBoolean getJsonBoolean(int index) {
+
+        return (JsonBoolean) getJsonValue(index, JsonBoolean.class);
+
+    }
+
+    public boolean getBoolean(int index) {
+
+        return getJsonBoolean(index).booleanValue;
+
+    }
+
+    public JsonObject getJsonObject(int index) {
+
+        return (JsonObject) getJsonValue(index, JsonObject.class);
+
+    }
+
+    public JsonArray getJsonArray(int index) {
+
+        return (JsonArray) getJsonValue(index, JsonArray.class);
+
+    }
+
+    public List<String> getStringList()
+    {
+        List<String> strings = new ArrayList<>();
+        for (JsonValue jsonValue : jsonValues)
+        {
+            strings.add(jsonValue.toString());
+        }
+
+        return strings;
     }
 }

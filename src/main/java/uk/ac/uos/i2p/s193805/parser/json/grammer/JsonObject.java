@@ -29,6 +29,15 @@ public class JsonObject implements JsonValue {
 
         }
 
+        /*JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
+
+        if ( symbol.type != CLOSE_BRACE)
+        {
+            throw new RuntimeException("JSON Object must end with }");
+        }
+
+        pushbackLexParser.unread(symbol);*/
+
 
     }
 
@@ -39,6 +48,10 @@ public class JsonObject implements JsonValue {
 
         if ( symbol.type == JSONSymbol.Type.END || symbol.type == JSONSymbol.Type.CLOSE_BRACE)
         {
+            /*if (symbol.type == JSONSymbol.Type.CLOSE_BRACE)
+            {
+                lexParser.unread(symbol);
+            }*/
             return null;
         }
         lexParser.unread(symbol);
@@ -70,8 +83,6 @@ public class JsonObject implements JsonValue {
         if (JSONSymbol.Type.END == symbol.type) return null;
 
         if (symbol.type != JSONSymbol.Type.QUOTE) return null;
-
-        //lex.nextSkipSpaces();
 
         while ( (symbol = lex.nextSkipSpaces()).type != JSONSymbol.Type.QUOTE)
         {
@@ -120,18 +131,13 @@ public class JsonObject implements JsonValue {
 
     }
 
-    public JsonValue getJsonValue(String key, Class<? extends JsonValue> JsonType) {
+    private JsonValue getJsonValue(String key, Class<? extends JsonValue> JsonType) {
 
         JsonValue jsonValue = getJsonValue(key);
 
         if (!(JsonType.isInstance(jsonValue)))
         {
             throw new RuntimeException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
-        }
-
-        if (!jsonValueMap.containsKey(key))
-        {
-            throw new RuntimeException("Key " + key + " does not exist");
         }
 
         return jsonValue;
@@ -186,10 +192,6 @@ public class JsonObject implements JsonValue {
 
     }
 
-    public List<JsonValue> getJsonArrayList(String keyName) {
-        JsonValue jsonValue = getJsonValue(keyName);
-        return getJsonArray(keyName).jsonValues;
-    }
 
     public List<String> getJsonArrayStringList(String keyName) {
         JsonArray jsonArray = getJsonArray(keyName);
@@ -211,7 +213,6 @@ public class JsonObject implements JsonValue {
         return new ArrayList<>(jsonArray.jsonValues);
 
     }
-
 
 
 }

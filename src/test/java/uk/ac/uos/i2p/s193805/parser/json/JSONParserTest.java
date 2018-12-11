@@ -56,6 +56,61 @@ public class JSONParserTest {
     }
 
     @Test
+    void testSimpleKeyDecimalNumber() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": 1.1\n" +
+                "}"));
+        assertEquals(1.1, data.getJSONNumber("number").number.doubleValue());
+
+    }
+
+    @Test
+    void testSimpleKeyMinusDecimalNumber() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": -1.1\n" +
+                "}"));
+        assertEquals(-1.1, data.getJSONNumber("number").number.doubleValue());
+
+    }
+
+    @Test
+    void testSimpleKeyDecimalNumberLong() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": 12345.12345\n" +
+                "}"));
+        assertEquals(12345.12345, data.getJSONNumber("number").number.doubleValue());
+
+    }
+
+    @Test
+    void testSimpleKeyExponentNumber() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": 1e+2\n" +
+                "}"));
+        assertEquals(1e+2, data.getJSONNumber("number").number.doubleValue());
+
+    }
+
+    @Test
+    void testSimpleKeyDecimalExponentNumber() throws IOException {
+
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{\n" +
+                "  \"number\": 1.1e+2\n" +
+                "}"));
+        assertEquals(1.1e+2, data.getJSONNumber("number").number.doubleValue());
+
+    }
+
+    @Test
     void testKeyValueNotNumber() throws IOException {
 
         JSONParser jsonParser = new JSONParser();
@@ -140,8 +195,8 @@ public class JSONParserTest {
                 "  ]\n" +
                 "}"));
         assertEquals(2, data.getJsonArray("parameters").jsonValues.size());
-        assertEquals("23", data.getJsonArray("parameters").jsonValues.get(0));
-        assertEquals(45, data.getJsonArray("parameters").jsonValues.get(1));
+        assertEquals("23", data.getJsonArray("parameters").getString(0));
+        assertEquals(45, data.getJsonArray("parameters").getInt(1));
 
     }
 
@@ -163,11 +218,71 @@ public class JSONParserTest {
                 "    }\n" +
                 "  ]\n" +
                 "}"));
-        /*assertEquals(2, data.getJsonArray("parameters").jsonValues.size());
-        assertEquals("23", data.getJsonArray("parameters").jsonValues.get(0).object);
-        assertEquals(45, data.getJsonArray("parameters").jsonValues.get(1).object);*/
+        assertEquals(2, data.getJsonArray("additionalDocument").jsonValues.size());
+        assertEquals("1", data.getJsonArray("additionalDocument").getJsonObject(0).getString("catagoryCode"));
+        assertEquals("2", data.getJsonArray("additionalDocument").getJsonObject(1).getString("catagoryCode"));
 
     }
+
+    @Test
+    void testMissingOpeningBrace() throws IOException {
+
+        assertParseException("\n" +
+                "  \"instruction\": \"add\"\n" +
+                "}\n", "JSON Object must start with {");
+
+    }
+
+    @Test
+    void testMissingClosingBrace() throws IOException {
+
+        assertParseException("\n {" +
+                "  \"instruction\": \"add\"\n" +
+                "\n", "JSON Object must end with }");
+
+    }
+
+   /* @Test
+    void testSuperNestedX() throws IOException {
+          JSONParser jsonParser = new JSONParser();
+          JsonObject data = jsonParser.parse(new StringReader("{\"additionalDocument\": [\n" +
+                  "    {\n" +
+                  "      \"catagoryCode\": \"1\",\n" +
+                  "      \"id\": \"\",\n" +
+                  "      \"typeCode\": \"DAN\"\n" +
+                  "    },\n" +
+                  "    {\n" +
+                  "      \"catagoryCode\": \"2\",\n" +
+                  "      \"id\": \"\",\n" +
+                  "      \"typeCode\": \"DAN\"\n" +
+                  "    }\n" +
+                  "  ],\n" +
+                  "  \"exporter\": {\n" +
+                  "    \"name\": \"\",\n" +
+                  "    \"address\": {\n" +
+                  "      \"line\": \"\",\n" +
+                  "      \"city\": \"\",\n" +
+                  "      \"countryCode\": \"\",\n" +
+                  "      \"postCode\": \"\"\n" +
+                  "    },\n" +
+                  "    \"id\": \"\"\n" +
+                  "  }}"));
+
+        System.out.println(data);
+    }
+
+    @Test
+    void testSuperNestedXX() throws IOException {
+        JSONParser jsonParser = new JSONParser();
+        JsonObject data = jsonParser.parse(new StringReader("{ \"exporter\": {\n" +
+                "    \"address\": {\n" +
+                "      \"line\": \"\"\n" +
+                "    },\n" +
+                "    \"id\": \"\"\n" +
+                "  }}"));
+
+        System.out.println(data);
+    }*/
 
 
     @Test
@@ -614,12 +729,24 @@ public class JSONParserTest {
                 "    \"totalGrossMassMeasure\": \"\"\n" +
                 "  }\n" +
                 "}"));
-        assertEquals("MCPMSM3122018104343006", data.getJsonObject("declaration").getJSONString("functionalReferenceId"));
+        assertEquals("MCPMSM3122018104343006", data.getJsonObject("declaration").getString("functionalReferenceId"));
         assertEquals(2, data.getJsonObject("declaration").getJsonArray("additionalDocument").jsonValues.size());
-        /*assertEquals("1", data.getJsonObject("declaration").getJsonArrayList("additionalDocument").get(0).getJsonObject().getJSONString("catagoryCode"));
-        assertEquals("type1", data.getJsonObject("declaration").getJsonObject("goodsShipment").getJsonArrayList("governmentAgencyGoodsItem")
-                .get(0).getJsonObject().getJsonObject("commodity").getJsonArrayList("dutyTaxFee").get(0).getJsonObject().getJSONString("typeCode"));*/
+        assertEquals("1", data.getJsonObject("declaration").getJsonArray("additionalDocument").getJsonObject(0).getString("catagoryCode"));
+        assertEquals("type1", data.getJsonObject("declaration").getJsonObject("goodsShipment").getJsonArray("governmentAgencyGoodsItem").getJsonObject(0)
+                .getJsonObject("commodity").getJsonArray("dutyTaxFee").getJsonObject(0).getString("typeCode"));
         
 
+    }
+
+
+    private void assertParseException(String json, String expectedMessage) throws IOException {
+        try
+        {
+            new JSONParser().parse(new StringReader(json));
+            fail();
+        } catch (RuntimeException e)
+        {
+            assertEquals(expectedMessage, e.getMessage());
+        }
     }
 }
