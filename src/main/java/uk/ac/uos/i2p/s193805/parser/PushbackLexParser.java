@@ -14,6 +14,7 @@ public class PushbackLexParser {
 
     private LexParser lexParser;
     private Stack<JSONSymbol> symbols;
+    private JSONSymbol symbol;
 
     public PushbackLexParser(LexParser lexParser) {
         this.lexParser = lexParser;
@@ -26,7 +27,7 @@ public class PushbackLexParser {
     }
 
     public JSONSymbol nextSkipSpaces() throws IOException {
-        JSONSymbol symbol;
+        //JSONSymbol symbol;
         if (!symbols.isEmpty())
         {
             symbol = symbols.pop();
@@ -54,5 +55,9 @@ public class PushbackLexParser {
 
     public Stack<JSONSymbol> getSymbols() {
         return symbols;
+    }
+
+    public JSONSymbol getCurrentSymbol() {
+        return symbol;
     }
 }
