@@ -2,6 +2,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
+import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ public class JsonValueBuilder {
             {
                 if (symbol.type == END)
                 {
-                    throw new RuntimeException("Quoted Value must end with \"");
+                    throw new JsonParseException("Quoted Value must end with \"");
                 }
                 value.append(symbol.value);
             }
@@ -41,7 +42,7 @@ public class JsonValueBuilder {
         else if (symbol.type == NUMBER || symbol.type == MINUS_SIGN)
         {
             pushbackLexParser.unread(symbol);
-            return new JsonNumber(pushbackLexParser);
+            return new JsonNumberParser(pushbackLexParser).parse();
         }
         else if (symbol.type == STRING)
         {
@@ -55,7 +56,7 @@ public class JsonValueBuilder {
             }
             else
             {
-                throw new RuntimeException("Unquoted String value not allowed");
+                throw new JsonParseException("Unquoted String value not allowed");
             }
 
         }

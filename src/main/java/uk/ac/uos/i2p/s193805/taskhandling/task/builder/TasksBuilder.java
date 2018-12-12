@@ -19,7 +19,9 @@ public class TasksBuilder {
     public static Tasks buildTasksObject(String json) throws IOException
     {
         Tasks tasks = new Tasks();
-        JsonObject jsonObject = new JSONParser().parse(new StringReader(json));
+        JSONParser jsonParser = new JSONParser(new StringReader(json));
+        jsonParser.parse();
+        JsonObject jsonObject = jsonParser.getJsonObject();
         tasks.setId(jsonObject.getString("id"));
         tasks.setTaskURLS(jsonObject.getJsonArrayStringList("tasks"));
 

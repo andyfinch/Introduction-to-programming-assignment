@@ -22,7 +22,9 @@ public class TaskBuilder {
 
     public static Task buildTaskObject(String json) throws IllegalArgumentException, IOException {
         Task task = null;
-        JsonObject jsonObject = new JSONParser().parse(new StringReader(json));
+        JSONParser jsonParser = new JSONParser(new StringReader(json));
+        jsonParser.parse();
+        JsonObject jsonObject = jsonParser.getJsonObject();
 
         String instruction = jsonObject.getString("instruction");
 

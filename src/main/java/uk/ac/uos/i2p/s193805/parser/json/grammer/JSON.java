@@ -3,6 +3,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
+import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 
 import java.io.IOException;
 
@@ -10,14 +11,24 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JSON {
 
-    public final JsonObject jsonObject;
+    //public final JsonObject jsonObject;
+    public final JsonValue jsonValue;
+    public final PushbackLexParser pushbackLexParser;
 
-    public JSON(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
-    }
+
 
     public JSON(PushbackLexParser pushbackLexParser) throws IOException {
-        this.jsonObject = jsonObject(pushbackLexParser);
+        //this.jsonObject = jsonObject(pushbackLexParser);
+        this.pushbackLexParser = pushbackLexParser;
+        this.jsonValue = parse();
+        /*if ( jsonValue instanceof JsonObject)
+        {
+            this.jsonObject = (JsonObject) this.jsonValue;
+        }
+        else
+        {
+            jsonObject = null;
+        }*/
     }
 
     private JsonObject jsonObject(PushbackLexParser lexParser) throws IOException
@@ -26,13 +37,23 @@ public class JSON {
 
         if ( symbol.type != OPEN_BRACE)
         {
-            throw new RuntimeException("JSON Object must start with {");
+            throw new JsonParseException("JSON Object must start with {");
         }
 
         JsonObject jsonObject = new JsonObject(lexParser);
 
         return jsonObject;
 
+    }
+
+    public JsonValue parse() throws IOException
+    {
+        //JSONSymbol symbol = lexParser.nextSkipSpaces();
+
+
+        JsonValue jsonValue = JsonValueBuilder.buildJsonValue(pushbackLexParser);
+
+        return jsonValue;
     }
 
     /*private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {

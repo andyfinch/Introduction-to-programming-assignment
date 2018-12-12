@@ -2,6 +2,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
+import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class JsonArray implements JsonValue {
 
         if (symbol.type == JSONSymbol.Type.COMMA)
         {
-            throw new RuntimeException("Array cannot start with ,");
+            throw new JsonParseException("Array cannot start with ,");
         }
         pushbackLexParser.unread(symbol);
 
@@ -41,7 +42,7 @@ public class JsonArray implements JsonValue {
                 symbol = pushbackLexParser.nextSkipSpaces();
                 if ( symbol.type == JSONSymbol.Type.CLOSE_ARRAY)
                 {
-                    throw new RuntimeException("Trailing commas not allowed");
+                    throw new JsonParseException("Trailing commas not allowed");
                 }
                 pushbackLexParser.unread(symbol);
             }
@@ -71,7 +72,7 @@ public class JsonArray implements JsonValue {
 
         if (!(JsonType.isInstance(jsonValue)))
         {
-            throw new RuntimeException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
+            throw new JsonParseException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
         }
 
         return jsonValue;

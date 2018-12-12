@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public interface JsonValue {
-
+    //publuc XX getType()
+    //public BigDecimal getNumber();
     /*public final Object object;
 
     public JsonValue(PushbackLexParser pushbackLexParser) throws IOException {

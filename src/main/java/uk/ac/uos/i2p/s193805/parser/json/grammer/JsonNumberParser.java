@@ -7,16 +7,17 @@ import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class JsonNumber implements JsonValue {
+public class JsonNumberParser {
 
-    public final BigDecimal number;
-    public JsonNumber(BigDecimal number) {
-        this.number = number;
+    public final PushbackLexParser pushbackLexParser;
+
+    public JsonNumberParser(PushbackLexParser pushbackLexParser)  {
+
+        this.pushbackLexParser = pushbackLexParser;
+
     }
 
-
-
-    /*public JsonValue parse() throws IOException {
+    public JsonNumber parse() throws IOException {
         StringBuilder numberString = new StringBuilder();
         JSONSymbol symbol = pushbackLexParser.next();
 
@@ -96,18 +97,10 @@ public class JsonNumber implements JsonValue {
         }
 
 
-        return new JSONN( new BigDecimal(numberString.toString()));
+        return new JsonNumber( new BigDecimal(numberString.toString()));
 
 
-    }*/
-
-    public int intValue()
-    {
-        return number.intValue();
     }
 
-    @Override
-    public String toString() {
-        return this.number.toString();
-    }
+
 }

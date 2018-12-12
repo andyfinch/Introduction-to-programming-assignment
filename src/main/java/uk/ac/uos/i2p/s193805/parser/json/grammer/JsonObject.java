@@ -2,6 +2,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
+import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,14 +60,24 @@ public class JsonObject implements JsonValue {
         String key = key(lexParser);
         if (null == key)
         {
-            throw new RuntimeException("Json member must have string key");
+            throw new JsonParseException("Json member must have string key");
         }
         JsonValue value = value(lexParser);
 
         symbol = lexParser.nextSkipSpaces();
+
+        if ( value instanceof JsonObject)
+        {
+            if ( symbol.type != JSONSymbol.Type.CLOSE_BRACE)
+            {
+                throw new JsonParseException("Json Object must end with }");
+            }
+        }
+
+
         if ( (symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.END) && symbol.type != JSONSymbol.Type.COMMA)
         {
-            throw new RuntimeException("Members must be seperated by commas, found symbol " + symbol.type.name() + " symbol value " + symbol.value );
+            throw new JsonParseException("Members must be seperated by commas, found symbol " + symbol.type.name() + " symbol value " + symbol.value );
         }
         if ( symbol.type == CLOSE_BRACE)
         {
@@ -88,7 +99,7 @@ public class JsonObject implements JsonValue {
         {
             if ( symbol.type == JSONSymbol.Type.END)
             {
-                throw new RuntimeException("Quoted String must end with \"");
+                throw new JsonParseException("Quoted String must end with \"");
             }
             key.append(symbol.value);
         }
@@ -97,7 +108,7 @@ public class JsonObject implements JsonValue {
 
         if (symbol.type != COLON)
         {
-            throw new RuntimeException("Key must be followed by :");
+            throw new JsonParseException("Key must be followed by :");
         }
 
         return key.toString();
@@ -117,7 +128,7 @@ public class JsonObject implements JsonValue {
     public JsonValue getJsonValue(String key) {
         if (!jsonValueMap.containsKey(key))
         {
-            throw new RuntimeException("Key " + key + " does not exist");
+            throw new JsonParseException("Key " + key + " does not exist");
         }
 
         JsonValue jsonValue = jsonValueMap.get(key);
@@ -137,7 +148,7 @@ public class JsonObject implements JsonValue {
 
         if (!(JsonType.isInstance(jsonValue)))
         {
-            throw new RuntimeException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
+            throw new JsonParseException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
         }
 
         return jsonValue;
