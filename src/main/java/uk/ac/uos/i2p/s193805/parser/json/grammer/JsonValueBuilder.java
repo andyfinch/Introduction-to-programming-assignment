@@ -5,6 +5,7 @@ import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonArrayParser;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonNumberParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonObjectParser;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonStringParser;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class JsonValueBuilder {
         }
         else if (symbol.type == OPEN_BRACE)
         {
-            return new JsonObject(pushbackLexParser);
+            return new JsonObjectParser(pushbackLexParser).parse();
         }
         else if (symbol.type == OPEN_ARRAY)
         {

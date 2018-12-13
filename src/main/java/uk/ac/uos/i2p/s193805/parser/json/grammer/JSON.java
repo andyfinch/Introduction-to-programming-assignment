@@ -4,6 +4,7 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonObjectParser;
 
 import java.io.IOException;
 
@@ -40,7 +41,7 @@ public class JSON {
             throw new JsonParseException("JSON Object must start with {");
         }
 
-        JsonObject jsonObject = new JsonObject(lexParser);
+        JsonObject jsonObject = new JsonObjectParser(lexParser).parse();
 
         return jsonObject;
 
