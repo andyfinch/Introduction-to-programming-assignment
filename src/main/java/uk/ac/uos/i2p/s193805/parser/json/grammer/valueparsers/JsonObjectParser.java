@@ -22,7 +22,7 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JsonObjectParser {
 
-    public final PushbackLexParser pushbackLexParser;
+    private PushbackLexParser pushbackLexParser;
     private Map<String, JsonValue> jsonValueMap = new HashMap<>();
 
 
@@ -58,12 +58,12 @@ public class JsonObjectParser {
 
 
 
-        String key = key(pushbackLexParser);
+        String key = key();
         if (null == key)
         {
             throw new JsonParseException("Json member must have string key");
         }
-        JsonValue value = value(pushbackLexParser);
+        JsonValue value = value();
 
         JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
 
@@ -79,24 +79,24 @@ public class JsonObjectParser {
         jsonValueMap.put(key, value);
     }
 
-    private String key(PushbackLexParser lex) throws IOException {
-        JSONSymbol symbol = lex.nextSkipSpaces();
+    private String key() throws IOException {
+        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
         StringBuilder key = new StringBuilder();
 
-        if (JSONSymbol.Type.END == symbol.type) return null;
+        if (END == symbol.type) return null;
 
-        if (symbol.type != JSONSymbol.Type.QUOTE) return null;
+        if (symbol.type != QUOTE) return null;
 
-        while ((symbol = lex.nextSkipSpaces()).type != JSONSymbol.Type.QUOTE)
+        while ((symbol = pushbackLexParser.nextSkipSpaces()).type != QUOTE)
         {
-            if (symbol.type == JSONSymbol.Type.END)
+            if (symbol.type == END)
             {
                 throw new JsonParseException("Quoted String must end with \"");
             }
             key.append(symbol.value);
         }
 
-        symbol = lex.nextSkipSpaces();
+        symbol = pushbackLexParser.nextSkipSpaces();
 
         if (symbol.type != COLON)
         {
@@ -106,9 +106,9 @@ public class JsonObjectParser {
         return key.toString();
     }
 
-    private JsonValue value(PushbackLexParser lex) throws IOException {
+    private JsonValue value() throws IOException {
 
-        JsonValue jsonValue = JsonValueBuilder.buildJsonValue(lex);
+        JsonValue jsonValue = new JsonValueBuilder(pushbackLexParser).parse();
 
         if (jsonValue == null) return null;
 

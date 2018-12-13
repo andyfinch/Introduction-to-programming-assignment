@@ -19,4 +19,9 @@ public class JsonString implements JsonValue {
     public String toString() {
         return stringValue;
     }
+
+    @Override
+    public ValueType getJsonValueType() {
+        return ValueType.JSON_STRING;
+    }
 }

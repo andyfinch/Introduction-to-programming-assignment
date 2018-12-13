@@ -51,7 +51,7 @@ public class JsonArrayParser {
             if (symbol.type != JSONSymbol.Type.COMMA)
             {
                 pushbackLexParser.unread(symbol);
-                jsonValue = JsonValueBuilder.buildJsonValue(pushbackLexParser);
+                jsonValue = new JsonValueBuilder(pushbackLexParser).parse();
                 jsonValues.add(jsonValue);
             }
             else

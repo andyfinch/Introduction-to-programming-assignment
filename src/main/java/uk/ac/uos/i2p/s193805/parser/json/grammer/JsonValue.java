@@ -9,6 +9,18 @@ import java.math.BigDecimal;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public interface JsonValue {
+
+    public enum ValueType
+    {
+        JSON_OBEJCT,
+        JSON_ARRAY,
+        JSON_STRING,
+        JSON_NUMBER,
+        JSON_BOOLEAN
+    }
+
+    public ValueType getJsonValueType();
+
     //publuc XX getType()
     //public BigDecimal getNumber();
     /*public final Object object;

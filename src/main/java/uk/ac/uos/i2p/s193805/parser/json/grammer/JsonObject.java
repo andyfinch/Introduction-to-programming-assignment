@@ -127,5 +127,10 @@ public class JsonObject implements JsonValue {
 
     }
 
+    @Override
+    public ValueType getJsonValueType() {
+        return ValueType.JSON_OBEJCT;
+    }
+
 
 }

@@ -1,11 +1,12 @@
 package uk.ac.uos.i2p.s193805.parser.json;
 
+import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
-import uk.ac.uos.i2p.s193805.parser.json.grammer.JSON;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValueBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -20,57 +21,52 @@ import java.io.Reader;
 public class JSONParser {
 
     JsonValue jsonValue;
-    Reader in;
+    private PushbackLexParser pushBackLexParser;
 
-    public JSONParser(Reader in) {
-        this.in = in;
+    public JSONParser(Reader reader) {
+
+        LexParser lexParser = new LexParser(reader);
+        pushBackLexParser = new PushbackLexParser(lexParser);
+
     }
 
-    /*public JsonObject parse (Reader in) throws IOException
+    public JsonObject parse () throws IOException
     {
-        LexParser lexParser = new LexParser(in);
-        PushbackLexParser pushBackLexParser = new PushbackLexParser(lexParser);
-        return jsonDocument(pushBackLexParser);
-    }*/
+        JSONSymbol symbol = pushBackLexParser.nextSkipSpaces();
 
-    public void parse () throws IOException
-    {
-        LexParser lexParser = new LexParser(in);
-        PushbackLexParser pushBackLexParser = new PushbackLexParser(lexParser);
-        this.jsonValue = jsonDocument(pushBackLexParser);
-        //return jsonDocument(pushBackLexParser);
-    }
-
-    public JsonObject getJsonObject()
-    {
-        return (JsonObject) jsonValue;
-    }
-
-
-    private JsonValue jsonDocument(PushbackLexParser lexParser) throws IOException
-    {
-        JSON json = new JSON(lexParser);
-        json.parse();
-        return json.jsonValue;
-
-        /*if ( json.jsonValue == null)
+        if ( symbol.type != JSONSymbol.Type.OPEN_BRACE)
         {
-            throw new JsonParseException("Not valid JSON - No {");
-        }*/
+            throw new JsonParseException("JSON Object must start with {");
+        }
 
-        /*if ( json.jsonValue instanceof JsonObject)
+        pushBackLexParser.unread(symbol);
+
+        JsonValue jsonValue = new JsonValueBuilder(pushBackLexParser).parse();
+
+        if ( jsonValue.getJsonValueType() == JsonValue.ValueType.JSON_OBEJCT)
         {
-           return (JsonObject) json.jsonValue;
+            return (JsonObject) jsonValue;
         }
         else
         {
-            throw new IllegalArgumentException("Request Json Object is not a Json Object. It is a " + json.jsonValue.getClass().getSimpleName());
-        }*/
-
+            throw new JsonParseException("Parse returns a JsonObject. This is a " + jsonValue.getJsonValueType() + ". Use parseAsValue");
+        }
 
     }
 
+    public JsonValue parseAsValue() throws IOException {
 
+        JsonValue jsonValue = new JsonValueBuilder(pushBackLexParser).parse();
+
+        JSONSymbol symbol = pushBackLexParser.nextSkipSpaces();
+
+        if ( symbol.type != JSONSymbol.Type.END)
+        {
+           throw new JsonParseException("Expected EOF but got " + symbol.value);
+        }
+
+        return jsonValue;
+    }
 
 
 }

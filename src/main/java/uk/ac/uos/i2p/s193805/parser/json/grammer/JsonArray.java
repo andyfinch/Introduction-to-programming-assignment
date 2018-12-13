@@ -102,4 +102,9 @@ public class JsonArray implements JsonValue {
 
         return strings;
     }
+
+    @Override
+    public ValueType getJsonValueType() {
+        return ValueType.JSON_ARRAY;
+    }
 }

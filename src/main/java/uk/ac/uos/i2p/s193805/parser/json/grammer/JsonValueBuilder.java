@@ -21,7 +21,13 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JsonValueBuilder {
 
-    public static JsonValue buildJsonValue(PushbackLexParser pushbackLexParser) throws IOException
+    private PushbackLexParser pushbackLexParser;
+
+    public JsonValueBuilder(PushbackLexParser pushbackLexParser) {
+        this.pushbackLexParser = pushbackLexParser;
+    }
+
+    public JsonValue parse() throws IOException
     {
 
         JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
