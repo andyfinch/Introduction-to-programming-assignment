@@ -66,13 +66,13 @@ public class JsonObject implements JsonValue {
 
         symbol = lexParser.nextSkipSpaces();
 
-        if ( value instanceof JsonObject)
+        /*if ( value instanceof JsonObject)
         {
             if ( symbol.type != JSONSymbol.Type.CLOSE_BRACE)
             {
                 throw new JsonParseException("Json Object must end with }");
             }
-        }
+        }*/
 
 
         if ( (symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.END) && symbol.type != JSONSymbol.Type.COMMA)

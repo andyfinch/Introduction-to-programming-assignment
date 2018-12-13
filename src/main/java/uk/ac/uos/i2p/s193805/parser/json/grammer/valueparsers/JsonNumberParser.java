@@ -1,8 +1,9 @@
-package uk.ac.uos.i2p.s193805.parser.json.grammer;
+package uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers;
 
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonNumber;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,13 +20,11 @@ public class JsonNumberParser {
 
     public JsonNumber parse() throws IOException {
         StringBuilder numberString = new StringBuilder();
-        JSONSymbol symbol = pushbackLexParser.next();
+        JSONSymbol symbol = pushbackLexParser.getCurrentSymbol();
 
         if (symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.NUMBER) {
             throw new JsonParseException("Number must start with - or Integer");
         }
-
-
 
         if ( symbol.type == JSONSymbol.Type.MINUS_SIGN)
         {
@@ -38,9 +37,6 @@ public class JsonNumberParser {
             {
                 throw new JsonParseException("Number must follow minus sign");
             }
-
-            //pushbackLexParser.unread(symbol);
-
 
         }
 
@@ -95,7 +91,6 @@ public class JsonNumberParser {
         {
             pushbackLexParser.unread(symbol);
         }
-
 
         return new JsonNumber( new BigDecimal(numberString.toString()));
 

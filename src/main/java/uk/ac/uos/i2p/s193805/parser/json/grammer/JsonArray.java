@@ -10,46 +10,11 @@ import java.util.List;
 
 public class JsonArray implements JsonValue {
 
-    public final List<JsonValue> jsonValues = new ArrayList<>();
+    public final List<JsonValue> jsonValues;
 
-    public JsonArray(PushbackLexParser pushbackLexParser) throws IOException {
+    public JsonArray(List<JsonValue> jsonValues) throws IOException {
 
-        JsonValue jsonValue;
-        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
-
-        if (symbol.type == JSONSymbol.Type.COMMA)
-        {
-            throw new JsonParseException("Array cannot start with ,");
-        }
-        pushbackLexParser.unread(symbol);
-
-        while ((symbol = pushbackLexParser.nextSkipSpaces()).type != JSONSymbol.Type.CLOSE_ARRAY)
-        {
-            if (symbol.type == JSONSymbol.Type.CLOSE_BRACE)
-            {
-                continue;
-            }
-
-            //JsonMember jsonMember = jsonMember(pushbackLexParser);
-            if ( symbol.type != JSONSymbol.Type.COMMA)
-            {
-                pushbackLexParser.unread(symbol);
-                jsonValue = JsonValueBuilder.buildJsonValue(pushbackLexParser);
-                jsonValues.add(jsonValue);
-            }
-            else
-            {
-                symbol = pushbackLexParser.nextSkipSpaces();
-                if ( symbol.type == JSONSymbol.Type.CLOSE_ARRAY)
-                {
-                    throw new JsonParseException("Trailing commas not allowed");
-                }
-                pushbackLexParser.unread(symbol);
-            }
-
-        }
-
-
+        this.jsonValues = jsonValues;
 
     }
 

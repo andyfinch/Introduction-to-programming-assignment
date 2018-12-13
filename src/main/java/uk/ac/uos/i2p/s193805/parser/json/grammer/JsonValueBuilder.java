@@ -3,6 +3,9 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer;
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonArrayParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonNumberParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers.JsonStringParser;
 
 import java.io.IOException;
 
@@ -26,22 +29,11 @@ public class JsonValueBuilder {
 
         if (symbol.type == QUOTE)
         {
-            StringBuilder value = new StringBuilder();
-            while ((symbol = pushbackLexParser.nextSkipSpaces()).type != QUOTE)
-            {
-                if (symbol.type == END)
-                {
-                    throw new JsonParseException("Quoted Value must end with \"");
-                }
-                value.append(symbol.value);
-            }
-
-            return new JsonString(value.toString());
+            return new JsonStringParser(pushbackLexParser).parse();
 
         }
         else if (symbol.type == NUMBER || symbol.type == MINUS_SIGN)
         {
-            pushbackLexParser.unread(symbol);
             return new JsonNumberParser(pushbackLexParser).parse();
         }
         else if (symbol.type == STRING)
@@ -66,7 +58,7 @@ public class JsonValueBuilder {
         }
         else if (symbol.type == OPEN_ARRAY)
         {
-            return new JsonArray(pushbackLexParser);
+            return new JsonArrayParser(pushbackLexParser).parse();
         }
 
         return null;
