@@ -17,74 +17,51 @@ public class JsonObject implements JsonValue {
     //has members
     //public final JsonMember jsonMember;
     public final Map<String, JsonValue> jsonValueMap = new HashMap<>();
+    public final PushbackLexParser pushbackLexParser;
 
 
     public JsonObject(PushbackLexParser pushbackLexParser) throws IOException {
 
-        JsonMember jsonMember;
-        
-        while ( (jsonMember = jsonMember(pushbackLexParser)) != null)
+        this.pushbackLexParser = pushbackLexParser;
+
+        JSONSymbol symbol = pushbackLexParser.getCurrentSymbol();
+
+        while (symbol.type != JSONSymbol.Type.CLOSE_BRACE)
         {
-            //JsonMember jsonMember = jsonMember(pushbackLexParser);
-            jsonValueMap.put(jsonMember.key, jsonMember.jsonValue);
+            if ( symbol.type == END)
+            {
+                throw new JsonParseException("JSON Object must end with }");
+            }
 
+            buildKeyValue();
+            symbol = pushbackLexParser.next();
         }
-
-        /*JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
-
-        if ( symbol.type != CLOSE_BRACE)
-        {
-            throw new RuntimeException("JSON Object must end with }");
-        }
-
-        pushbackLexParser.unread(symbol);*/
 
 
     }
 
 
-    private JsonMember jsonMember(PushbackLexParser lexParser) throws IOException {
-
-        JSONSymbol symbol = lexParser.nextSkipSpaces();
-
-        if ( symbol.type == JSONSymbol.Type.END || symbol.type == JSONSymbol.Type.CLOSE_BRACE)
-        {
-            /*if (symbol.type == JSONSymbol.Type.CLOSE_BRACE)
-            {
-                lexParser.unread(symbol);
-            }*/
-            return null;
-        }
-        lexParser.unread(symbol);
-
-        String key = key(lexParser);
+    private void buildKeyValue() throws IOException {
+        
+        String key = key(pushbackLexParser);
         if (null == key)
         {
             throw new JsonParseException("Json member must have string key");
         }
-        JsonValue value = value(lexParser);
+        JsonValue value = value(pushbackLexParser);
 
-        symbol = lexParser.nextSkipSpaces();
+        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
 
-        /*if ( value instanceof JsonObject)
-        {
-            if ( symbol.type != JSONSymbol.Type.CLOSE_BRACE)
-            {
-                throw new JsonParseException("Json Object must end with }");
-            }
-        }*/
-
-
-        if ( (symbol.type != JSONSymbol.Type.CLOSE_BRACE && symbol.type != JSONSymbol.Type.END) && symbol.type != JSONSymbol.Type.COMMA)
+        if ( (symbol.type != CLOSE_BRACE && symbol.type != END) && symbol.type != COMMA)
         {
             throw new JsonParseException("Members must be seperated by commas, found symbol " + symbol.type.name() + " symbol value " + symbol.value );
         }
         if ( symbol.type == CLOSE_BRACE)
         {
-            lexParser.unread(symbol);
+            pushbackLexParser.unread(symbol);
         }
 
-        return new JsonMember(key, value);
+        jsonValueMap.put(key, value);
     }
 
     private String key(PushbackLexParser lex) throws IOException {

@@ -275,7 +275,7 @@ public class JSONParserTest {
     @Test
     void testMissingOpeningBrace() throws IOException {
 
-        JSONParser jsonParser = new JSONParser(new StringReader("{\n" +
+        JSONParser jsonParser = new JSONParser(new StringReader("\n" +
                 "  \"instruction\" : \"add\",\n" +
                 "  \"response URL\": \"/answer/d3ae45\"\n" +
                 "}"));
