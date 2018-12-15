@@ -30,13 +30,18 @@ public class JsonStringParser {
     public JsonString parse() throws IOException
     {
         StringBuilder value = new StringBuilder();
-        JSONSymbol symbol;
+        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
+
+        if ( symbol.type != QUOTE)
+        {
+            throw new JsonParseException("Json string must start with \"");
+        }
 
         while ((symbol = pushbackLexParser.nextSkipSpaces()).type != QUOTE)
         {
             if (symbol.type == END)
             {
-                throw new JsonParseException("Quoted Value must end with \"");
+                throw new JsonParseException("Json string must end with \"");
             }
             value.append(symbol.value);
         }

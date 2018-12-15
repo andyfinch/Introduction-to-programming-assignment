@@ -20,7 +20,7 @@ public class JsonNumberParser {
 
     public JsonNumber parse() throws IOException {
         StringBuilder numberString = new StringBuilder();
-        JSONSymbol symbol = pushbackLexParser.getCurrentSymbol();
+        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
 
         if (symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.NUMBER) {
             throw new JsonParseException("Number must start with - or Integer");
@@ -45,7 +45,7 @@ public class JsonNumberParser {
         symbol = pushbackLexParser.next();
 
 
-        if (symbol.type == JSONSymbol.Type.DECIMAL_POINT || symbol.value.equalsIgnoreCase("E"))
+        if (symbol.type == JSONSymbol.Type.DECIMAL_POINT || "E".equalsIgnoreCase(symbol.value))
         {
             if (symbol.type == JSONSymbol.Type.DECIMAL_POINT)
             {
@@ -64,32 +64,61 @@ public class JsonNumberParser {
 
             }
 
-            if ( symbol.value.equalsIgnoreCase("E"))
+            if ("E".equalsIgnoreCase(symbol.value))
             {
                 numberString.append(symbol.value);
 
                 symbol = pushbackLexParser.next();
 
-                if (symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.PLUS_SIGN)
+                if (symbol.type != JSONSymbol.Type.NUMBER && symbol.type != JSONSymbol.Type.MINUS_SIGN && symbol.type != JSONSymbol.Type.PLUS_SIGN)
                 {
-                    throw new JsonParseException("Exponent E must be followed by sign");
+                    throw new JsonParseException("Exponent E must be followed by number or sign");
                 }
 
                 numberString.append(symbol.value);
 
                 symbol = pushbackLexParser.next();
 
-                if ( symbol.type != JSONSymbol.Type.NUMBER)
+                if ( symbol.type == JSONSymbol.Type.NUMBER)
                 {
-                    throw new JsonParseException("Exponent sign must be followed by number");
+                    numberString.append(symbol.value);
                 }
 
-                numberString.append(symbol.value);
+                symbol = pushbackLexParser.nextSkipSpaces();
+
+                if ( symbol.type != JSONSymbol.Type.COMMA
+                        && symbol.type != JSONSymbol.Type.CLOSE_ARRAY
+                        && symbol.type != JSONSymbol.Type.CLOSE_BRACE
+                        && symbol.type != JSONSymbol.Type.END
+                        && symbol.type != JSONSymbol.Type.SPACE)
+                {
+                    numberString.append(symbol.value);
+                    throw new JsonParseException("Invalid JSON number " + numberString);
+                }
+
+                pushbackLexParser.unread(symbol);
+
+
+
+
             }
         }
         else
         {
+            //symbol = pushbackLexParser.nextSkipSpaces();
+
+            if ( symbol.type != JSONSymbol.Type.COMMA
+                    && symbol.type != JSONSymbol.Type.CLOSE_ARRAY
+                    && symbol.type != JSONSymbol.Type.CLOSE_BRACE
+                    && symbol.type != JSONSymbol.Type.END
+                    && symbol.type != JSONSymbol.Type.SPACE)
+            {
+                numberString.append(symbol.value);
+                throw new JsonParseException("Invalid JSON number " + numberString);
+            }
+
             pushbackLexParser.unread(symbol);
+
         }
 
         return new JsonNumber( new BigDecimal(numberString.toString()));

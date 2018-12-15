@@ -36,11 +36,13 @@ public class JsonValueBuilder {
 
         if (symbol.type == QUOTE)
         {
+            pushbackLexParser.unread(symbol);
             return new JsonStringParser(pushbackLexParser).parse();
 
         }
         else if (symbol.type == NUMBER || symbol.type == MINUS_SIGN)
         {
+            pushbackLexParser.unread(symbol);
             return new JsonNumberParser(pushbackLexParser).parse();
         }
         else if (symbol.type == STRING)
