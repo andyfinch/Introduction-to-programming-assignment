@@ -46,6 +46,7 @@ public class JsonStringParser {
             value.append(symbol.value);
         }
 
+        //pushbackLexParser.unread(symbol);
         return new JsonString(value.toString());
 
     }

@@ -12,7 +12,7 @@ public interface JsonValue {
 
     public enum ValueType
     {
-        JSON_OBEJCT,
+        JSON_OBJECT,
         JSON_ARRAY,
         JSON_STRING,
         JSON_NUMBER,

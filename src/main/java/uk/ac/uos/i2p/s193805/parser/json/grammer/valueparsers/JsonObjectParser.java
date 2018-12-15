@@ -47,7 +47,7 @@ public class JsonObjectParser {
             }
 
             buildKeyValue();
-            symbol = pushbackLexParser.next();
+            symbol = pushbackLexParser.nextSkipSpaces();
         }
 
         return new JsonObject(jsonValueMap);
@@ -71,10 +71,15 @@ public class JsonObjectParser {
         {
             throw new JsonParseException("Members must be seperated by commas, found symbol " + symbol.type.name() + " symbol value " + symbol.value);
         }
-        if (symbol.type == CLOSE_BRACE)
+        if (symbol.type == CLOSE_BRACE || symbol.type == COMMA)
         {
             pushbackLexParser.unread(symbol);
         }
+
+        /*if (symbol.type == COMMA)
+        {
+            pushbackLexParser.unread(symbol);
+        }*/
 
         jsonValueMap.put(key, value);
     }

@@ -86,15 +86,7 @@ public class JsonNumberParser {
 
                 symbol = pushbackLexParser.nextSkipSpaces();
 
-                if ( symbol.type != JSONSymbol.Type.COMMA
-                        && symbol.type != JSONSymbol.Type.CLOSE_ARRAY
-                        && symbol.type != JSONSymbol.Type.CLOSE_BRACE
-                        && symbol.type != JSONSymbol.Type.END
-                        && symbol.type != JSONSymbol.Type.SPACE)
-                {
-                    numberString.append(symbol.value);
-                    throw new JsonParseException("Invalid JSON number " + numberString);
-                }
+                testNumberEnd(symbol, numberString);
 
                 pushbackLexParser.unread(symbol);
 
@@ -102,21 +94,14 @@ public class JsonNumberParser {
 
 
             }
+            else
+            {
+                testNumberEnd(symbol, numberString);
+            }
         }
         else
         {
-            //symbol = pushbackLexParser.nextSkipSpaces();
-
-            if ( symbol.type != JSONSymbol.Type.COMMA
-                    && symbol.type != JSONSymbol.Type.CLOSE_ARRAY
-                    && symbol.type != JSONSymbol.Type.CLOSE_BRACE
-                    && symbol.type != JSONSymbol.Type.END
-                    && symbol.type != JSONSymbol.Type.SPACE)
-            {
-                numberString.append(symbol.value);
-                throw new JsonParseException("Invalid JSON number " + numberString);
-            }
-
+            testNumberEnd(symbol, numberString);
             pushbackLexParser.unread(symbol);
 
         }
@@ -126,5 +111,18 @@ public class JsonNumberParser {
 
     }
 
+    private void testNumberEnd(JSONSymbol jsonSymbol, StringBuilder numberString)
+    {
+        if ( jsonSymbol.type != JSONSymbol.Type.COMMA
+                && jsonSymbol.type != JSONSymbol.Type.CLOSE_ARRAY
+                && jsonSymbol.type != JSONSymbol.Type.CLOSE_BRACE
+                && jsonSymbol.type != JSONSymbol.Type.END
+                && jsonSymbol.type != JSONSymbol.Type.SPACE)
+        {
+            numberString.append(jsonSymbol.value);
+            throw new JsonParseException("Invalid JSON number " + numberString);
+        }
+    }
 
 }
+

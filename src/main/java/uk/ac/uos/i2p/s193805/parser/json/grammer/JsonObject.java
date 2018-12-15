@@ -1,16 +1,11 @@
 package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
-import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
-import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 public class JsonObject implements JsonValue {
 
@@ -44,13 +39,13 @@ public class JsonObject implements JsonValue {
 
     }
 
-    private JsonValue getJsonValue(String key, Class<? extends JsonValue> JsonType) {
+    private JsonValue getJsonValue(String key, JsonValue.ValueType jsonType) {
 
         JsonValue jsonValue = getJsonValue(key);
 
-        if (!(JsonType.isInstance(jsonValue)))
+        if ( jsonValue.getJsonValueType() != jsonType )
         {
-            throw new JsonParseException("Requested key is not a " + jsonValue.getClass().getSimpleName() + ". It is a " + JsonType.getSimpleName());
+            throw new JsonParseException("Requested key is not a " + jsonType + ". It is a " + jsonValue.getJsonValueType());
         }
 
         return jsonValue;
@@ -59,7 +54,7 @@ public class JsonObject implements JsonValue {
 
     public JsonString getJSONString(String keyName) {
 
-        return (JsonString) getJsonValue(keyName, JsonString.class);
+        return (JsonString) getJsonValue(keyName, ValueType.JSON_STRING);
 
     }
 
@@ -71,7 +66,7 @@ public class JsonObject implements JsonValue {
 
     public JsonNumber getJSONNumber(String keyName) {
 
-        return (JsonNumber) getJsonValue(keyName, JsonNumber.class);
+        return (JsonNumber) getJsonValue(keyName, ValueType.JSON_NUMBER);
 
     }
 
@@ -83,7 +78,7 @@ public class JsonObject implements JsonValue {
 
     public JsonBoolean getJsonBoolean(String keyName) {
 
-        return (JsonBoolean) getJsonValue(keyName, JsonBoolean.class);
+        return (JsonBoolean) getJsonValue(keyName, ValueType.JSON_BOOLEAN);
 
     }
 
@@ -95,13 +90,13 @@ public class JsonObject implements JsonValue {
 
     public JsonObject getJsonObject(String keyName) {
 
-        return (JsonObject) getJsonValue(keyName, JsonObject.class);
+        return (JsonObject) getJsonValue(keyName, ValueType.JSON_OBJECT);
 
     }
 
     public JsonArray getJsonArray(String keyName) {
 
-        return (JsonArray) getJsonValue(keyName, JsonArray.class);
+        return (JsonArray) getJsonValue(keyName, ValueType.JSON_ARRAY);
 
     }
 
@@ -129,7 +124,7 @@ public class JsonObject implements JsonValue {
 
     @Override
     public ValueType getJsonValueType() {
-        return ValueType.JSON_OBEJCT;
+        return ValueType.JSON_OBJECT;
     }
 
 

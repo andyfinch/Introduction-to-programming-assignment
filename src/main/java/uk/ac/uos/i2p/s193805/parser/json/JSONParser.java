@@ -43,7 +43,7 @@ public class JSONParser {
 
         JsonValue jsonValue = new JsonValueBuilder(pushBackLexParser).parse();
 
-        if ( jsonValue.getJsonValueType() == JsonValue.ValueType.JSON_OBEJCT)
+        if ( jsonValue.getJsonValueType() == JsonValue.ValueType.JSON_OBJECT)
         {
             return (JsonObject) jsonValue;
         }

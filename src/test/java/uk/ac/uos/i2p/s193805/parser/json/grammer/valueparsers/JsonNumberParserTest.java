@@ -195,22 +195,11 @@ class JsonNumberParserTest {
             getParser("1.1.1").parse();
             fail();
         } catch (JsonParseException e) {
-            assertEquals("Number must follow decimal point", e.getMessage());
+            assertEquals("Invalid JSON number 1.1.", e.getMessage());
         }
 
     }
 
-    @Test
-    void testMissingQuotes() throws IOException {
-
-        try {
-            getParser("String").parse();
-            fail();
-        } catch (JsonParseException e) {
-            assertEquals("Json string must start with \"", e.getMessage());
-        }
-
-    }
 
     private JsonNumberParser getParser(String json)
     {

@@ -28,6 +28,8 @@ public class JSONParserTest {
 
     }
 
+
+
     @Test
     void testSimpleKeyString2() throws IOException {
 
@@ -46,6 +48,20 @@ public class JSONParserTest {
                 "}")).parse();
 
         assertEquals("/answer/d3ae45", data.getString("response URL"));
+
+    }
+
+    @Test
+    void testTaskJson() throws IOException {
+
+//        JsonObject data = new JSONParser(new StringReader("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+        JsonObject data = new JSONParser(new StringReader("{\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"parameters\": [\"23\",45],\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}")).parse();
+
+        assertEquals("add", data.getString("instruction"));
 
     }
 
@@ -139,7 +155,7 @@ public class JSONParserTest {
         }
         catch (RuntimeException re)
         {
-            assertEquals("Requested key is not a JsonString. It is a JsonNumber", re.getMessage());
+            assertEquals("Requested key is not a JSON_NUMBER. It is a JSON_STRING", re.getMessage());
         }
 
 
