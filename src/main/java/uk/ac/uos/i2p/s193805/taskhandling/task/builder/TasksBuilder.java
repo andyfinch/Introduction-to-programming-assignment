@@ -16,10 +16,9 @@ import java.io.StringReader;
 
 public class TasksBuilder {
 
-    public static Tasks buildTasksObject(String json) throws IOException
+    public static Tasks buildTasksObject(JsonObject jsonObject) throws IOException
     {
         Tasks tasks = new Tasks();
-        JsonObject jsonObject = new JSONParser(new StringReader(json)).parse();
         tasks.setId(jsonObject.getString("id"));
         tasks.setTaskURLS(jsonObject.getJsonArrayStringList("tasks"));
 

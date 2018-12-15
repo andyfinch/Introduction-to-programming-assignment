@@ -1,10 +1,13 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +37,8 @@ class AddTaskTest {
     @Test
     public void testTaskBuilder() throws IOException {
 
-        Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
+        JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+        Task task = TaskBuilder.buildTaskObject(jsonObject);
 
         //Task<Integer> task = new AddTask<>();
         task.runInstruction();

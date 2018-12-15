@@ -3,12 +3,14 @@ package uk.ac.uos.i2p.s193805;
 import org.junit.jupiter.api.Test;
 import uk.ac.uos.i2p.s193805.http.HttpRequester;
 import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Tasks;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +33,7 @@ public class IntegrationTest {
         try
         {
             HttpResponseVO httpResponseVO = HttpRequester.sendGET(baseurl+studentQuery);
-            Tasks tasks = TasksBuilder.buildTasksObject(httpResponseVO.getBody());
+            Tasks tasks = TasksBuilder.buildTasksObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
 
             for (String taskURL : tasks.getTaskURLS())
             {
@@ -39,7 +41,7 @@ public class IntegrationTest {
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody());
+                    task = TaskBuilder.buildTaskObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
                     System.out.println(task.getInstruction());
                     System.out.println(task.getParamList());
                 } catch (RuntimeException e )
@@ -83,7 +85,7 @@ public class IntegrationTest {
             HttpResponseVO httpResponseVO = HttpRequester.sendGET(baseurl+studentQuery);
             Tasks tasks = null;
             try {
-                tasks = TasksBuilder.buildTasksObject(httpResponseVO.getBody());
+                tasks = TasksBuilder.buildTasksObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
 
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -95,7 +97,7 @@ public class IntegrationTest {
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody());
+                    task = TaskBuilder.buildTaskObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
                     System.out.println(task.getInstruction());
                     System.out.println(task.getParamList());
                 } catch (RuntimeException e )

@@ -1,9 +1,12 @@
 package uk.ac.uos.i2p.s193805.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +22,8 @@ class TaskTest {
     @Test
     public void testTaskBuilderAdd() throws IOException {
 
-        Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
+        JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+        Task task = TaskBuilder.buildTaskObject(jsonObject);
         assertTrue( task instanceof AddTask );
 
 
@@ -28,7 +32,8 @@ class TaskTest {
     @Test
     public void testTaskBuilderMultiply() throws IOException {
 
-        Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"multiply\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
+        JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"multiply\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+        Task task = TaskBuilder.buildTaskObject(jsonObject);
         assertTrue(task instanceof MultiplyTask);
 
 
@@ -37,7 +42,8 @@ class TaskTest {
     @Test
     public void testTaskBuilderConcat() throws IOException{
 
-        Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"concat\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
+        JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"concat\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+        Task task = TaskBuilder.buildTaskObject(jsonObject);
         assertTrue(task instanceof ConcatTask);
 
 
@@ -48,7 +54,8 @@ class TaskTest {
 
         try
         {
-            TaskBuilder.buildTaskObject("{\"instruction\": \"divide\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}");
+            JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"divide\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
+            TaskBuilder.buildTaskObject(jsonObject);
             fail("Shouldn't get here");
         } catch (IllegalArgumentException e)
         {
