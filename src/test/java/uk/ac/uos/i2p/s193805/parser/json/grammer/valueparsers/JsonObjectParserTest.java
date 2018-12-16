@@ -1,37 +1,54 @@
-package uk.ac.uos.i2p.s193805.parser.json;
+package uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.parser.LexParser;
+import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonArray;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
-import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonString;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
 
-import javax.json.stream.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JSONParserTest {
-
-
+class JsonObjectParserTest {
 
     @Test
     void testSimpleKeyString() throws IOException {
 
-        JsonObject data = new JSONParser(new StringReader("{\n" +
+
+        JsonObject data = getParser("{\n" +
                 "  \"instruction\": \"add\"\n" +
-                "}\n")).parse();
+                "}\n").parse();
 
         assertEquals("add", data.getString("instruction"));
+
+    }
+
+    @Test
+    void testTaskJson() throws IOException {
+
+        JsonObject data = getParser("{\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"parameters\": [\"23\",45],\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}").parse();
+
+        assertEquals("add", data.getString("instruction"));
+        assertSame(JsonValue.ValueType.JSON_ARRAY, data.getJsonValue("parameters").getJsonValueType());
+        assertEquals("23", data.getJsonArray("parameters").getString(0));
+        assertEquals(45, data.getJsonArray("parameters").getInt(1));
+        assertEquals("/answer/d3ae45", data.getString("response URL"));
 
     }
 
 
 
     @Test
-    void testSimpleKeyString2() throws IOException {
+    void testMissingOpenBrace() throws IOException {
 
 
         assertParseValueException("\"this is a string\" }", "Expected EOF but got }");
@@ -51,19 +68,7 @@ public class JSONParserTest {
 
     }
 
-    @Test
-    void testTaskJson() throws IOException {
 
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"instruction\": \"add\",\n" +
-                "  \"parameters\": [\"23\",45],\n" +
-                "  \"response URL\": \"/answer/d3ae45\"\n" +
-                "}")).parse();
-
-        assertEquals("add", data.getString("instruction"));
-
-    }
 
     @Test
     void testSimpleKeyNumber() throws IOException {
@@ -258,7 +263,7 @@ public class JSONParserTest {
     @Test
     void testMissingOpeningBrace() throws IOException {
 
-       assertParseException("\n" +
+        assertParseException("\n" +
                 "  \"instruction\": \"add\"\n" +
                 "}\n", "JSON Object must start with {");
 
@@ -276,28 +281,28 @@ public class JSONParserTest {
 
     @Test
     void testNested2() throws IOException {
-          JsonObject data = new JSONParser(new StringReader("{\"additionalDocument\": [\n" +
-                  "    {\n" +
-                  "      \"catagoryCode\": \"1\",\n" +
-                  "      \"id\": \"\",\n" +
-                  "      \"typeCode\": \"DAN\"\n" +
-                  "    },\n" +
-                  "    {\n" +
-                  "      \"catagoryCode\": \"2\",\n" +
-                  "      \"id\": \"\",\n" +
-                  "      \"typeCode\": \"DAN\"\n" +
-                  "    }\n" +
-                  "  ],\n" +
-                  "  \"exporter\": {\n" +
-                  "    \"name\": \"mcp\",\n" +
-                  "    \"address\": {\n" +
-                  "      \"line\": \"\",\n" +
-                  "      \"city\": \"\",\n" +
-                  "      \"countryCode\": \"\",\n" +
-                  "      \"postCode\": \"\"\n" +
-                  "    },\n" +
-                  "    \"id\": \"\"\n" +
-                  "  }}")).parse();
+        JsonObject data = new JSONParser(new StringReader("{\"additionalDocument\": [\n" +
+                "    {\n" +
+                "      \"catagoryCode\": \"1\",\n" +
+                "      \"id\": \"\",\n" +
+                "      \"typeCode\": \"DAN\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"catagoryCode\": \"2\",\n" +
+                "      \"id\": \"\",\n" +
+                "      \"typeCode\": \"DAN\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"exporter\": {\n" +
+                "    \"name\": \"mcp\",\n" +
+                "    \"address\": {\n" +
+                "      \"line\": \"\",\n" +
+                "      \"city\": \"\",\n" +
+                "      \"countryCode\": \"\",\n" +
+                "      \"postCode\": \"\"\n" +
+                "    },\n" +
+                "    \"id\": \"\"\n" +
+                "  }}")).parse();
 
         assertEquals("1", data.getJsonArray("additionalDocument").getJsonObject(0).getString("catagoryCode"));
         assertEquals("mcp", data.getJsonObject("exporter").getString("name"));
@@ -752,7 +757,7 @@ public class JSONParserTest {
         assertEquals("1", data.getJsonObject("declaration").getJsonArray("additionalDocument").getJsonObject(0).getString("catagoryCode"));
         assertEquals("type1", data.getJsonObject("declaration").getJsonObject("goodsShipment").getJsonArray("governmentAgencyGoodsItem").getJsonObject(0)
                 .getJsonObject("commodity").getJsonArray("dutyTaxFee").getJsonObject(0).getString("typeCode"));
-        
+
 
     }
 
@@ -760,7 +765,7 @@ public class JSONParserTest {
     private void assertParseException(String json, String expectedMessage) throws IOException {
         try
         {
-           new JSONParser(new StringReader(json)).parse();
+            new JSONParser(new StringReader(json)).parse();
 
             fail();
         } catch (JsonParseException e)
@@ -779,5 +784,15 @@ public class JSONParserTest {
         {
             assertEquals(expectedMessage, e.getMessage());
         }
+    }
+
+    private JsonObjectParser getParser(String json) throws IOException
+    {
+
+        LexParser lexParser = new LexParser(new StringReader(json));
+        PushbackLexParser pushBackLexParser = new PushbackLexParser(lexParser);
+        return new JsonObjectParser(pushBackLexParser);
+
+
     }
 }

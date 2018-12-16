@@ -63,6 +63,7 @@ public class JsonValueBuilder {
         }
         else if (symbol.type == OPEN_BRACE)
         {
+            pushbackLexParser.unread(symbol);
             return new JsonObjectParser(pushbackLexParser).parse();
         }
         else if (symbol.type == OPEN_ARRAY)

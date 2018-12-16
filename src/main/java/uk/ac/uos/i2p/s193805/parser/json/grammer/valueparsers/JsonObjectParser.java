@@ -37,7 +37,7 @@ public class JsonObjectParser {
 
     public JsonObject parse() throws IOException
     {
-        JSONSymbol symbol = pushbackLexParser.getCurrentSymbol();
+        JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
 
         while (symbol.type != JSONSymbol.Type.CLOSE_BRACE)
         {
