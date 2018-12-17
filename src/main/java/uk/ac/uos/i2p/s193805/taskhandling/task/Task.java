@@ -22,7 +22,9 @@ public abstract class Task implements FileWritable {
     protected Result result;
     private String json;
 
-    public abstract void runInstruction();
+    public void runInstruction(){
+        throw new UnsupportedOperationException(instruction + " is not a valid instruction");
+    }
 
     public List<String> getParamList() {
         return paramList;
@@ -87,7 +89,15 @@ public abstract class Task implements FileWritable {
             content.append(param).append(" ");
         }
         content.append(" and these were to be ").append(instruction).append("ed together").append("\n\n");
-        content.append("The result was ").append(result.getAnswer());
+        if ( result != null)
+        {
+            content.append("The result was ").append(result.getAnswer());
+        }
+        else
+        {
+            content.append("The result was not calculated");
+        }
+
 
 
         return content.toString();

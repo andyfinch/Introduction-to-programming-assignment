@@ -3,10 +3,7 @@ package uk.ac.uos.i2p.s193805.taskhandling.task.builder;
 import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
 
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
-import uk.ac.uos.i2p.s193805.taskhandling.task.AddTask;
-import uk.ac.uos.i2p.s193805.taskhandling.task.ConcatTask;
-import uk.ac.uos.i2p.s193805.taskhandling.task.MultiplyTask;
-import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
+import uk.ac.uos.i2p.s193805.taskhandling.task.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -42,7 +39,7 @@ public class TaskBuilder {
         }
         else
         {
-            throw new IllegalArgumentException("Invalid Instruction " + jsonObject.getJSONString("instruction"));
+            task = new InvalidTask();
         }
 
 

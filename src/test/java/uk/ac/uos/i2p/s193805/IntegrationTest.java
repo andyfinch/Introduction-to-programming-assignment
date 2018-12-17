@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.file.FileWritable;
 import uk.ac.uos.i2p.s193805.file.FileWriter;
 import uk.ac.uos.i2p.s193805.http.HttpRequester;
 import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
@@ -67,33 +68,28 @@ public class IntegrationTest {
                 HttpResponseVO httpResponseVO = future.get();
 
                 Task task = null;
-                try
-                {
-                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(),httpResponseVO.getRequestURL() );
-                    System.out.println(task.getInstruction());
-                    System.out.println(task.getParamList());
-                } catch (RuntimeException e )
-                {
-                    e.printStackTrace();
-                    httpResponseVO = HttpRequester.sendPOST(baseurl + httpResponseVO.getRequestURL(), "Error" + e.getMessage());
-                    assertEquals(200, httpResponseVO.getResponse());
-                    continue;
-                }
+                task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(),httpResponseVO.getRequestURL() );
+                System.out.println(task.getInstruction());
+                System.out.println(task.getParamList());
 
-
-                try
-                {
+                try {
                     task.runInstruction();
-                    FileWriter fileWriter = new FileWriter(task);
-                    fileWriter.writeToFile();
                     httpResponseVO = HttpRequester.sendPOST(baseurl+task.getResponseURL(), task.getResult().getAnswer());
                     task.getResult().setResponse(httpResponseVO.getResponse());
                     assertTrue(task.getResult().isCorrect());
                     assertEquals(200, httpResponseVO.getResponse());
-                } catch (IllegalArgumentException e)
-                {
-                    e.printStackTrace();
+
+                } catch (UnsupportedOperationException e) {
+                    System.out.println(e.getMessage());
+                    httpResponseVO = HttpRequester.sendPOST(task.getRequestURL(), "Error" + e.getMessage());
+                    assertEquals(200, httpResponseVO.getResponse());
+                    FileWriter fileWriter = new FileWriter(task);
+                    fileWriter.writeToFile();
+                    continue;
                 }
+                FileWriter fileWriter = new FileWriter(task);
+                fileWriter.writeToFile();
+
 
             }
 
