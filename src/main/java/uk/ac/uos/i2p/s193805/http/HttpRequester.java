@@ -64,6 +64,7 @@ public class HttpRequester {
         con.disconnect();
 
         httpResponseVO.setBody(content.toString());
+        httpResponseVO.setRequestURL(urlAddress);
 
         return httpResponseVO;
     }
@@ -86,6 +87,7 @@ public class HttpRequester {
         con.connect();
 
         httpResponseVO.setResponse(con.getResponseCode());
+        httpResponseVO.setRequestURL(urlAddress);
 
         if ( httpResponseVO.getResponse() == 200 )
         {

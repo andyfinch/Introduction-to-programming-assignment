@@ -39,6 +39,12 @@ public class JsonObjectParser {
     {
         JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
 
+        if ( symbol.type != JSONSymbol.Type.OPEN_BRACE)
+        {
+            throw new JsonParseException("JSON Object must start with {");
+        }
+
+
         while (symbol.type != JSONSymbol.Type.CLOSE_BRACE)
         {
             if (symbol.type == END)

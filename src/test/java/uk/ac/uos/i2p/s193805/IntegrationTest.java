@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.file.FileWriter;
 import uk.ac.uos.i2p.s193805.http.HttpRequester;
 import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
 import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
@@ -68,14 +69,14 @@ public class IntegrationTest {
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
+                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(),httpResponseVO.getRequestURL() );
                     System.out.println(task.getInstruction());
                     System.out.println(task.getParamList());
                 } catch (RuntimeException e )
                 {
                     e.printStackTrace();
-                    //httpResponseVO = HttpRequester.sendPOST(baseurl + task.getRequestURL(), "Error" + e.getMessage());
-                    //assertEquals(200, httpResponseVO.getResponse());
+                    httpResponseVO = HttpRequester.sendPOST(baseurl + httpResponseVO.getRequestURL(), "Error" + e.getMessage());
+                    assertEquals(200, httpResponseVO.getResponse());
                     continue;
                 }
 
@@ -83,6 +84,8 @@ public class IntegrationTest {
                 try
                 {
                     task.runInstruction();
+                    FileWriter fileWriter = new FileWriter(task);
+                    fileWriter.writeToFile();
                     httpResponseVO = HttpRequester.sendPOST(baseurl+task.getResponseURL(), task.getResult().getAnswer());
                     task.getResult().setResponse(httpResponseVO.getResponse());
                     assertTrue(task.getResult().isCorrect());
@@ -175,7 +178,7 @@ public class IntegrationTest {
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
+                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(), httpResponseVO.getRequestURL());
                     System.out.println(task.getInstruction());
                     System.out.println(task.getParamList());
                 } catch (RuntimeException e )

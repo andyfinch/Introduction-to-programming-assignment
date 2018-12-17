@@ -4,6 +4,7 @@ public class HttpResponseVO {
 
     private int response;
     private String body;
+    private String requestURL;
 
     public int getResponse() {
         return response;
@@ -19,5 +20,13 @@ public class HttpResponseVO {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getRequestURL() {
+        return requestURL;
+    }
+
+    public void setRequestURL(String requestURL) {
+        this.requestURL = requestURL;
     }
 }

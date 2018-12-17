@@ -37,36 +37,18 @@ class JsonObjectParserTest {
                 "  \"response URL\": \"/answer/d3ae45\"\n" +
                 "}").parse();
 
+        assertSame(JsonValue.ValueType.JSON_STRING, data.getJsonValue("instruction").getJsonValueType());
         assertEquals("add", data.getString("instruction"));
         assertSame(JsonValue.ValueType.JSON_ARRAY, data.getJsonValue("parameters").getJsonValueType());
+        assertSame(JsonValue.ValueType.JSON_STRING, data.getJsonArray("parameters").getJsonValue(0).getJsonValueType());
         assertEquals("23", data.getJsonArray("parameters").getString(0));
+        assertSame(JsonValue.ValueType.JSON_NUMBER, data.getJsonArray("parameters").getJsonValue(1).getJsonValueType());
         assertEquals(45, data.getJsonArray("parameters").getInt(1));
         assertEquals("/answer/d3ae45", data.getString("response URL"));
 
     }
 
 
-
-    @Test
-    void testMissingOpenBrace() throws IOException {
-
-
-        assertParseValueException("\"this is a string\" }", "Expected EOF but got }");
-
-
-    }
-
-    @Test
-    void testSimpleKeyString_X2() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"instruction\" : \"add\",\n" +
-                "  \"response URL\": \"/answer/d3ae45\"\n" +
-                "}")).parse();
-
-        assertEquals("/answer/d3ae45", data.getString("response URL"));
-
-    }
 
 
 
@@ -81,78 +63,13 @@ class JsonObjectParserTest {
 
     }
 
-    @Test
-    void testSimpleKeyNegativeNumber() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": -12\n" +
-                "}")).parse();
-
-        assertEquals(-12, data.getInt("number"));
-
-    }
-
-    @Test
-    void testSimpleKeyDecimalNumber() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": 1.1\n" +
-                "}")).parse();
-
-        assertEquals(1.1, data.getJSONNumber("number").number.doubleValue());
-
-    }
-
-    @Test
-    void testSimpleKeyMinusDecimalNumber() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": -1.1\n" +
-                "}")).parse();
-
-        assertEquals(-1.1, data.getJSONNumber("number").number.doubleValue());
-
-    }
-
-    @Test
-    void testSimpleKeyDecimalNumberLong() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": 12345.12345\n" +
-                "}")).parse();
-
-        assertEquals(12345.12345, data.getJSONNumber("number").number.doubleValue());
-
-    }
-
-    @Test
-    void testSimpleKeyExponentNumber() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": 1e+2\n" +
-                "}")).parse();
-
-        assertEquals(1e+2, data.getJSONNumber("number").number.doubleValue());
-
-    }
-
-    @Test
-    void testSimpleKeyDecimalExponentNumber() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"number\": 1.1e+2\n" +
-                "}")).parse();
-
-        assertEquals(1.1e+2, data.getJSONNumber("number").number.doubleValue());
-
-    }
 
     @Test
     void testKeyValueNotNumber() throws IOException {
 
-        JsonObject data = new JSONParser(new StringReader("{\n" +
+        JsonObject data = getParser("{\n" +
                 "  \"number\": \"A\"\n" +
-                "}")).parse();
+                "}").parse();
 
         try {
             data.getJSONNumber("number");
@@ -166,30 +83,15 @@ class JsonObjectParserTest {
 
     }
 
-    @Test
-    void testKeyStringNumberCombo() throws IOException {
-
-        JsonObject data = new JSONParser(new StringReader("{\n" +
-                "  \"instruction\" : \"add\",\n" +
-                "  \"number\" : 12,\n" +
-                "  \"response URL\": \"/answer/d3ae45\",\n" +
-                "  \"server\": \"Test1Server2\"\n" +
-                "}\n")).parse();
-
-        assertEquals("add", data.getString("instruction"));
-        assertEquals("/answer/d3ae45", data.getString("response URL"));
-        assertEquals(12, data.getInt("number"));
-        assertEquals("Test1Server2", data.getString("server"));
-
-    }
 
     @Test
     void testSimpleKeyBoolean() throws IOException {
 
-        JsonObject data = new JSONParser(new StringReader("{\n" +
+        JsonObject data = getParser("{\n" +
                 "  \"instruction\": true\n" +
-                "}\n")).parse();
+                "}\n").parse();
 
+        assertSame(JsonValue.ValueType.JSON_BOOLEAN, data.getJsonValue("instruction").getJsonValueType());
         assertTrue(data.getBoolean("instruction"));
 
     }
@@ -261,13 +163,18 @@ class JsonObjectParserTest {
     }
 
     @Test
-    void testMissingOpeningBrace() throws IOException {
+    void testMissingOpenBrace() throws IOException {
 
-        assertParseException("\n" +
-                "  \"instruction\": \"add\"\n" +
-                "}\n", "JSON Object must start with {");
+
+        assertParseValueException("\n" +
+                "  \"instruction\": \"add\",\n" +
+                "  \"parameters\": [\"23\",45],\n" +
+                "  \"response URL\": \"/answer/d3ae45\"\n" +
+                "}}", "JSON Object must start with {");
+
 
     }
+
 
     @Test
     void testMissingClosingBrace() throws IOException {
@@ -777,10 +684,10 @@ class JsonObjectParserTest {
     private void assertParseValueException(String json, String expectedMessage) throws IOException {
         try
         {
-            new JSONParser(new StringReader(json)).parseAsValue();
+            getParser(json).parse();
 
             fail();
-        } catch (JsonParseException e)
+        } catch (JsonParseException | IllegalArgumentException e)
         {
             assertEquals(expectedMessage, e.getMessage());
         }
