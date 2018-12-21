@@ -5,7 +5,10 @@ import uk.ac.uos.i2p.s193805.file.FileWritable;
 import uk.ac.uos.i2p.s193805.file.FileWriter;
 import uk.ac.uos.i2p.s193805.http.HttpRequester;
 import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
+import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
+import uk.ac.uos.i2p.s193805.taskhandling.Result;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
 import uk.ac.uos.i2p.s193805.taskhandling.task.Tasks;
 import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
@@ -45,17 +48,15 @@ public class IntegrationTest {
 
 
             long start = System.currentTimeMillis();
-            for (int i = 0; i < 10; i++) {
-                for (String taskURL : tasks.getTaskURLS())
-                {
+            for (String taskURL : tasks.getTaskURLS())
+            {
 
-                    Callable<HttpResponseVO> callableTask = () -> {
-                        return HttpRequester.sendGET(baseurl+taskURL);
-                    };
-                    callableTasks.add(callableTask);
+                Callable<HttpResponseVO> callableTask = () -> {
+                    return HttpRequester.sendGET(baseurl + taskURL);
+                };
+                callableTasks.add(callableTask);
 
 
-                }
             }
 
 
@@ -65,30 +66,52 @@ public class IntegrationTest {
 
             for (Future<HttpResponseVO> future : futures) {
 
+                System.out.println(future.get().getBody());
                 HttpResponseVO httpResponseVO = future.get();
 
                 Task task = null;
-                task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(),httpResponseVO.getRequestURL() );
-                System.out.println(task.getInstruction());
-                System.out.println(task.getParamList());
+                JsonObject jsonObject;
+                try
+                {
+                    jsonObject = new JSONParser(new StringReader(httpResponseVO.getBody())).parse();
+                    task = new TaskBuilder().buildTaskObject(httpResponseVO.getBody(), jsonObject, httpResponseVO.getRequestURL());
+                    System.out.println(task.getInstruction());
+                    System.out.println(task.getParamList());
 
-                try {
-                    task.runInstruction();
-                    httpResponseVO = HttpRequester.sendPOST(baseurl+task.getResponseURL(), task.getResult().getAnswer());
-                    task.getResult().setResponse(httpResponseVO.getResponse());
-                    assertTrue(task.getResult().isCorrect());
-                    assertEquals(200, httpResponseVO.getResponse());
+                    try
+                    {
+                        task.runInstruction();
+                        httpResponseVO = HttpRequester.sendPOST(baseurl + task.getResponseURL(), task.getResult().getAnswer());
+                        task.getResult().setResponse(httpResponseVO.getResponse());
+                        assertTrue(task.getResult().isCorrect());
+                        assertEquals(200, httpResponseVO.getResponse());
 
-                } catch (UnsupportedOperationException e) {
-                    System.out.println(e.getMessage());
-                    httpResponseVO = HttpRequester.sendPOST(task.getRequestURL(), "Error" + e.getMessage());
-                    assertEquals(200, httpResponseVO.getResponse());
-                    FileWriter fileWriter = new FileWriter(task);
-                    fileWriter.writeToFile();
-                    continue;
+                    } catch (UnsupportedOperationException e)
+                    {
+                        System.out.println(e.getMessage());
+                        Result result = new Result();
+                        result.setAnswer("Error" + e.getMessage());
+                        task.setResult(result);
+                        httpResponseVO = HttpRequester.sendPOST(task.getRequestURL(), task.getResult().getAnswer());
+                        assertEquals(200, httpResponseVO.getResponse());
+                    }
+
+
+
+                } catch (JsonParseException e)
+                {
+                    task = new Task();
+
+                    task.setRequestURL(httpResponseVO.getRequestURL());
+                    task.setJson(httpResponseVO.getBody());
+
                 }
+
                 FileWriter fileWriter = new FileWriter(task);
                 fileWriter.writeToFile();
+
+
+
 
 
             }
@@ -141,10 +164,11 @@ public class IntegrationTest {
 
 
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            //fail();
             e.printStackTrace();
+            fail();
         }
 
 
@@ -152,7 +176,7 @@ public class IntegrationTest {
 
     }
 
-    @Test
+    /*@Test
     void testSendIncorrectResults() {
 
 
@@ -174,7 +198,7 @@ public class IntegrationTest {
                 Task task = null;
                 try
                 {
-                    task = TaskBuilder.buildTaskObject(httpResponseVO.getBody(), httpResponseVO.getRequestURL());
+                    task = new TaskBuilder().buildTaskObject(httpResponseVO);
                     System.out.println(task.getInstruction());
                     System.out.println(task.getParamList());
                 } catch (RuntimeException e )
@@ -207,5 +231,5 @@ public class IntegrationTest {
         }
 
 
-    }
+    }*/
 }

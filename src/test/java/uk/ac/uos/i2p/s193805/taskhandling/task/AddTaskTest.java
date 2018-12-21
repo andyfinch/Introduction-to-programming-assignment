@@ -38,7 +38,7 @@ class AddTaskTest {
     public void testTaskBuilder() throws IOException {
 
         //JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
-        Task task = TaskBuilder.buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
+        Task task = new TaskBuilder().buildTaskObject("{\"instruction\": \"add\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
 
         //Task<Integer> task = new AddTask<>();
         task.runInstruction();
