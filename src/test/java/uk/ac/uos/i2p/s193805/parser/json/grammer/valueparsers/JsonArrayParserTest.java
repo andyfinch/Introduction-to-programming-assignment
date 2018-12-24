@@ -7,7 +7,7 @@ import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import java.io.IOException;
 import java.io.StringReader;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JsonArrayParserTest {
 

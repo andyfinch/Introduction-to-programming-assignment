@@ -1,6 +1,5 @@
 package uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task;
 
-import uk.ac.uos.i2p.s193805.jsonapplication.file.FileWritable;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.exceptions.InvalidInstructionException;
 

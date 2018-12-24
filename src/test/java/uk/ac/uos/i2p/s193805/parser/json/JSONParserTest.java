@@ -1,13 +1,9 @@
 package uk.ac.uos.i2p.s193805.parser.json;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
-import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonString;
-import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
 
-import javax.json.stream.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 

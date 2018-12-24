@@ -1,12 +1,12 @@
 package uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TasksBuilder;
+import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
 
 import java.io.StringReader;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.

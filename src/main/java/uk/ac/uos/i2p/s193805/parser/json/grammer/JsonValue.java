@@ -1,13 +1,5 @@
 package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
-import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
-import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-
-import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
-
 public interface JsonValue {
 
     public enum ValueType

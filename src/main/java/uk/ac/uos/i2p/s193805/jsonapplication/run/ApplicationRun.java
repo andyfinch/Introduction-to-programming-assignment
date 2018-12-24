@@ -4,7 +4,6 @@ import uk.ac.uos.i2p.s193805.jsonapplication.file.FileWriter;
 import uk.ac.uos.i2p.s193805.jsonapplication.file.Report;
 import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpRequester;
 import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpResponseVO;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.exceptions.InvalidInstructionException;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Task;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Tasks;

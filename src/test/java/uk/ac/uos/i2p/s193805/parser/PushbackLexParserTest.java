@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringReader;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.NUMBER;
+import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.STRING;
 
 /**
  * Created by IntelliJ IDEA.

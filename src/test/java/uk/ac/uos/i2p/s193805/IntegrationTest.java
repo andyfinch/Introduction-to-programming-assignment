@@ -1,25 +1,5 @@
 package uk.ac.uos.i2p.s193805;
 
-import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.jsonapplication.file.FileWriter;
-import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpRequester;
-import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpResponseVO;
-import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
-import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
-import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Task;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Tasks;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TaskBuilder;
-import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TasksBuilder;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Created by IntelliJ IDEA.
  * User: finchaj
