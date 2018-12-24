@@ -75,7 +75,7 @@ public class ApplicationRun {
             {
                 report.setRequestContent(httpResponseVO.getBody());
                 report.setRequestURL(httpResponseVO.getRequestURL());
-                report.setFileName(httpResponseVO.getRequestURL().substring(httpResponseVO.getRequestURL().lastIndexOf("/") + 1)+".txt");
+                report.setFileName("task_" + httpResponseVO.getRequestURL().substring(httpResponseVO.getRequestURL().lastIndexOf("/") + 1)+".txt");
 
                 jsonObject = new JSONParser(new StringReader(httpResponseVO.getBody())).parse();
                 task = new TaskBuilder().buildTaskObject(httpResponseVO.getBody(), jsonObject, httpResponseVO.getRequestURL());

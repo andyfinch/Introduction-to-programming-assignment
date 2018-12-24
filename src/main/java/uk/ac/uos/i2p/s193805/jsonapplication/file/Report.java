@@ -27,15 +27,23 @@ public class Report implements FileWritable {
     @Override
     public String getContent() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Content received from ").append(requestURL).append("\n\n");
+        stringBuilder.append("Content received from ").append(requestURL).append(":").append("\n\n");
         stringBuilder.append(requestContent).append("\n\n");
-        if ( responseURL != null)
-        {
-            stringBuilder.append("Response sent to ").append(responseURL).append("\n\n");
-        }
+
 
         if ( responseSent != null)
         {
+            stringBuilder.append("Response sent to ");
+
+            if (responseURL != null)
+            {
+                stringBuilder.append(responseURL);
+            }
+            else
+            {
+                stringBuilder.append(requestURL);
+            }
+            stringBuilder.append(":").append("\n\n");
             stringBuilder.append(responseSent).append("\n\n");
         }
 
