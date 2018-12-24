@@ -1,20 +1,18 @@
 package uk.ac.uos.i2p.s193805;
 
 import org.junit.jupiter.api.Test;
-import uk.ac.uos.i2p.s193805.file.FileWritable;
-import uk.ac.uos.i2p.s193805.file.FileWriter;
-import uk.ac.uos.i2p.s193805.http.HttpRequester;
-import uk.ac.uos.i2p.s193805.http.HttpResponseVO;
+import uk.ac.uos.i2p.s193805.jsonapplication.file.FileWriter;
+import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpRequester;
+import uk.ac.uos.i2p.s193805.jsonapplication.http.HttpResponseVO;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.JSONParser;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
-import uk.ac.uos.i2p.s193805.taskhandling.Result;
-import uk.ac.uos.i2p.s193805.taskhandling.task.Task;
-import uk.ac.uos.i2p.s193805.taskhandling.task.Tasks;
-import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TaskBuilder;
-import uk.ac.uos.i2p.s193805.taskhandling.task.builder.TasksBuilder;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Task;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.Tasks;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TaskBuilder;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TasksBuilder;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class IntegrationTest {
 
-    public final static String baseurl = "http://i2j.openode.io";
+    /*public final static String baseurl = "http://i2j.openode.io";
     public final static String studentQuery = "/student?id=s193805";
 
 
@@ -117,7 +115,7 @@ public class IntegrationTest {
             }
 
 
-            /*for (String taskURL : tasks.getTaskURLS())
+            *//*for (String taskURL : tasks.getTaskURLS())
             {
 
                 Callable<HttpResponseVO> callableTask = () -> {
@@ -160,7 +158,7 @@ public class IntegrationTest {
                 long end = System.currentTimeMillis();
                 System.out.println(end-start);
 
-            }*/
+            }*//*
 
 
 
@@ -176,7 +174,7 @@ public class IntegrationTest {
 
     }
 
-    /*@Test
+    *//*@Test
     void testSendIncorrectResults() {
 
 
