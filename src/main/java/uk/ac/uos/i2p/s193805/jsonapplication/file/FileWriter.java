@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 public class FileWriter {
 
-    FileWritable fileWritable;
+    private FileWritable fileWritable;
 
     public FileWriter(FileWritable fileWritable) {
         this.fileWritable = fileWritable;

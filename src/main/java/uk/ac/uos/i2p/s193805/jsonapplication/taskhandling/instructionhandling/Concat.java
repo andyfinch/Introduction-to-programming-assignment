@@ -14,7 +14,6 @@ import java.util.List;
 public class Concat implements Instruction {
 
     @Override
-    @SuppressWarnings("unchecked")
     public Result runInstruction(List<String> values) {
 
         Result result = new Result();

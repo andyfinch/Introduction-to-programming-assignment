@@ -1,5 +1,6 @@
 package uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder;
 
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.exceptions.InvalidInstructionException;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.AddTask;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.ConcatTask;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.MultiplyTask;
@@ -41,7 +42,8 @@ public class TaskBuilder {
         }
         else
         {
-            task = new Task();
+            throw new InvalidInstructionException(instruction + " is not a valid Instruction");
+            //task = new Task();
         }
 
         task.setParamList(jsonObject.getJsonArray("parameters").getStringList());
@@ -71,10 +73,11 @@ public class TaskBuilder {
         } catch (JsonParseException e)
         {
             e.printStackTrace();
-            task = new Task();
+            /*task = new Task();
             task.setRequestURL(requestURL);
             task.setJson(json);
-            return task;
+            return task;*/
+            throw e;
 
         }
 

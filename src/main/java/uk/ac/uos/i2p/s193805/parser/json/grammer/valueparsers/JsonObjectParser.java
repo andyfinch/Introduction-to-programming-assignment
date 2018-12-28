@@ -30,9 +30,6 @@ public class JsonObjectParser {
 
         this.pushbackLexParser = pushbackLexParser;
 
-
-
-
     }
 
     public JsonObject parse() throws IOException
@@ -81,11 +78,6 @@ public class JsonObjectParser {
         {
             pushbackLexParser.unread(symbol);
         }
-
-        /*if (symbol.type == COMMA)
-        {
-            pushbackLexParser.unread(symbol);
-        }*/
 
         jsonValueMap.put(key, value);
     }

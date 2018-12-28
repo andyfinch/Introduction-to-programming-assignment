@@ -19,7 +19,7 @@ public class HttpRequester {
    /* private int response;
     private String body;*/
 
-    private static HttpURLConnection setupConnection(String urlAddress, String requestMethod) throws IOException
+    private HttpURLConnection setupConnection(String urlAddress, String requestMethod) throws IOException
     {
         URL url = new URL(urlAddress);
         HttpURLConnection con;
@@ -44,7 +44,7 @@ public class HttpRequester {
         return con;
     }
 
-    public static HttpResponseVO sendGET(String urlAddress) throws IOException
+    public HttpResponseVO sendGET(String urlAddress) throws IOException
     {
         HttpResponseVO httpResponseVO = new HttpResponseVO();
 
@@ -69,7 +69,7 @@ public class HttpRequester {
         return httpResponseVO;
     }
 
-    public static HttpResponseVO sendPOST(String urlAddress, String body) throws IOException
+    public HttpResponseVO sendPOST(String urlAddress, String body) throws IOException
     {
 
 

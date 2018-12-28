@@ -32,7 +32,7 @@ public class ApplicationRun {
     public void processTasksRequest() throws IOException
     {
         System.out.println("Processing Tasks request from " + baseurl + studentQuery);
-        HttpResponseVO httpResponseVO = HttpRequester.sendGET(baseurl + studentQuery);
+        HttpResponseVO httpResponseVO = new HttpRequester().sendGET(baseurl + studentQuery);
         tasks = TasksBuilder.buildTasksObject(new JSONParser(new StringReader(httpResponseVO.getBody())).parse());
         Report report = new Report();
         report.setFileName("tasks_" + tasks.getId() + ".txt");
@@ -52,7 +52,7 @@ public class ApplicationRun {
         {
 
             Callable<HttpResponseVO> callableTask = () -> {
-                return HttpRequester.sendGET(baseurl + taskURL);
+                return new HttpRequester().sendGET(baseurl + taskURL);
             };
             callableTasks.add(callableTask);
 
@@ -82,23 +82,14 @@ public class ApplicationRun {
                 report.setResponseURL(baseurl + task.getResponseURL());
 
                 task.runInstruction();
-                httpResponseVO = HttpRequester.sendPOST(baseurl + task.getResponseURL(), task.getResult().getAnswer());
+                httpResponseVO = new HttpRequester().sendPOST(baseurl + task.getResponseURL(), task.getResult().getAnswer());
                 task.getResult().setResponse(httpResponseVO.getResponse());
                 report.setResponseSent(task.getResult().getAnswer());
 
             }
-            catch (InvalidInstructionException e)
+            catch (JsonParseException | InvalidInstructionException e)
             {
-                httpResponseVO = HttpRequester.sendPOST(httpResponseVO.getRequestURL(), "Error: " + e.getMessage());
-                report.setResponseSent("Error: " + e.getMessage());
-
-
-            }catch (JsonParseException e)
-            {
-                task = new Task();
-                task.setJson(httpResponseVO.getBody());
-                task.setRequestURL(httpResponseVO.getRequestURL());
-                httpResponseVO = HttpRequester.sendPOST(httpResponseVO.getRequestURL(), "Error: " + e.getMessage());
+                httpResponseVO = new HttpRequester().sendPOST(httpResponseVO.getRequestURL(), "Error: " + e.getMessage());
                 report.setResponseSent("Error: " + e.getMessage());
 
 

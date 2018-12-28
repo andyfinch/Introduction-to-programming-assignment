@@ -14,10 +14,9 @@ import java.util.List;
 public class Add implements Instruction {
 
     @Override
-    @SuppressWarnings("unchecked")
     public Result runInstruction(List<String> values) throws IllegalArgumentException {
         Result result = new Result();
-        Integer runningSum = 0;
+        int runningSum = 0;
 
         if (values != null)
         {
@@ -34,7 +33,7 @@ public class Add implements Instruction {
         }
 
 
-        result.setAnswer(runningSum.toString());
+        result.setAnswer(String.valueOf(runningSum));
 
         return result;
     }

@@ -14,11 +14,10 @@ import java.util.List;
 public class Multiply implements Instruction {
 
     @Override
-    @SuppressWarnings("unchecked")
     public Result runInstruction(List<String> values) throws IllegalArgumentException {
 
         Result result = new Result();
-        Integer runningSum = 1;
+        int runningSum = 1;
 
         if (values != null)
         {
@@ -35,7 +34,7 @@ public class Multiply implements Instruction {
         }
 
 
-        result.setAnswer(runningSum.toString());
+        result.setAnswer(String.valueOf(runningSum));
 
         return result;
     }

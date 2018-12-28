@@ -1,6 +1,7 @@
 package uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.exceptions.InvalidInstructionException;
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.task.builder.TaskBuilder;
 
 import java.io.IOException;
@@ -28,7 +29,6 @@ class TaskTest {
     @Test
     public void testTaskBuilderMultiply() throws IOException {
 
-//        JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"multiply\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
         Task task = new TaskBuilder().buildTaskObject("{\"instruction\": \"multiply\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
         assertTrue(task instanceof MultiplyTask);
 
@@ -38,7 +38,6 @@ class TaskTest {
     @Test
     public void testTaskBuilderConcat() throws IOException{
 
-        //JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"concat\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
         Task task = new TaskBuilder().buildTaskObject("{\"instruction\": \"concat\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
         assertTrue(task instanceof ConcatTask);
 
@@ -50,12 +49,12 @@ class TaskTest {
 
         try
         {
-            //JsonObject jsonObject = new JSONParser(new StringReader("{\"instruction\": \"divide\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}")).parse();
-            new TaskBuilder().buildTaskObject("{\"instruction\": \"divide\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
+            Task task = new TaskBuilder().buildTaskObject("{\"instruction\": \"divide\",\"parameters\": [\"23\",45],\"response URL\": \"/answer/d3ae45\"}", "");
+            task.runInstruction();
             fail("Shouldn't get here");
-        } catch (IllegalArgumentException e)
+        } catch (InvalidInstructionException e)
         {
-            assertEquals("Invalid Instruction divide", e.getMessage());
+            assertEquals("divide is not a valid instruction", e.getMessage());
         }
 
 

@@ -13,7 +13,7 @@ import java.util.List;
  * Time: 15:35
  */
 
-public class Task {
+public abstract class Task {
 
     private String requestURL;
     private String instruction = "";
@@ -21,7 +21,6 @@ public class Task {
     private String responseURL;
     protected Result result;
     private String json;
-    private String taskID;
 
     public void runInstruction(){
         throw new InvalidInstructionException(instruction + " is not a valid instruction");
@@ -77,10 +76,6 @@ public class Task {
 
     public String getTaskID() {
         return requestURL.substring(requestURL.lastIndexOf("/") + 1);
-    }
-
-    public void setTaskID(String taskID) {
-        this.taskID = taskID;
     }
 
 }

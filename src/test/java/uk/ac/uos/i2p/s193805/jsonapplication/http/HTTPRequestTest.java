@@ -21,7 +21,7 @@ class HTTPRequestTest {
 
         try
         {
-            HttpResponseVO httpResponseVO = HttpRequester.sendGET(url);
+            HttpResponseVO httpResponseVO = new HttpRequester().sendGET(url);
             assertEquals(200, httpResponseVO.getResponse());
         } catch (Exception e)
         {
