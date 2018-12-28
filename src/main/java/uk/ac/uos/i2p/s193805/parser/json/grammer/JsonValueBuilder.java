@@ -19,7 +19,7 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
  * Time: 16:18
  */
 
-public class JsonValueBuilder {
+public class JsonValueBuilder implements JsonParsable {
 
     private PushbackLexParser pushbackLexParser;
 
@@ -70,8 +70,10 @@ public class JsonValueBuilder {
         {
             return new JsonArrayParser(pushbackLexParser).parse();
         }
-
-        return null;
+        else
+        {
+            throw new JsonParseException("Unable to parse JSON " + symbol + " is not valid");
+        }
 
 
     }

@@ -5,22 +5,16 @@ import uk.ac.uos.i2p.s193805.parser.LexParser;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValueBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 30/10/2018
- * Time: 08:21
- */
 
-public class JSONParser {
+public class JSONParser implements JsonParsable {
 
-    JsonValue jsonValue;
     private PushbackLexParser pushBackLexParser;
 
     public JSONParser(Reader reader) {
@@ -29,6 +23,7 @@ public class JSONParser {
         pushBackLexParser = new PushbackLexParser(lexParser);
 
     }
+    
 
     public JsonObject parse () throws IOException
     {

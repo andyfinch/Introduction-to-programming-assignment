@@ -3,6 +3,7 @@ package uk.ac.uos.i2p.s193805.parser.json.grammer.valueparsers;
 import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonString;
 
 import java.io.IOException;
@@ -10,14 +11,8 @@ import java.io.IOException;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.END;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.QUOTE;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 13/12/2018
- * Time: 09:19
- */
 
-public class JsonStringParser {
+public class JsonStringParser implements JsonParsable {
 
     public final PushbackLexParser pushbackLexParser;
 
@@ -46,7 +41,6 @@ public class JsonStringParser {
             value.append(symbol.value);
         }
 
-        //pushbackLexParser.unread(symbol);
         return new JsonString(value.toString());
 
     }

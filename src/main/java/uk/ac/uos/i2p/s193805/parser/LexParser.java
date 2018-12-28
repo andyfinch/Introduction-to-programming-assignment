@@ -8,19 +8,15 @@ import java.util.List;
 
 public class LexParser {
 
-    private List<JSONSymbol> jsonSymbolList  = new ArrayList<>();
-
     private final PushbackReader reader;
 
     public LexParser(Reader reader) {
         this.reader = new PushbackReader(reader);
     }
-
-
+    
     public JSONSymbol next() throws IOException
     {
         int c = reader.read();
-
 
         if (c == -1)
         {

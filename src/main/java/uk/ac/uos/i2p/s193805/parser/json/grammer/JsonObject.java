@@ -9,13 +9,10 @@ import java.util.Map;
 
 public class JsonObject implements JsonValue {
 
-    //has members
-    //public final JsonMember jsonMember;
     public final Map<String, JsonValue> jsonValueMap;
-    //public final PushbackLexParser pushbackLexParser;
 
 
-    public JsonObject(Map<String, JsonValue> jsonValueMap) throws IOException {
+    public JsonObject(Map<String, JsonValue> jsonValueMap) {
 
         this.jsonValueMap = jsonValueMap;
 

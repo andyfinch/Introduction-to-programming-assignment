@@ -4,11 +4,12 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonNumber;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class JsonNumberParser {
+public class JsonNumberParser implements JsonParsable {
 
     public final PushbackLexParser pushbackLexParser;
 

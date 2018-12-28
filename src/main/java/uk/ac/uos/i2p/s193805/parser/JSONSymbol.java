@@ -1,11 +1,5 @@
 package uk.ac.uos.i2p.s193805.parser;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 28/11/2018
- * Time: 09:06
- */
 
 public class JSONSymbol {
 

@@ -4,6 +4,7 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValueBuilder;
 
@@ -13,14 +14,7 @@ import java.util.Map;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 13/12/2018
- * Time: 09:43
- */
-
-public class JsonObjectParser {
+public class JsonObjectParser implements JsonParsable {
 
     private PushbackLexParser pushbackLexParser;
     private Map<String, JsonValue> jsonValueMap = new HashMap<>();

@@ -4,6 +4,7 @@ import uk.ac.uos.i2p.s193805.parser.JSONSymbol;
 import uk.ac.uos.i2p.s193805.parser.PushbackLexParser;
 import uk.ac.uos.i2p.s193805.parser.exceptions.JsonParseException;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonArray;
+import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValue;
 import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonValueBuilder;
 
@@ -11,14 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 13/12/2018
- * Time: 09:29
- */
 
-public class JsonArrayParser {
+public class JsonArrayParser implements JsonParsable {
 
     public final PushbackLexParser pushbackLexParser;
 
@@ -47,7 +42,6 @@ public class JsonArrayParser {
                 continue;
             }
 
-            //JsonMember jsonMember = jsonMember(pushbackLexParser);
             if (symbol.type != JSONSymbol.Type.COMMA)
             {
                 pushbackLexParser.unread(symbol);
