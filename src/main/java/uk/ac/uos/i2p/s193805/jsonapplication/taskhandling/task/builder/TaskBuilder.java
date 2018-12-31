@@ -24,7 +24,7 @@ public class TaskBuilder {
 
 
     public Task buildTaskObject(String json, JsonObject jsonObject, String requestURL) throws IllegalArgumentException, IOException {
-        Task task = null;
+        Task task;
         String instruction = "";
         instruction = jsonObject.getString("instruction");
 
@@ -43,7 +43,6 @@ public class TaskBuilder {
         else
         {
             throw new InvalidInstructionException(instruction + " is not a valid Instruction");
-            //task = new Task();
         }
 
         task.setParamList(jsonObject.getJsonArray("parameters").getStringList());
@@ -60,7 +59,7 @@ public class TaskBuilder {
 
 
     public Task buildTaskObject(String json, String requestURL) throws IllegalArgumentException, IOException {
-        Task task;
+        
         JsonObject jsonObject;
 
         try
@@ -73,10 +72,6 @@ public class TaskBuilder {
         } catch (JsonParseException e)
         {
             e.printStackTrace();
-            /*task = new Task();
-            task.setRequestURL(requestURL);
-            task.setJson(json);
-            return task;*/
             throw e;
 
         }
