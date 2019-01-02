@@ -6,15 +6,17 @@ import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonObject;
 import java.io.IOException;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 30/10/2018
- * Time: 10:57
+ * Helper class to simplify building a Tasks object
  */
-
 public class TasksBuilder {
 
-    public static Tasks buildTasksObject(JsonObject jsonObject) throws IOException
+    /**
+     * Build tasks object tasks.
+     *
+     * @param jsonObject the json object
+     * @return the tasks
+     */
+    public static Tasks buildTasksObject(JsonObject jsonObject)
     {
         Tasks tasks = new Tasks();
         tasks.setId(jsonObject.getString("id"));

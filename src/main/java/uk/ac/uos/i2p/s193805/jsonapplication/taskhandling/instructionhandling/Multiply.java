@@ -5,14 +5,16 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 25/10/2018
- * Time: 09:43
+ * Implementation of Multiply Instruction
  */
-
 public class Multiply implements Instruction {
 
+    /**
+     * Implements Run instruction to Multiply values in supplied List
+     * @param values the values
+     * @return Result Object
+     * @throws IllegalArgumentException
+     */
     @Override
     public Result runInstruction(List<String> values) throws IllegalArgumentException {
 

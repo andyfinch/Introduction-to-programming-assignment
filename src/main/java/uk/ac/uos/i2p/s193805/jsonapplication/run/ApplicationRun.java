@@ -23,12 +23,26 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 
+/**
+ * The type Application run.
+ */
 public class ApplicationRun {
 
+    /**
+     * The constant baseurl.
+     */
     public final static String baseurl = "http://i2j.openode.io";
+    /**
+     * The constant studentQuery.
+     */
     public final static String studentQuery = "/student?id=s193805";
     private Tasks tasks;
 
+    /**
+     * Process tasks request.
+     *
+     * @throws IOException any ioexception
+     */
     public void processTasksRequest() throws IOException
     {
         System.out.println("Processing Tasks request from " + baseurl + studentQuery);
@@ -43,6 +57,11 @@ public class ApplicationRun {
         System.out.println("Processing Tasks request complete");
     }
 
+    /**
+     * Process all tasks.
+     *
+     * @throws Exception any exception
+     */
     public void processAllTasks() throws Exception
     {
         ExecutorService executor = Executors.newFixedThreadPool(tasks.getTaskURLS().size());
@@ -113,6 +132,12 @@ public class ApplicationRun {
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception {
 
         ApplicationRun applicationRun = new ApplicationRun();

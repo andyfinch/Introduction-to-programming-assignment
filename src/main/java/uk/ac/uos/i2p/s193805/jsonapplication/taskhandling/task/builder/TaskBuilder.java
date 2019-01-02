@@ -13,17 +13,21 @@ import java.io.IOException;
 import java.io.StringReader;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 30/10/2018
- * Time: 11:02
+ * Helper class to simplify building a Task object
  */
-
 public class TaskBuilder {
 
 
-
-    public Task buildTaskObject(String json, JsonObject jsonObject, String requestURL) throws IllegalArgumentException, IOException {
+    /**
+     * Build Task object.
+     *
+     * @param json       the json
+     * @param jsonObject the json object
+     * @param requestURL the request url
+     * @return the task
+     * @throws InvalidInstructionException Instruction must be one of Add, Concat or Multiply
+     */
+    public Task buildTaskObject(String json, JsonObject jsonObject, String requestURL) throws InvalidInstructionException  {
         Task task;
         String instruction = "";
         instruction = jsonObject.getString("instruction");
@@ -58,7 +62,16 @@ public class TaskBuilder {
     }
 
 
-    public Task buildTaskObject(String json, String requestURL) throws IllegalArgumentException, IOException {
+    /**
+     * Build Task Object
+     *
+     * @param json       the json
+     * @param requestURL the request url
+     * @return the task
+     * @throws InvalidInstructionException Instruction must be one of Add, Concat or Multiply
+     * @throws IOException
+     */
+    public Task buildTaskObject(String json, String requestURL) throws InvalidInstructionException, IOException {
         
         JsonObject jsonObject;
 

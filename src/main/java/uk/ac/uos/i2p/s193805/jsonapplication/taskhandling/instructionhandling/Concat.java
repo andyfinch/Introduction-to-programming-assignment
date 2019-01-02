@@ -5,14 +5,15 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 25/10/2018
- * Time: 09:43
+ * Implementation of Concat Instruction
  */
-
 public class Concat implements Instruction {
 
+    /**
+     * Concatenates supplied values to 1 string
+     * @param values the values
+     * @return Result object
+     */
     @Override
     public Result runInstruction(List<String> values) {
 

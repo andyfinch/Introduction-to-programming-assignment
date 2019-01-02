@@ -7,18 +7,20 @@ import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 02/11/2018
- * Time: 14:06
- */
 
+/**
+ * Contains methods to send HTTP GET and POST requests
+ */
 public class HttpRequester {
 
-   /* private int response;
-    private String body;*/
 
+    /**
+     * Helper method to get an HttpURLConnection
+     * @param urlAddress
+     * @param requestMethod
+     * @return an instance of an HttpURLConnection
+     * @throws IOException
+     */
     private HttpURLConnection setupConnection(String urlAddress, String requestMethod) throws IOException
     {
         URL url = new URL(urlAddress);
@@ -44,6 +46,13 @@ public class HttpRequester {
         return con;
     }
 
+    /**
+     * Send GET Http request
+     *
+     * @param urlAddress the url address
+     * @return HttpResponseVO with body and response code
+     * @throws IOException the io exception
+     */
     public HttpResponseVO sendGET(String urlAddress) throws IOException
     {
         HttpResponseVO httpResponseVO = new HttpResponseVO();
@@ -69,6 +78,14 @@ public class HttpRequester {
         return httpResponseVO;
     }
 
+    /**
+     * Send POST http request
+     *
+     * @param urlAddress the url address
+     * @param body       the body
+     * @return HttpResponseVO with body and response code
+     * @throws IOException the io exception
+     */
     public HttpResponseVO sendPOST(String urlAddress, String body) throws IOException
     {
 

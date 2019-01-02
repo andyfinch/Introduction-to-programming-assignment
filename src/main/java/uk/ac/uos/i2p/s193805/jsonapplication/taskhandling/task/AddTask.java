@@ -4,14 +4,13 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.Ad
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.Instruction;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 26/10/2018
- * Time: 09:12
+ * Implementation of an Add Task overriding runInstruction to process an Add instruction
  */
-
 public class AddTask extends Task {
 
+    /**
+     * Implementation of runInstruction to process Adding values
+     */
     @Override
     public void runInstruction() {
         Instruction adder = new Add();

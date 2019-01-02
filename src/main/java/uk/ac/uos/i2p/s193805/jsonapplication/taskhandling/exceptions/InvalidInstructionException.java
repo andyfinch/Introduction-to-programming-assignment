@@ -1,14 +1,15 @@
 package uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.exceptions;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 24/12/2018
- * Time: 09:52
+ * Custom exception thrown when an invalid instrcution type os received
  */
-
 public class InvalidInstructionException extends RuntimeException {
 
+    /**
+     * Instantiates a new Invalid instruction exception.
+     *
+     * @param message the message
+     */
     public InvalidInstructionException(String message) {
         super(message);
     }

@@ -4,14 +4,13 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.Co
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.Instruction;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 26/10/2018
- * Time: 09:12
+ * Implementation of an Concat Task overriding runInstruction to process an Concat instruction
  */
-
 public class ConcatTask extends Task {
 
+    /**
+     * Implementation of runInstruction to process Concatenating values
+     */
     @Override
     public void runInstruction() {
         Instruction adder = new Concat();

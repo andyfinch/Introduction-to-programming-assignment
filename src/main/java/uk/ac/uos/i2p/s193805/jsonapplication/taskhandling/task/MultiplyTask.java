@@ -4,14 +4,13 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.In
 import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.instructionhandling.Multiply;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 26/10/2018
- * Time: 09:12
+ * Implementation of an Multiply Task overriding runInstruction to process an Multiply instruction
  */
-
 public class MultiplyTask extends Task {
 
+    /**
+     * Implementation of runInstruction to process Multiplying values
+     */
     @Override
     public void runInstruction() {
         Instruction adder = new Multiply();

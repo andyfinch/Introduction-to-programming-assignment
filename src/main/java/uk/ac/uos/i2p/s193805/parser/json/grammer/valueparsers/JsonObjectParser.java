@@ -14,18 +14,32 @@ import java.util.Map;
 
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
+/**
+ * Attempts to parse JSON object.
+ */
 public class JsonObjectParser implements JsonParsable {
 
     private PushbackLexParser pushbackLexParser;
     private Map<String, JsonValue> jsonValueMap = new HashMap<>();
 
 
+    /**
+     * Instantiates a new Json object parser.
+     *
+     * @param pushbackLexParser the pushback lex parser
+     * @throws IOException the io exception
+     */
     public JsonObjectParser(PushbackLexParser pushbackLexParser) throws IOException {
 
         this.pushbackLexParser = pushbackLexParser;
 
     }
 
+    /**
+     * Attempts to parse a full Json Object with keys and values which are saved to a HashMap
+     * @return new JsonObject object
+     * @throws IOException
+     */
     public JsonObject parse() throws IOException
     {
         JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();

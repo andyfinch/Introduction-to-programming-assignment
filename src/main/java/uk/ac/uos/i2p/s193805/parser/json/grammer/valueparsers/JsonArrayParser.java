@@ -13,16 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Attempts to parse JSON array
+ */
 public class JsonArrayParser implements JsonParsable {
 
+    /**
+     * The Pushback lex parser.
+     */
     public final PushbackLexParser pushbackLexParser;
 
+    /**
+     * Instantiates a new Json array parser.
+     *
+     * @param pushbackLexParser the pushback lex parser
+     */
     public JsonArrayParser(PushbackLexParser pushbackLexParser) {
 
         this.pushbackLexParser = pushbackLexParser;
 
     }
 
+    /**
+     * Attempts to validate and parse JsonArray string and convery to JsonArray Object.
+     * @return new JsonArray object
+     * @throws IOException
+     */
     public JsonArray parse() throws IOException
     {
         JsonValue jsonValue;

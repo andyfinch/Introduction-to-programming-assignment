@@ -6,14 +6,28 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lexical Parser to read through a Reader and return a JSON Symbol based on char content
+ */
 public class LexParser {
 
     private final PushbackReader reader;
 
+    /**
+     * Instantiates a new Lex parser.
+     *
+     * @param reader the reader
+     */
     public LexParser(Reader reader) {
         this.reader = new PushbackReader(reader);
     }
-    
+
+    /**
+     * Next json symbol.
+     *
+     * @return the json symbol
+     * @throws IOException the io exception
+     */
     public JSONSymbol next() throws IOException
     {
         int c = reader.read();

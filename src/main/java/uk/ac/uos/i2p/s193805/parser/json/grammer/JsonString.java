@@ -1,16 +1,20 @@
 package uk.ac.uos.i2p.s193805.parser.json.grammer;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 10/12/2018
- * Time: 16:17
+ * JsonString object which holds a String value
  */
-
 public class JsonString implements JsonValue {
 
+    /**
+     * The String value.
+     */
     public final String stringValue;
 
+    /**
+     * Instantiates a new Json string.
+     *
+     * @param stringValue the string value
+     */
     public JsonString(String stringValue) {
         this.stringValue = stringValue;
     }

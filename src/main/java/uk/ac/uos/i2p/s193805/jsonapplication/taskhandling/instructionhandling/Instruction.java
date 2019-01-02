@@ -5,14 +5,17 @@ import uk.ac.uos.i2p.s193805.jsonapplication.taskhandling.Result;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 25/10/2018
- * Time: 09:40
+ * Interface defining runInstrcution methods to operate on a supplied List
  */
-
 public interface Instruction {
 
+    /**
+     * Run instruction result.
+     *
+     * @param values the values
+     * @return the result
+     * @throws IllegalArgumentException the illegal argument exception
+     */
     Result runInstruction(List<String> values) throws IllegalArgumentException;
 
 }

@@ -13,16 +13,17 @@ import java.io.IOException;
 import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: finchaj
- * Date: 10/12/2018
- * Time: 16:18
+ * Helper class to process JSON string and pass to correct Json parser
  */
-
 public class JsonValueBuilder implements JsonParsable {
 
     private PushbackLexParser pushbackLexParser;
 
+    /**
+     * Instantiates a new Json value builder.
+     *
+     * @param pushbackLexParser the pushback lex parser
+     */
     public JsonValueBuilder(PushbackLexParser pushbackLexParser) {
         this.pushbackLexParser = pushbackLexParser;
     }
@@ -34,18 +35,18 @@ public class JsonValueBuilder implements JsonParsable {
 
         if (END == symbol.type) return null;
 
-        if (symbol.type == QUOTE)
+        if (symbol.type == QUOTE) //Assume we are processing a quoted string
         {
             pushbackLexParser.unread(symbol);
             return new JsonStringParser(pushbackLexParser).parse();
 
         }
-        else if (symbol.type == NUMBER || symbol.type == MINUS_SIGN)
+        else if (symbol.type == NUMBER || symbol.type == MINUS_SIGN) //Assume we are processing a number
         {
             pushbackLexParser.unread(symbol);
             return new JsonNumberParser(pushbackLexParser).parse();
         }
-        else if (symbol.type == STRING)
+        else if (symbol.type == STRING) //Assume we are processing boolean or null value
         {
             if (symbol.value.equals("true") || symbol.value.equals("false"))
             {
@@ -61,12 +62,12 @@ public class JsonValueBuilder implements JsonParsable {
             }
 
         }
-        else if (symbol.type == OPEN_BRACE)
+        else if (symbol.type == OPEN_BRACE) //Assume we are processing a new JSON object
         {
             pushbackLexParser.unread(symbol);
             return new JsonObjectParser(pushbackLexParser).parse();
         }
-        else if (symbol.type == OPEN_ARRAY)
+        else if (symbol.type == OPEN_ARRAY) //Assume we are processing an Array
         {
             return new JsonArrayParser(pushbackLexParser).parse();
         }

@@ -9,16 +9,32 @@ import uk.ac.uos.i2p.s193805.parser.json.grammer.JsonParsable;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Attempts to parse JSON number
+ */
 public class JsonNumberParser implements JsonParsable {
 
+    /**
+     * The Pushback lex parser.
+     */
     public final PushbackLexParser pushbackLexParser;
 
+    /**
+     * Instantiates a new Json number parser.
+     *
+     * @param pushbackLexParser the pushback lex parser
+     */
     public JsonNumberParser(PushbackLexParser pushbackLexParser)  {
 
         this.pushbackLexParser = pushbackLexParser;
 
     }
 
+    /**
+     * Attempts to parse any JSON number type and convert to JsonNumber object
+     * @return new JsonNumber object
+     * @throws IOException
+     */
     public JsonNumber parse() throws IOException {
         StringBuilder numberString = new StringBuilder();
         JSONSymbol symbol = pushbackLexParser.nextSkipSpaces();
