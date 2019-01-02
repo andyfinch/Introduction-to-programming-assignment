@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
- * User: finchaj
+ * User: S193805
  * Date: 30/10/2018
  * Time: 10:48
  */

@@ -2,7 +2,7 @@ package uk.ac.uos.i2p.s193805.jsonapplication.file;
 
 /**
  * Created by IntelliJ IDEA.
- * User: finchaj
+ * User: S193805
  * Date: 24/12/2018
  * Time: 09:00
  */

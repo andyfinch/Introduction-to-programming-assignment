@@ -12,7 +12,7 @@ import static uk.ac.uos.i2p.s193805.parser.JSONSymbol.Type.STRING;
 
 /**
  * Created by IntelliJ IDEA.
- * User: finchaj
+ * User: S193805
  * Date: 29/11/2018
  * Time: 09:32
  */
