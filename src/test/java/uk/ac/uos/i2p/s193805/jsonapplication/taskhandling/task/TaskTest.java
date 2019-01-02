@@ -54,7 +54,7 @@ class TaskTest {
             fail("Shouldn't get here");
         } catch (InvalidInstructionException e)
         {
-            assertEquals("divide is not a valid instruction", e.getMessage());
+            assertEquals("divide is not a valid Instruction", e.getMessage());
         }
 
 
