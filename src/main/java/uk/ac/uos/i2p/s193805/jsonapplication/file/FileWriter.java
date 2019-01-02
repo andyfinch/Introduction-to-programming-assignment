@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ *  Takes a FileWritable object and saves content to file
+ */
 public class FileWriter {
 
     private FileWritable fileWritable;
@@ -14,6 +17,10 @@ public class FileWriter {
         this.fileWritable = fileWritable;
     }
 
+    /**
+     * Uses data from the FileWritable object to save file with required content
+     * @throws IOException
+     */
     public void writeToFile() throws IOException {
 
         //Get the file reference
